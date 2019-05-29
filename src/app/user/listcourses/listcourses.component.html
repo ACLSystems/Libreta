@@ -1,0 +1,106 @@
+<div class="container-fluid">
+  <div class="card-group">
+    <div  *ngIf="rolUser" class="card">
+      <div class="card-header">
+        <div class="card-title text-center">
+          <h3>Mis Cursos</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <h2 class="display-3 text-center"><i class="fas fa-graduation-cap"></i></h2>
+        <hr>
+        <button type="button" class="btn btn-success" [routerLink]="['/mygroups']">
+          <i class="fas fa-cubes"></i> Entrar
+        </button>
+      </div>
+    </div>
+    <div *ngIf="rolSup" class="card">
+      <div class="card-header">
+        <div class="card-title text-center">
+          <h3>Reportes</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <h2 class="display-3 text-center"><i class="far fa-chart-bar"></i></h2>
+        <hr>
+        <button type="button" class="btn btn-success" [routerLink]="['/charts']">
+          <i class="fas fa-cubes"></i> Entrar
+        </button>
+      </div>
+    </div>
+    <div *ngIf="rolAutho" class="card">
+      <div class="card-header">
+        <div class="card-title text-center">
+          <h3>Editar Cursos</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <h2 class="display-3 text-center"><i class="fas fa-pencil-alt"></i></h2>
+        <hr>
+        <button type="button" class="btn btn-success" [routerLink]="['/editmanager']">
+          <i class="fas fa-cubes"></i> Entrar
+        </button>
+      </div>
+    </div>
+    <div *ngIf="rolInstructor" class="card">
+      <div class="card-header">
+        <div class="card-title text-center">
+          <h3>Tutorías</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <h2 class="display-3 text-center"><i class="fab fa-black-tie"></i></h2>
+        <hr>
+        <button type="button" class="btn btn-success" [routerLink]="['/tutorial']">
+          <i class="fas fa-cubes"></i> Entrar
+        </button>
+      </div>
+    </div>
+    <div *ngIf="rolAdmin"class="card">
+      <div class="card-header">
+        <div class="card-title text-center">
+          <h3>Administrador</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <h2 class="display-3 text-center"><i class="fas fa-sitemap"></i></h2>
+        <hr>
+        <button type="button" class="btn btn-success" [routerLink]="['/admin']">
+          <i class="fas fa-cubes"></i> Entrar
+        </button>
+      </div>
+    </div>
+    <div *ngIf="rolOrg"class="card">
+      <div class="card-header">
+        <div class="card-title text-center">
+          <h3>Reseteo de Contraseña</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <h2 class="display-3 text-center"><i class="fas fa-key"></i></h2>
+        <hr>
+        <button type="button" class="btn btn-success" [routerLink]="['/resetpass']">
+          <i class="fas fa-cubes"></i> Entrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="identiti && !rolUser && !rolSup && !rolAutho && !rolInstructor && !rolAdmin && !rolOrg"  class="container">
+  <h1 class="display-3 text-center">Bienvenido</h1>
+  <hr>
+  <div class="jumbotron animated fadeIn fast">
+    <p>
+      Te damos la bienvenida a la plataforma <b>Conalep Virtual</b> donde podrás encontrar los cursos que enriquezcan tu aprendizaje
+    </p>
+    <p>
+      Aún no tienes cursos enrolados. Te invitamos a que ingreses al catálogo de cursos: <b><i class="fas fa-book"></i> Cursos </b> ubicado en la parte superior. Desde ahí podras buscar y seleccionar el curso de tu interés
+    </p>
+    <p>
+      Cuando estes enrolado en algún curso, te aparecera el menú de <b><i class="fas fa-graduation-cap"></i> Mis Cursos</b>, desde donde tendrás acceso al material de cada curso.
+    </p>
+    <p>
+      Es un placer de que seas parte de <b>Conalep Virtual</b>
+    </p>
+  </div>
+</div>

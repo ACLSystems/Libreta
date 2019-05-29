@@ -1,0 +1,175 @@
+<div *ngIf="loading">
+  <div class="row text-center animated fadeIn">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Cargando componentes ... </h1>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loading" class="container">
+
+  <button type="button" class="btn btn-success" (click)="returnTaskReview()">
+    <i class="fas fa-reply"></i> Regresar
+  </button>
+  <hr>
+
+  <div class="text-center">
+    <h4><i class="fas fa-user"></i> Alumno: <small class="text-success">{{tasksStudents.studentFullName}}</small></h4>
+    <h5><i class="fas fa-book"></i> Curso: <small class="text-success">{{tasksStudents.course}}</small>  <i class="fas fa-users"></i> Grupo: <small class="text-success">{{tasksStudents.groupCode}}</small></h5>
+  </div>
+
+  <div *ngFor="let itemTask of tasksStudents.tasks, let idTask = index">
+    <div [ngSwitch]="itemTask.type">
+      <!--tareas tipo texto-->
+      <div *ngSwitchCase="'text'">
+        <div *ngIf="messageSuccess" class="alert alert-success" role="alert">
+          {{messageSuccess}}
+        </div>
+        <h5 class="text-success"><i class="fas fa-thumbtack"></i> {{itemTask.label}}</h5>
+        <div [innerHTML]="itemTask.taskText">
+
+        </div>
+        <div class="alert alert-secondary" role="alert">
+          <h6>Respuesta: </h6>
+          {{itemTask.content}}
+        </div>
+        <div class="row">
+          <div class="col-sm-3">
+            <h6><i class="far fa-calendar-alt"></i> Fecha de envio: <small class="text-success">{{itemTask.date | date:'yyyy-MM-dd'}}</small></h6>
+          </div>
+          <div class="col-sm-3">
+            <h6><i class="far fa-folder"></i> Calificación Actual: <small class="text-success">{{itemTask.grade}}</small></h6>
+          </div>
+          <div class="col-sm-3">
+
+            <form class="form-inline">
+              <div class="form-group">
+                <label >Calificación (0-100) :</label>
+                <input type="text" class="form-control col-lg-3" #grade (blur)="setGrade(itemTask.taskId, grade.value, itemTask.label, idTask)" required>
+                <span *ngIf="!isGradeOk" class="text-danger"> El valor no puede ser mayor a 100</span>
+              </div>
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+      <!--cierra tareas tipo texto-->
+
+      <!--tareas tipo archivo-->
+      <div *ngSwitchCase="'file'">
+
+        <h5 class="text-success"><i class="fas fa-thumbtack"></i> {{itemTask.label}}</h5>
+
+        <div [innerHTML]="itemTask.taskText">
+
+        </div>
+
+        <a class="btn btn-success" role="button" href="{{file}}">
+          <i class="fas fa-cloud-download-alt"></i> Descargar tarea
+        </a>
+
+        <div class="row m-5">
+
+          <div class="col-sm-3">
+            <h6><i class="far fa-calendar-alt"></i> Fecha de envio: <small class="text-success">{{itemTask.date | date:'yyyy-MM-dd'}}</small></h6>
+          </div>
+
+          <div class="col-sm-3">
+            <h6><i class="far fa-folder"></i> Calificación Actual: <small class="text-success">{{itemTask.grade}}</small></h6>
+          </div>
+
+          <div class="col-sm-3">
+            <form class="form-inline">
+              <div class="form-group">
+                <label >Calificación (0-100) :</label>
+                <input type="text" class="form-control col-lg-3" #grade (blur)="setGrade(itemTask.taskId, grade.value, itemTask.label, idTask)" required>
+                <span *ngIf="!isGradeOk" class="text-danger"> El valor no puede ser mayor a 100</span>
+              </div>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+      <!--cierra tareas tipo archivo-->
+    </div>
+    <hr>
+  </div>
+  <div class="row">
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sendGradesTask">
+      <i class="fas fa-save"></i> Guardar calificaciones
+    </button>
+  </div>
+  <br><br>
+  <div class="modal" id="sendGradesTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-save"></i> Guardar calificaciones</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="container-fluid">
+
+            <div *ngIf="gradeTask.length<=0">
+              <div class="alert alert-danger m-2" role="alert">
+                <h5><i class="fas fa-times"></i> No se tienen calificaciones</h5>
+              </div>
+            </div>
+
+            <div *ngIf="gradeTask.length > 0">
+              <i class="fas fa-info-circle"></i> Se guardaran las siguientes calificaciones
+              <div *ngFor="let grade of gradeTask" class="row">
+                <div class="col-lg-4">
+                  <div class="alert alert-success text-center" role="alert">
+                    <h5>Ejercicio: <small>{{grade.label}}</small></h5>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="alert alert-secondary text-center" role="alert">
+                    <h5>Calificación: <small>{{grade.grade}}</small></h5>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div *ngIf="messageTasks.length!=0">
+                    <div *ngFor="let gradeSave of messageTasks">
+                      <span *ngIf="gradeSave.id == grade.id" class="text-success"><i class="fas fa-info-circle"></i> {{gradeSave.Mensaje}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseComment" aria-expanded="false" aria-controls="collapseComment">
+                <i class="far fa-comment-alt"></i> Agregar un comentario
+              </button>
+            </div>
+            <div class="collapse container-fluid m-3" id="collapseComment">
+              <textarea rows="8" cols="80" #comment></textarea>
+            </div>
+          </div><!--cierre container-fluid del modal-->
+        </div><!--Cierre modal-body -->
+
+        <div class="modal-footer">
+          <button *ngIf="gradeTask.length<=0" type="button" class="btn btn-success" disabled>
+            <i class="fas fa-check"></i> Aceptar
+          </button>
+          <button *ngIf="gradeTask.length>0" type="button" class="btn btn-success" (click)="sendGrades(comment.value)">
+            <i class="fas fa-check"></i> Aceptar
+          </button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="getTask()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+        </div><!-- cierre footer-modal-->
+
+      </div><!-- cierre modal content-->
+    </div><!--Cierre clase modal-dialog-->
+  </div><!--Termina el modal-->
+</div>

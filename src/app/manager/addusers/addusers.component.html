@@ -1,0 +1,464 @@
+<div class="container">
+  <div class="row">
+    <div class="col-4">
+      <button type="button" class="btn btn-success blockquote" [routerLink]="['/viewrequest',numberrequest]">
+        <i class="fas fa-undo"></i> Regresar
+      </button>
+    </div>
+    <div class="col-4">
+      <button type="button" class="btn btn-danger" (click)="showModal(cancelRequest)">
+        <i class="fas fa-trash-alt"></i> Cancelar solicitud
+      </button>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-3">
+      <b>Número de solicitud:</b> <span class="text-success">{{numberrequest}}</span>
+    </div>
+    <div class="col-3">
+      <b>Palabra clave:</b> <span class="text-success">{{labelrequest}}</span> <b></b>
+    </div>
+    <div class="col-3">
+      <b>Curso:</b> <span class="text-success">{{this.course.item.course.title}}</span>
+    </div>
+    <div class="col-3">
+      <b>Clave del grupo</b>  <span class="text-success">{{codegroup}}</span>
+    </div>
+  </div>
+  <hr>
+  <wizard navBarLocation="bottom">
+    <!--Carga de archivo con los usuarios-->
+    <wizard-step>
+      <h4><i class="fas fa-users"></i> Carga de la información de los alumnos</h4>
+      <hr>
+      <div *ngIf="loading" class="row">
+        <h4><i class="fas fa-sync fa-spin"></i> Preparando formularios ... </h4>
+      </div>
+      <div *ngIf="!loading">
+        <form class="was-validated">
+          <label for="">* Seleccione el tipo de registro</label>
+          <select class="form-control" #type (change)="gettyperegister(type.value)">
+            <option value="">*Seleccione una opción</option>
+            <option value="masivo">Masivo</option>
+            <option value="individual">Individual</option>
+          </select>
+        </form>
+        <hr>
+        <div *ngIf="typeregister=='masivo'">
+          <div class="alert alert-warning" role="alert">
+            <b><i class="fas fa-exclamation-triangle"></i> Atención: En esta parte se cargara la información de los alumnos, es importante tomar en cuenta las siguientes instrucciones:</b>
+            <ul>
+              <li>Los archivos que en esta sección se proporcionan, contienen las instrucciones para el llenado y el formato correcto del archivo de excel para la carga masiva de alumnos</li>
+              <li>El nombre del archivo de excel se puede cambiar</li>
+              <li>Los formatos del archivo para la carga masiva de participantes deben de ser <b>(.xlsx ó .xls)</b></li>
+              <li>Se debe de respetar el formato del archivo que se proporciona en esta sección</li>
+              <li>Se debe de proporcionar un correo electrónico por cada alumno</li>
+              <li>En caso de que algún registro no cumpla con los estandares de información, el sistema no registrara este alumno en el grupo</li>
+            </ul>
+          </div>
+          <hr>
+        </div>
+        <div *ngIf="typeregister=='masivo' && !loadingprocess">
+          <a href="assets/Instrucciones de Alta Masiva de usuarios.zip" download="instrucciones.zip" class="btn btn-success" role="button" aria-pressed="true"><i class="fas fa-file-alt"></i>* Archivos para el alta masiva</a>
+          <br><br>
+          <h5><i class="fas fa-users"></i> Registro masivo</h5>
+          <div *ngIf="messageSuccessFile" class="alert alert-success" role="alert">
+            <i class="fas fa-check"></i> {{messageSuccessFile}}
+          </div>
+          <div *ngIf="messageErrorFile" class="alert alert-danger" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> {{messageErrorFile}}
+          </div>
+          <form class="was-validated">
+            <!-- V.1
+            <input type="file" accept="text/csv" (change)="loadFile($event.target.files)" class="text-success" required>
+            -->
+            <input type="file" (change)="loadFile($event)" multiple="false">
+            <!--
+            <button type="button" class="btn btn-success blockquote" (click)="processFiles()" [disabled]="!csvContent.length">
+              <i [ngClass]="{'fa-cogs':!loadingprocess, 'fa-sync fa-spin':loadingprocess}" class="fa "></i>
+              <span *ngIf="!loadingprocess">Procesar Archivo</span>
+              <span *ngIf="loadingprocess">Procesando Archivo</span>
+            </button>
+            -->
+          </form>
+          <div *ngIf="!loadingprocess && csvResult.length!=0">
+            <!--div class="row">
+              <div class="col-3 text-center">
+                <span class="text-success"><b><i class="fas fa-check"></i></b> Registros correctos: </span><b>{{resulttrue}}</b>
+              </div>
+              <div class="col-3 text-center">
+                <span class="text-danger"><b><i class="fas fa-exclamation-triangle"></i></b> Registros incorrectos: </span><b>{{resultfalse}}</b>
+              </div>
+              <div class="col-3 text-center">
+                <span class="text-warning"><b><i class="fas fa-search"></i></b> Registros encontrados en el sistema: </span><b>{{resultfind}}</b>
+              </div>
+              <div class="col-3 text-center">
+                <span class="text-secondary"><b><i class="fas fa-exclamation-triangle"></i></b> Registros repetidos en el grupo:</span><b>{{resultrepeat}}</b>
+              </div>
+            </div-->
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <td colspan="7">
+                    <div class="text-center text-success">
+                      <pagination-controls (pageChange)="p = $event" previousLabel="Atras" nextLabel="Siguiente"></pagination-controls>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="text-center"><b><i class="fas fa-poll"></i></b></th>
+                  <th class="text-center">Mensaje</th>
+                  <th class="text-center">Número</th>
+                  <th class="text-center"><b>Nombre completo</b></th>
+                  <th class="text-center"><b>Correo electrónico</b></th>
+                  <th class="text-center"><b>Interno/Externo</b></th>
+                  <th class="text-center"><b>Tipo</b></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let itemResult of csvResult | paginate: { itemsPerPage: 25, currentPage: p }">
+                  <td>
+                    <span [ngClass]="{'text-success': itemResult.flag=='success' , 'text-danger':itemResult.flag=='danger' , 'text-secondary':itemResult.flag=='secondary'}">
+                      <i [ngClass]="{'fa-check': itemResult.flag== 'success' , 'fa-exclamation-triangle':itemResult.flag=='danger' , 'fa-exclamation-circle':itemResult.flag=='secondary'}" class="fas "></i>
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <span [ngClass]="{'text-success': itemResult.flag=='success' , 'text-danger':itemResult.flag=='danger'}">
+                      {{itemResult.result}}
+                    </span>
+                  </td>
+                  <td>
+                    {{itemResult.value.Numero}}
+                  </td>
+                  <td>
+                    {{itemResult.value.Nombre_Completo}} {{itemResult.value.Apellido_Paterno}} {{itemResult.value.Apellido_Materno}}
+                  </td>
+                  <td>
+                    {{itemResult.value.Correo_electronico}}
+                  </td>
+                  <td>
+                    {{itemResult.value.Usuario}}
+                  </td>
+                  <td>
+                    {{itemResult.value.Tipo}}
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="8">
+                    <div class="text-center text-success">
+                      <pagination-controls (pageChange)="p = $event" previousLabel="Atras" nextLabel="Siguiente"></pagination-controls>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <hr>
+            <button type="button" class="btn btn-success" [disabled]="studentscsvfile.length < 0" (click)="showModal(aceptterms)"><i class="fas fa-check"></i> Aceptar/Agregar alumnos</button>
+            <button type="button" class="btn btn-success" [disabled]="studentsforgrouptmp.length == 0" (click)="updateRequestManager()" nextStep><i class="fas fa-chevron-right"></i> Siguiente</button>
+          </div>
+        </div>
+        <!-- -->
+        <div *ngIf="typeregister=='individual' && !loadingprocess">
+          <div class="alert alert-warning" role="alert">
+            <b><i class="fas fa-exclamation-triangle"></i> Atención: </b>
+            <ul>
+              <li>Los campos marcados con asterisco son de caracter obligatorio</li>
+            </ul>
+          </div>
+          <hr>
+          <div *ngIf="messageSuccess" class="alert alert-success" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> {{messageSuccess}}
+          </div>
+          <div *ngIf="messageError" class="alert alert-danger" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> {{messageError}}
+          </div>
+          <h5><i class="fas fa-user"></i> Registro individual</h5>
+          <form class="was-validated">
+            <div class="row">
+              <div class="col-4">
+                <div class="input-group mb-3">
+                  <input #email type="text" class="form-control" placeholder="Correo electronico" (blur)="validateUser(email.value)" required>
+                  <div class="input-group-append">
+                    <button class="btn btn-success" type="button" id="button-addon2"><i class="fas fa-search"></i></button>
+                  </div>
+                </div>
+                <small *ngIf="!uservalite" class="text-danger"><b> Paso 1. Ingrese un correo electrónico valido</b></small>
+              </div>
+              <div class="col-4">
+                <button type="button" class="btn btn-success" [disabled]="userindividual==0" nextStep><i class="fas fa-check"></i> Terminar </button>
+              </div>
+            </div>
+            <div *ngIf="userfind">
+              <br>
+              <div class="alert alert-warning" role="alert">
+                <h6><i class="fas fa-sync fa-spin"></i> Validando usuario ...</h6>
+              </div>
+            </div>
+            <div *ngIf="userfinder">
+              <br>
+              <div class="alert alert-secondary" role="alert">
+                <i class="fas fa-exclamation-triangle"></i> <b>Este correo electrónico ya se encuentra registrado en el grupo</b>
+              </div>
+            </div>
+            <div *ngIf="uservalite && personsingle && personcheck && !userfind && !userfinder">
+              <div class="row">
+                <div class="col">
+                  <label for="">* Nombre</label>
+                  <input type="text" class="form-control" [value]="personsingle.name" disabled >
+                </div>
+                <div class="col">
+                  <label for="">* Apellido Paterno</label>
+                  <input type="text" class="form-control" [value]="personsingle.fatherName" disabled>
+                </div>
+                <div class="col">
+                  <label for="">* Apellido Materno</label>
+                  <input type="text" class="form-control" [value]="personsingle.motherName" disabled>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="uservalite && !personsingle && personcheck && !userfind && !userfinder">
+              <div class="row">
+                <div class="col">
+                  <label for="">* Nombre</label>
+                  <input #name type="text" class="form-control" placeholder="Nombre" (blur)="validateName(name.value)" required>
+                  <small *ngIf="!validateName(name.value)" class="text-danger"><b>Paso2. Ingrese el nombre completo</b></small>
+                </div>
+                <div class="col">
+                  <label for="">* Apellido Paterno</label>
+                  <input #afather type="text" class="form-control" placeholder="Apellido paterno" (blur)="validateafather(afather.value)" required>
+                  <small *ngIf="!validateafather(afather.value)" class="text-danger"><b>Paso3. Ingrese apellido paterno</b></small>
+                </div>
+                <div class="col">
+                  <label for="">* Apellido Materno</label>
+                  <input #amaterno type="text" class="form-control" placeholder="Apellido materno" (blur)="validateamother(amaterno.value)" required>
+                  <small *ngIf="!validateamother(amaterno.value)" class="text-danger"><b>Paso4. Ingrese apellido materno</b></small>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <label for="">*Tipo de usuario: </label>
+                  <select #type class="form-control" (change)="validatetypestudent(type.value)">
+                    <option value="">opciones</option>
+                    <option value="internal">Interno</option>
+                    <option value="external">Externo</option>
+                  </select>
+                  <small *ngIf="!datosOktype" class="text-danger"><b>*Paso5 Seleccione el tipo de usuario</b></small>
+                </div>
+                <div class="col-4">
+                  <label for="">*Seleccione una opción</label>
+                  <select *ngIf="typestudent=='internal'" #corptype class="form-control" (change)="validatecorptypestudent(corptype.value)">
+                    <option value="">opciones</option>
+                    <option value="student">Estudiante</option>
+                    <option value="teacher">Docente</option>
+                    <option value="administrative">Administrativo</option>
+                  </select>
+                  <select *ngIf="typestudent=='external'" #corptype class="form-control" (change)="validatecorptypestudent(corptype.value)">
+                    <option value="">opciones</option>
+                    <option value="private">Privado</option>
+                    <option value="public">Publico</option>
+                    <option value="particular">Particular</option>
+                  </select>
+                  <small *ngIf="!datosOkCorptype" class="text-danger"><b>*Seleccione una opción</b></small>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="uservalite && studentsingle && personcheck && !userfind && !userfinder">
+              <div class="row">
+                <div class="col">
+                  <label for="">* Carrera</label>
+                  <input type="text" class="form-control" [value]="studentsingle.career" disabled>
+                </div>
+                <div class="col">
+                  <label for="">* Semestre</label>
+                  <input type="text" class="form-control" [value]="studentsingle.term" disabled>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="corptype=='student'">
+              <div class="row">
+                <div class="col">
+                  <label for="">Carrera</label>
+                  <select class="form-control" #carrer (change)="validateCareer(carrer.value)">
+                    <option value="">Selecciona una opción</option>
+                    <option *ngFor="let item of carrerList" [value]="item.longName">{{item.longName}}</option>
+                  </select>
+                  <small *ngIf="!validateCareer(carrer.value)" class="text-danger"><b>*Seleccione una opción</b></small>
+                </div>
+                <div class="col">
+                  <label for="">Semestre</label>
+                  <select class="form-control" #termn (change)="validateTermn(termn.value)">
+                    <option value="">Selecciona una opción</option>
+                    <option *ngFor="let item of termnList" [value]="item">{{item}}</option>
+                  </select>
+                  <small *ngIf="!validateTermn(termn.value)" class="text-danger"><b>Seleccione una opcion de la lista</b></small>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div *ngIf="uservalite && personsingle && studentsingle && personcheck && !userfind && !userfinder">
+              <div class="row">
+                <div class="col-4">
+                  <button type="button" class="btn btn-success" name="button" (click)="updateRequestManagerSingle(idusersingle, persontmp)">
+                    <i class="fas fa-user"></i> Aceptar/Agregar alumno
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <div *ngIf="uservalite && !personsingle && !studentsingle && personcheck && !userfind && !userfinder">
+              <div class="row">
+                <div class="col-4">
+                  <button type="button" class="btn btn-success" name="button"
+                  (click)="newusersingle()"
+                  [disabled]="!datosOkname || !datosOkafather || !datosOkamother || !datosOktype || !datosOkCorptype">
+                    <i class="fas fa-user"></i> Aceptar/Agregar alumno
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="personsingle && !studentsingle && personcheck && !userfind && !userfinder">
+              <div class="row">
+                <div class="col-4">
+                  <button type="button" class="btn btn-success" name="button" (click)="updateRequestManagerSingle(idusersingle, persontmp)">
+                    <i class="fas fa-user"></i> Aceptar/Agregar alumno
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- -->
+      <div *ngIf="loadingprocess">
+        <div class="row text-center animated fadeIn m-5">
+          <div class="col ">
+            <i class="fas fa-sync fa-spin fa-5x"></i>
+          </div>
+        </div>
+        <div class="row text-center">
+          <div class="col">
+            <h2>Procesando datos ...</h2>
+          </div>
+        </div>
+      </div>
+    </wizard-step>
+    <!--Termina la carga masiva-->
+    <wizard-step>
+      <div *ngIf="!loadingprocess && !loading">
+        <div class="row">
+          <div class="col-6">
+            <b>Grupo: </b> <span class="text-success">{{codegroup}}</span>
+          </div>
+          <div *ngIf="typeregister=='masivo'" class="col-6">
+            <b>Total de usuarios registrados a este grupo: </b> <span class="text-success">{{studenstTemp.length}}</span>
+          </div>
+          <div *ngIf="typeregister=='individual'" class="col-6">
+            <b>Total de usuarios registrados a este grupo: </b> <span class="text-success">{{userindividual}}</span>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-4">
+            <button type="button" class="btn blockquote btn-secondary" [routerLink]="['/newrequest',idrequest,numberrequest,labelrequest]">
+              <i class="fas fa-users"></i> Agregar nuevo grupo
+            </button>
+          </div>
+          <div class="col-4">
+            <button type="button" class="btn blockquote btn-light" [routerLink]="['/viewrequest',numberrequest]">
+              <i class="fas fa-reply"></i> Regresar al detalle de la solicitud
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="loadingprocess">
+        <div class="row text-center animated fadeIn m-5">
+          <div class="col ">
+            <i class="fas fa-sync fa-spin fa-5x"></i>
+          </div>
+        </div>
+        <div class="row text-center">
+          <div class="col">
+            <h2>Procesando datos ...</h2>
+          </div>
+        </div>
+      </div>
+    </wizard-step>
+  </wizard>
+</div>
+<ng-template #cancelRequest let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-trash-alt"></i> Cancelar solicitud</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+  <!--Cuerpo del modal-->
+  <div class="modal-body">
+    <form class="was-validated">
+      <label >Motivo de cancelación</label>
+      <input class="form-control" type="text" #reason (blur)="validateSpaceBlank(reason.value)" required>
+      <br>
+      <button type="button" class="btn btn-success" [disabled]="!reasonOk" (click)="deletedRequest(reason.value)">
+        Cancelar Solicitud.
+      </button>
+    </form>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+
+<ng-template #aceptterms let-c="close" let-d="dismiss" class="animation">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-info-circle"></i> Aviso importante</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+  <!--Cuerpo del modal-->
+  <div class="modal-body">
+    <div class="alert alert-secondary" role="alert">
+      <p class="text-justify">
+        <b><i class="fas fa-info-circle"></i> Atención: </b> <br>
+        Solo de registraran en el grupo los datos de los participantes que hayan cumplido con los estandares de información que se indican en el manual y que no esten repetidos en el archivo.
+      </p>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="text-center"><i class="fas fa-hashtag"></i> Total de participantes</th>
+          <th class="text-center"><i class="fas fa-check"></i> Correctos</th>
+          <th class="text-center"><i class="fas fa-exclamation-triangle"></i>Incorrectos</th>
+          <th class="text-center"><i class="fas fa-exclamation-circle"></i> Repetidos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center">
+            {{csvResult.length}}
+          </td>
+          <td class="text-center">
+            {{resulttrue}}
+          </td>
+          <td class="text-center">
+            {{resultfalse}}
+          </td>
+          <td class="text-center">
+            {{resultfind}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!--Termina cuerpo del modal-->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="processFiles()">
+      <i class="fas fa-gears"></i> Agregar participantes
+    </button>
+  </div>
+</ng-template>

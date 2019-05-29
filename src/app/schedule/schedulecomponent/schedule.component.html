@@ -1,0 +1,15 @@
+<div *ngIf="loading">
+  <div class="row text-center animated fadeIn">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Cargando componentes ... </h1>
+    </div>
+  </div>
+</div>
+<div *ngIf="!loading" class="container">
+  <ng-fullcalendar #ucCalendar [options]="calendarOptions" [(eventsModel)]="events"></ng-fullcalendar>
+</div>

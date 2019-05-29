@@ -1,0 +1,555 @@
+<div class="container">
+  <ngb-tabset>
+    <ngb-tab>
+      <ng-template ngbTabTitle>
+        <div class="text-success">
+          <i class="fas fa-cogs"></i> Datos de la lección
+        </div>
+      </ng-template>
+      <!---->
+      <ng-template ngbTabContent>
+        <div class="row" style="margin-top:15px;">
+          <div class="col-11">
+            <div class="row">
+              <div class="col-5">
+                <div class="alert alert-success" role="alert">
+                  Visible
+                </div>
+              </div>
+              <div class="col-5">
+                <div *ngIf="!editblockIsVisible" class="alert alert-secondary" role="alert">
+                  {{contentblock.blockIsVisible}}
+                </div>
+                <div *ngIf="editblockIsVisible">
+                  <select  class="form-control" [(ngModel)]="isVisible">
+                    <option value="">Selecciona una opción</option>
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-1">
+                <button *ngIf="!editblockIsVisible" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Editar" (click)="editVisible()">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button *ngIf="editblockIsVisible" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar" (click)="saveVisible(contentblock.blockId)">
+                  <i class="far fa-save"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5">
+                <div class="alert alert-success" role="alert">
+                  Estatus
+                </div>
+              </div>
+              <div class="col-5">
+                <div *ngIf="!editbblockStatus" class="alert alert-secondary" role="alert">
+                  {{contentblock.blockStatus}}
+                </div>
+                <div *ngIf="editbblockStatus">
+                  <select  class="form-control" [(ngModel)]="status">
+                    <option value="">Selecciona una opción</option>
+                    <option value="published">published</option>
+                    <option value="draft">draft</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-1">
+                <button *ngIf="!editbblockStatus" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Editar" (click)="editStatus()">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button *ngIf="editbblockStatus" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar" (click)="saveStatus(contentblock.blockId)">
+                  <i class="far fa-save"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5">
+                <div class="alert alert-success" role="alert">
+                  Título
+                </div>
+              </div>
+              <div class="col-5">
+                <div *ngIf="!editblockTitle" class="alert alert-secondary" role="alert">
+                  {{contentblock.blockTitle}}
+                </div>
+                <div *ngIf="editblockTitle">
+                  <input type="text" class="form-control" [placeholder]="contentblock.blockTitle" [(ngModel)]="title">
+                </div>
+              </div>
+              <div class="col-1">
+                <button *ngIf="!editblockTitle" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Editar" (click)="editTitle()">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button *ngIf="editblockTitle" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar" (click)="saveTitle(contentblock.blockId)">
+                  <i class="far fa-save"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5">
+                <div class="alert alert-success" role="alert">
+                  Código del bloque
+                </div>
+              </div>
+              <div class="col-5">
+                <div *ngIf="!editblockCode" class="alert alert-secondary" role="alert">
+                  {{contentblock.blockCode}}
+                </div>
+                <div *ngIf="editblockCode">
+                  <input type="text" class="form-control" [placeholder]="contentblock.blockCode" [(ngModel)]="code">
+                </div>
+              </div>
+              <div class="col-1">
+                <button *ngIf="!editblockCode" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Editar" (click)="editBlockCode()">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button *ngIf="editblockCode" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar" (click)="saveBlockCode(contentblock.blockId)">
+                  <i class="far fa-save"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5">
+                <div class="alert alert-success" role="alert">
+                  Contenido MultiMedia
+                </div>
+              </div>
+              <div class="col-5">
+                <div *ngIf="!editblockMedia" class="alert alert-secondary" role="alert">
+                  {{contentblock.blockMedia}}
+                </div>
+                <div *ngIf="editblockMedia">
+                  <input type="text" class="form-control" [placeholder]="contentblock.blockMedia" [(ngModel)]="media">
+                </div>
+              </div>
+              <div class="col-1">
+                <button *ngIf="!editblockMedia" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Editar" (click)="editMedia()">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button *ngIf="editblockMedia" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar" (click)="saveMedia(contentblock.blockId)">
+                  <i class="far fa-save"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5">
+                <div class="alert alert-success" role="alert">
+                  Ponderador del bloque
+                </div>
+              </div>
+              <div class="col-5">
+                <div *ngIf="!editblockWb" class="alert alert-secondary" role="alert">
+                  {{contentblock.blockW}}
+                </div>
+                <div *ngIf="editblockWb">
+                  <input type="text" class="form-control" [placeholder]="contentblock.blockW" [(ngModel)]="blockw">
+                </div>
+              </div>
+              <div class="col-1">
+                <button *ngIf="!editblockWb" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Editar" (click)="editBlockW()">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button *ngIf="editblockWb" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar" (click)="saveBlockW(contentblock.blockId)">
+                  <i class="far fa-save"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5">
+                <div class="alert alert-success" role="alert">
+                  Ponderador del cuestionario
+                </div>
+              </div>
+              <div class="col-5">
+                <div *ngIf="!editblockWq" class="alert alert-secondary" role="alert">
+                  {{contentblock.blockWq}}
+                </div>
+                <div *ngIf="editblockWq">
+                  <input type="text" class="form-control" [placeholder]="contentblock.blockWq" [(ngModel)]="blockwq">
+                </div>
+              </div>
+              <div class="col-1">
+                <button *ngIf="!editblockWq" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Editar" (click)="editBlockWQ()">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button *ngIf="editblockWq" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar" (click)="saveBlockWQ(contentblock.blockId)">
+                  <i class="far fa-save"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5">
+                <div class="alert alert-success" role="alert">
+                  Ponderador de la tarea
+                </div>
+              </div>
+              <div class="col-5">
+                <div *ngIf="!editblockWt" class="alert alert-secondary" role="alert">
+                  {{contentblock.blockWt}}
+                </div>
+                <div *ngIf="editblockWt">
+                  <input type="text" class="form-control" [placeholder]="contentblock.blockWt" [(ngModel)]="blockwt">
+                </div>
+              </div>
+              <div class="col-1">
+                <button *ngIf="!editblockWt" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Editar" (click)="editBlockWT()">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button *ngIf="editblockWt" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar" (click)="saveBlockWT(contentblock.blockId)">
+                  <i class="far fa-save"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-1">
+            <button type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Regresar" (click)="returnCourse()">
+              <i class="fas fa-reply"></i>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab>
+      <ng-template ngbTabTitle>
+        <div class="text-success">
+          <i class="fas fa-book"></i> Contenido
+        </div>
+      </ng-template>
+      <!---->
+      <ng-template ngbTabContent>
+        <div class="row" style="margin-top:15px">
+          <div *ngIf="!editC" class="col-11">
+            <div [innerHTML]="contentblock.blockContent">
+
+            </div>
+          </div>
+          <div *ngIf="editC" class="col-11">
+            <div class="editor block">
+          		<app-ngx-editor [config]="editorConfig" [spellcheck]="true" [(ngModel)]="textprevView"></app-ngx-editor> <!--contentblock.blockContent-->
+          	</div>
+            <hr>
+            <h5><i class="fas fa-code"></i> Editor HTML</h5>
+            <div class="form-group">
+              <textarea class="form-control" rows="8" draggable="false" #textEdit (blur)="getTexthtml(textEdit.value)">
+                {{textprevView}}
+              </textarea>
+            </div>
+          </div>
+          <div class="col-1">
+            <button type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Regresar" (click)="returnCourse()">
+              <i class="fas fa-reply"></i>
+            </button>
+            <button *ngIf="!editC" type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Editar" (click)="editContent()">
+              <i class="fas fa-code"></i>
+            </button>
+
+            <button *ngIf="editC" type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Vista Previa" (click)="showEditorContent(modalEditor)">
+              <i class="fas fa-eye"></i>
+            </button>
+
+            <button *ngIf="editC" type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Guardar Cambios" (click)="saveContent(contentblock.blockId)">
+              <i class="far fa-save"></i>
+            </button>
+          </div>
+        </div>
+        <hr>
+      </ng-template>
+    </ngb-tab>
+    <!---->
+
+    <!---->
+    <ngb-tab>
+      <ng-template ngbTabTitle>
+        <div class="text-success">
+          <i class="fas fa-info-circle"></i> Cuestionario
+        </div>
+      </ng-template>
+      <!---->
+      <ng-template ngbTabContent>
+        <div *ngFor="let item of contentblock.questionnarie.questions; let id = index" class="row" style="margin-top:15px">
+          <div *ngIf="!editQ" class="col-11">
+            <span class="text-success" style="margin-bottom:15px;"><i class="fas fa-info-circle"></i> {{item.questLabel}}</span>
+            <div [innerHTML]="item.header">
+
+            </div>
+            <div [innerHTML]="item.questText">
+
+            </div>
+            <!--Cuestionarios tipo MAP-->
+            <div *ngIf="item.questType == 'map'" style="margin-top:15px;">
+              <div *ngFor="let itemmap of item.group; let idMap = index">
+                <div class="row" >
+                  <div class="col-6">
+                    <div class="alert alert-success" role="alert">
+                      <div [innerHTML]="itemmap">
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr>
+            </div>
+            <!---->
+
+            <!--Cuestionarios tipo group-->
+            <div *ngIf="item.questType == 'group'" style="margin-top:15px;">
+
+              <!--div *ngIf="item.display.length != 0"-->
+
+                <div *ngFor="let itemmap of item.group;let indexopt = index;">
+
+                  <div *ngFor="let ordercomp of item.display;let indexorder = index;">
+                    <div *ngIf="indexorder == indexopt">
+                      <div *ngIf="ordercomp == 0" class="row">
+                        <div class="col-6">
+
+                        </div>
+                        <div class="col-6">
+                          <div class="alert alert-success" role="alert">
+                            <div [innerHTML]="itemmap">
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div *ngIf="ordercomp == 1" class="row">
+                        <div class="col-6">
+                          <div class="alert alert-success" role="alert">
+                            <div [innerHTML]="itemmap">
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <!--/div-->
+
+              <!--div *ngIf="item.display.length == 0"-->
+                <div class="row" *ngFor="let itemmap of item.group;let idquestion = index;">
+                  <div class="col-6">
+                    <div class="alert alert-success" role="alert">
+                      <div [innerHTML]="itemmap">
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <!--/div-->
+            </div>
+            <!---->
+            <hr>
+          </div>
+          <div *ngIf="editQ" class="col-11">
+            <span class="text-success" style="margin-bottom:15px;"><i class="fas fa-info-circle"></i> {{item.questLabel}}</span>
+            <!---->
+            <div *ngIf="item.header!=null">
+              <div class="editor block">
+                <app-ngx-editor [config]="editorConfig" [spellcheck]="true" [(ngModel)]="item.header"></app-ngx-editor>
+              </div>
+              <h6><i class="fas fa-code"></i> Editor HTML</h6>
+              <div class="form-group">
+                <textarea class="form-control" rows="8" draggable="false" #textEditquestion (blur)="getTexthtmlQuestion(textEditquestion.value, id)">
+                  {{item.header}}
+                </textarea>
+              </div>
+            </div>
+            <!---->
+
+            <!---->
+            <div class="editor block">
+          		<app-ngx-editor [config]="editorConfig" [spellcheck]="true" [(ngModel)]="item.questText"></app-ngx-editor>
+          	</div>
+            <h6><i class="fas fa-code"></i> Editor HTML</h6>
+            <div class="form-group">
+              <textarea class="form-control" rows="8" draggable="false" #textEditquestion (blur)="getTexthtmlQuestion(textEditquestion.value, id)">
+                {{item.questText}}
+              </textarea>
+            </div>
+            <!---->
+            <h6>Preguntas</h6>
+            <!--Cuestionarios tipo MAP-->
+            <div *ngIf="item.questType == 'map'" style="margin-top:15px;">
+              <div *ngFor="let itemmap of item.group; let idMap = index">
+                <input class="form-control" type="text" [placeholder]="itemmap">
+              </div>
+              <hr>
+            </div>
+            <!---->
+
+            <!--Cuestionarios tipo group-->
+            <div *ngIf="item.questType == 'group'" style="margin-top:15px;">
+
+              <!--div *ngIf="item.display.length != 0"-->
+
+                <div *ngFor="let itemmap of item.group;let indexopt = index;">
+
+                  <div *ngFor="let ordercomp of item.display;let indexorder = index;">
+                    <div *ngIf="indexorder == indexopt">
+                      <div *ngIf="ordercomp == 0" class="row">
+                        <div class="col-6">
+                          <input class="form-control" type="text" [placeholder]="itemmap">
+                        </div>
+                      </div>
+
+                      <div *ngIf="ordercomp == 1" class="row">
+                        <input class="form-control" type="text" [placeholder]="itemmap">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <!--/div-->
+
+              <!--div *ngIf="item.display.length == 0"-->
+                <div class="row" *ngFor="let itemmap of item.group;let idquestion = index;">
+                  <input class="form-control" type="text" [placeholder]="itemmap">
+                </div>
+              <!--/div-->
+            </div>
+
+            <!---->
+
+            <hr>
+          </div>
+          <div class="col-1">
+            <button type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Regresar" (click)="returnCourse()">
+              <i class="fas fa-reply"></i>
+            </button>
+            <button *ngIf="!editQ" type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Editar" (click)="editQuestion()">
+              <i class="fas fa-code"></i>
+            </button>
+
+            <button *ngIf="editQ" type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Vista Previa" (click)="showEditorContent(modalEditorQuestion)">
+              <i class="fas fa-eye"></i>
+            </button>
+
+            <button *ngIf="editQ" type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Guardar Cambios" (click)="saveQuestion()">
+              <i class="far fa-save"></i>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <!---->
+
+    <!---->
+    <ngb-tab>
+      <ng-template ngbTabTitle>
+        <div class="text-success">
+          <i class="fas fa-thumbtack"></i> Tarea
+        </div>
+      </ng-template>
+      <!---->
+      <ng-template ngbTabContent>
+        <div *ngIf="contentblock.task.items">
+          <div *ngFor="let item of contentblock.task.items; let id = index" class="row" style="margin-top:15px">
+            <div *ngIf="!editT" class="col-11">
+              <span class="text-success"><i class="fas fa-thumbtack"></i> {{item.itemLabel}}</span>
+              <div [innerHTML]="item.itemText">
+
+              </div>
+              <hr>
+            </div>
+
+            <div *ngIf="editT" class="col-11">
+              <span class="text-success"><i class="fas fa-thumbtack"></i> {{item.itemLabel}}</span>
+              <div class="editor block">
+            		<app-ngx-editor [config]="editorConfig" [spellcheck]="true" [(ngModel)]="item.itemText"></app-ngx-editor>
+            	</div>
+              <h5><i class="fas fa-code"></i> Editor HTML</h5>
+              <div class="form-group">
+                <textarea class="form-control" rows="8" draggable="false" #textEditTask (blur)="getTexthtmlTask(textEditTask.value, id)">
+                  {{item.itemText}}
+                </textarea>
+              </div>
+              <hr>
+            </div>
+
+            <div class="col-1">
+              <button type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Regresar" (click)="returnCourse()">
+                <i class="fas fa-reply"></i>
+              </button>
+              <button *ngIf="!editT" type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Editar" (click)="editTask()">
+                <i class="fas fa-code"></i>
+              </button>
+
+              <button *ngIf="editT" type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Vista Previa" (click)="showEditorContent(modalEditorTask)">
+                <i class="fas fa-eye"></i>
+              </button>
+
+              <button *ngIf="editT" type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Guardar Cambios" (click)="saveTask()">
+                <i class="far fa-save"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <!---->
+  </ngb-tabset>
+
+  <!--Modal content-->
+  <ng-template #modalEditor let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+    <!--Encabezado del modal-->
+    <div class="modal-header">
+      <h4 class="modal-title"><i class="fas fa-eye"></i> Vista previa</h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeEditor()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <!--  -->
+    <!--Cuerpo del modal para desplegar el materail de apoyo-->
+    <div class="modal-body">
+      <div [innerHTML]="textprevView">
+
+      </div>
+    </div>
+    <!--Termina cuerpo del modal-->
+  </ng-template>
+  <!---->
+
+  <!--Modal Question-->
+  <ng-template #modalEditorQuestion let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+    <!--Encabezado del modal-->
+    <div class="modal-header">
+      <h4 class="modal-title"><i class="fas fa-eye"></i> Vista previa</h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeEditor()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <!--  -->
+    <!--Cuerpo del modal para desplegar el materail de apoyo-->
+    <div class="modal-body">
+      <div [innerHTML]="textprevViewQuestion">
+
+      </div>
+    </div>
+    <!--Termina cuerpo del modal-->
+  </ng-template>
+  <!---->
+
+  <!--Modal Task-->
+  <ng-template #modalEditorTask let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+    <!--Encabezado del modal-->
+    <div class="modal-header">
+      <h4 class="modal-title"><i class="fas fa-eye"></i> Vista previa</h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeEditor()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <!--  -->
+    <!--Cuerpo del modal para desplegar el materail de apoyo-->
+    <div class="modal-body">
+      <div [innerHTML]="textprevViewTask">
+
+      </div>
+    </div>
+    <!--Termina cuerpo del modal-->
+  </ng-template>
+  <!---->
+</div>

@@ -1,0 +1,143 @@
+<div *ngIf="loading">
+  <div class="row text-center animated fadeIn">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Cargando componentes ... </h1>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loading" class="animated fast fadeIn">
+  <div class="container">
+    <app-courseshop>
+
+    </app-courseshop>
+    <h1 class="text-center">
+      {{curso.title}}
+    </h1>
+    <hr>
+    <ngb-tabset>
+      <ngb-tab>
+        <ng-template ngbTabTitle><h6 class="text-success"><i class="fas fa-book-reader"></i> Descripción del curso</h6></ng-template>
+        <ng-template ngbTabContent>
+          <br>
+          <div class="row">
+            <div class="col-4">
+              <div class="card">
+                <img [src]="curso.image" class="card-img-top">
+                <div class="card-body">
+                  <div class="card-title">
+                    <h4 class="text-success">{{curso.title}}</h4>
+                  </div>
+                  Categoria: <small>{{curso.categories}}</small>
+                  <br>
+                  CLAVE: <small>{{curso.code}}</small>
+                  <br>
+                  Costo: {{costo | currency:'MXN'}}
+                </div>
+                <!--div class="card-footer">
+                  <button type="button" class="btn btn-success blockquote" (click)="showModal(modalUser)">
+                    <i class="fas fa-user-graduate"></i> Inscribirme
+                  </button>
+                </div-->
+              </div>
+            </div>
+            <div class="col-8">
+              <div [innerHTML]="curso.description">
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab>
+        <ng-template ngbTabTitle><h6 class="text-success"><i class="fas fa-list"></i> Temario</h6></ng-template>
+          <ng-template ngbTabContent>
+            <div *ngFor="let item of block" class="card">
+              <div *ngIf="item.number==0" class="card-header">
+                <h5>
+                  {{item.section}}.{{item.title}} <span *ngIf="item.beginDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de inicio: {{item.beginDate | date}}</span> <span *ngIf="item.endDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de término: {{item.endDate | date}}</span><span *ngIf="item.duration" class="text-right text-secondary"> | <i class="far fa-clock"></i> Duración:{{item.duration}}</span>
+                </h5>
+              </div>
+              <ul class="list-group list-group-flush">
+                <li *ngIf="item.number!=0" class="list-group-item">
+                  {{item.section}}.{{item.number}} {{item.title}}
+                </li>
+              </ul>
+            </div>
+          </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+    <br>
+    <div class="row">
+      <button type="button" class="btn btn-success blockquote" [routerLink]="['/cursos']">
+        <i class="fas fa-map-signs"></i> Seguir explorando
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalUser let-c="close" let-d="dismiss" class="animation">
+  <div *ngIf="identiti==null">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fas fa-info-circle"></i> Aviso importante</div>
+      <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-success" role="alert">
+        <b>Es necesario estar logueado para poder inicar el proceso de inscripción</b>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col text-center">
+          <h6>Ya tengo una cuenta</h6>
+          <button type="button" class="btn btn-success blockquote float-none" [routerLink]="['/login']" (click)="closeModal()">
+            <i class="fas fa-user"></i> Iniciar sesión
+          </button>
+        </div>
+        <div class="col text-center">
+          <h6>Soy un participante nuevo</h6>
+          <button type="button" class="btn btn-success blockquote" [routerLink]="['/signin']" (click)="closeModal()">
+            <i class="fas fa-user-plus"></i> Registrarme
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="identiti != null">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fas fa-info-circle"></i> Selecciona la modalidad</div>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="was-validated">
+          <label for="modalidad">* Modalidad</label>
+          <select #modalidad id="modalidad" class="form-control" (change)="typeModal(modalidad.value)" required>
+            <option value="">*Selecciona una opción</option>
+            <option value="grupal">Grupal</option>
+            <option value="individual">Individual</option>
+          </select>
+        </form>
+        <br>
+        <div *ngIf="modaltype=='grupal'">
+          <select #members class="form-control" (change)="setMembers(members.value)" required>
+            <option value="">Seleccione el número de participantes</option>
+            <option *ngFor="let item of maxmembers" [value]="item">{{item}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer" >
+        <button class="btn btn-success blockquote" (click)="sendCourseShop()" [disabled]="members==0">
+            <i class="fas fa-shopping-cart"></i> Agregar a mi lista de pedido
+        </button>
+      </div>
+  </div>
+</ng-template>

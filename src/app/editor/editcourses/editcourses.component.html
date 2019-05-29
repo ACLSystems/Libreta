@@ -1,0 +1,28 @@
+<div *ngIf="identiti" class="container">
+  <div *ngIf="loading">
+    <div class="row text-center animated fadeIn">
+      <div class="col ">
+        <i class="fas fa-sync fa-spin fa-5x"></i>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col">
+        <h1>Cargando componentes ... </h1>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!loading">
+    <h1 class="display-3 text-center">Seleccione un Curso</h1>
+    <hr>
+    <div class="card animated fadeIn fast" *ngFor="let crs of cursoslist, let id=index">
+      <div class="card-header">
+        <button type="button" class="btn btn-outline-success" (click)="getCourse(crs.id)">
+          <h6><i class="far fa-arrow-alt-circle-right"></i> {{crs.title}} CLAVE: {{crs.code}}</h6>
+        </button>
+      </div>
+    </div>
+    <button type="button" class="btn btn-outline-success blockquote" (click)="getEditManager()">
+      <i class="fas fa-reply"></i> Regresar
+    </button>
+  </div>
+</div>

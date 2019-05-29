@@ -1,0 +1,78 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <a class="navbar-brand" [routerLink]="['consoleuser']">
+    <img src="/assets/img/superatemexico.jpg" width="100" alt="">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li *ngIf="groupsUser > 0" class="nav-item" routerLinkActive="active" >
+        <a class="nav-link" [routerLink]="['/mygroups']"><i class="fas fa-graduation-cap"></i> Mis cursos</a>
+      </li>
+      <li *ngIf="groupsUser > 0" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/schedule']"><i class="fas fa-calendar"></i> Calendario de actividades</a>
+      </li>
+      <li *ngIf="identiti && rolSup" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/searchconsole']"><i class="fas fa-search-plus"></i> Consultas</a>
+      </li>
+      <li *ngIf="identiti && rolSup" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/consolereports']"><i class="far fa-chart-bar"></i> Reportes</a>
+      </li>
+      <li *ngIf="identiti && rolRequester" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/solicitudes']"><i class="fas fa-folder-plus"></i> Solicitudes</a>
+      </li>
+      <li *ngIf="identiti && rolAutho" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/editmanager']"><i class="fas fa-pencil-alt"></i> Editar Cursos</a>
+      </li>
+      <li *ngIf="identiti && rolInstructor" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/tutorial']"><i class="fab fa-black-tie"></i> Tutorías</a>
+      </li>
+      <li *ngIf="identiti && rolAdmin" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/admin']"><i class="fas fa-sitemap"></i> Administrador</a>
+      </li>
+      <li *ngIf="identiti && rolOrg" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/resetpass']"><i class="fas fa-key"></i> Reseteo de Contraseña</a>
+      </li>
+
+    </ul>
+    <hr>
+    <form class="form-inline my-2 my-lg-0">
+      <a *ngIf="notifications == 0" class="nav-link text-success"><i class="far fa-bell"></i></a>
+      <div *ngIf="notifications != 0" ngbDropdown placement="bottom-right" class="d-inline-block">
+        <a class="nav-link text-success" ngbDropdownToggle><i class="far fa-bell"></i><b class="text-danger" style="font-size:12px">{{notifications}}</b></a>
+        <div ngbDropdownMenu aria-labelledby="userOptions">
+
+          <div *ngFor="let item of messagesNotifications">
+            <div *ngIf="item.sourceRole == 'instructor'">
+              <button class="dropdown-item" (click)="getviewnotification(item.objects, item.sourceRole, item.notificationid, item.destination.item._id, item.sourceType)">
+                <span class="text-success"><i class="fas fa-chalkboard-teacher"></i> <b>{{item.source.item.person.name}} {{item.source.item.person.fatherName}} {{item.source.item.person.motherName}}</b></span>
+                <p class="font-italic">{{item.message | slice:0:50}}</p>
+              </button>
+            </div>
+            <div *ngIf="item.sourceRole == 'user' && item.sourceType == 'user'">
+              <button class="dropdown-item" (click)="getviewnotification(item.objects, item.sourceRole, item.notificationid, item.destination.item._id, item.sourceType)">
+                <span class="text-success"><i class="fas fa-user-circle"></i> <b>{{item.source.item.person.name}} {{item.source.item.person.fatherName}} {{item.source.item.person.motherName}}</b></span>
+                <p class="font-italic">{{item.message | slice:0:50}}</p>
+              </button>
+            </div>
+
+            <div *ngIf="item.sourceType == 'system'">
+              <button class="dropdown-item" (click)="getviewnotification(item.objects, item.sourceRole, item.notificationid, item.destination.item._id, item.sourceType)">
+                <span class="text-info"><i class="fas fa-desktop"></i> Aviso del sistema</span>
+                <p class="font-italic">{{item.message | slice:0:50}}</p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ngbDropdown placement="bottom-right" class="d-inline-block">
+        <button class="btn btn-outline-success" id="userOptions" ngbDropdownToggle><i class="fas fa-user-circle"></i> {{identiti.person.name}}</button>
+        <div ngbDropdownMenu aria-labelledby="userOptions">
+          <button class="dropdown-item text-success" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesion</button>
+          <button class="dropdown-item text-success" [routerLink]="['/userprofile']" ><i class="fas fa-user-alt"></i> Mi perfíl</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</nav>

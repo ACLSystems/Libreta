@@ -1,0 +1,51 @@
+<div *ngIf="messageUserSucces" class="alert alert-warning" role="alert">
+  <h5><i class="fas fa-bullhorn"></i> {{messageUserSucces}}</h5>
+</div>
+
+<div *ngIf="messageUserError" class="alert alert-warning" role="alert">
+  <h5><i class="fas fa-bullhorn"></i> {{messageUserError}}</h5>
+</div>
+
+<div *ngFor="let itemTask of block.data.tasks">
+  <hr>
+  <span class="text-success" style="margin-bottom:15px;"><i class="fas fa-thumbtack"></i> {{itemTask.label}}</span>
+  <div [innerHTML]="itemTask.text">
+
+  </div>
+  <div *ngIf="itemTask.type == 'textarea'">
+    <textarea class="form-control" rows="3" draggable="false" #answerTaskTA (blur)="setTask(answerTaskTA.value, 'text',itemTask.id,itemTask.label)"></textarea>
+  </div>
+  <div *ngIf="itemTask.type == 'text'">
+    <input type="text" class="form-control" #answerTaskTxt (blur)="setTask(answerTaskTxt.value, 'text',itemTask.id, itemTask.label)">
+  </div>
+  <div *ngIf="itemTask.type == 'file'">
+    <input type="file" (change)="uploadFile($event,itemTask.id,itemTask.label)">
+  </div>
+</div>
+<hr>
+<div *ngIf="isSendTask" class="alert alert-success" role="alert">
+  <h5><i class="fas fa-exclamation-circle"></i> Se guardó la actividad exitosamente</h5>
+</div>
+<button type="button" class="btn btn-success" name="button" (click)="showAccept(modalTask)" [disabled]="!isAttachmen"><i class="fas fa-thumbtack"></i> Enviar</button>
+
+<!--Modal envio de tareas-->
+<ng-template #modalTask let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-info-circle"></i> Atención</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+  <!--Cuerpo del modal para el aviso de envió de evaluación de tareas-->
+  <div class="modal-body">
+      <div class="alert alert-warning" role="alert">
+        <h6>Al enviar de nuevo el ejercicio, se estara actualizando la fecha y hora de entrega ¿Deseas continuar?</h6>
+      </div>
+      <button type="button" class="btn btn-success" (click)="sendTask('true')"><i class="fas fa-thumbtack"></i> Enviar tarea</button>
+      <button type="button" class="btn btn-success" (click)="closeDialog()"><i class="fas fa-times"></i> Cancelar</button>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+<!---->

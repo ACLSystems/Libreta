@@ -1,0 +1,126 @@
+<div *ngIf="loading">
+  <div class="row text-center animated fadeIn">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Cargando componentes ... </h1>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loading" class="container-fluid">
+  <div *ngIf="orgTree.ouType=='org'" class="container-fluid">
+    <div class="card">
+      <div class="card-header">
+        <button type="button" class="btn btn-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(orgTree.query, orgTree.ouType)">
+          <i class="fas fa-chart-pie"></i>
+        </button>
+        <span class="text-success">
+          <h5><i class="fas fa-location-arrow"></i> CONALEP</h5>
+        </span>
+      </div>
+    </div>
+    <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+      <div *ngFor="let item of orgTree.ous">
+        <ngb-panel>
+          <ng-template ngbPanelTitle>
+            <span class="text-success">
+              <h5><i class="fas fa-location-arrow"></i> Estado: <span class="text-secondary">{{item.ouLongName}}</span></h5>
+            </span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <div class="card-header">
+              <button type="button" class="btn btn-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(item.query, item.ouType)">
+                <i class="fas fa-chart-pie"></i>
+              </button>
+              <span class="text-success">
+                <h6><i class="far fa-building"></i> <span class="text-secondary">{{item.ouLongName}}</span></h6>
+              </span>
+            </div>
+            <div class="card" *ngFor="let itemPlantel of item.ous">
+              <div class="card-header">
+                <button type="button" class="btn btn-outline-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(itemPlantel.query, itemPlantel.ouType)">
+                  <i class="fas fa-chart-pie"></i>
+                </button>
+                <span class="text-success">
+                  <h6><i class="far fa-building"></i> Plantel: <span class="text-secondary">{{itemPlantel.ouLongName}}</span> <i class="fas fa-hashtag"></i> Clave: <span class="text-secondary">{{itemPlantel.ouName}}</span></h6>
+                </span>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </div>
+    </ngb-accordion>
+  </div>
+  <!---->
+  <!---->
+  <div *ngIf="orgTree.ouType=='state'">
+    <div class="row">
+      <div class="col-6">
+        <h3 class="text-success"><i class="fas fa-location-arrow"></i> Estado: <span class="text-secondary">{{orgTree.ouLongName}}</span></h3>
+      </div>
+      <div class="col-6">
+        <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(orgTree.query, orgTree.ouType)">
+          <i class="fas fa-chart-pie"></i>
+        </button>
+      </div>
+    </div>
+
+    <div *ngFor="let item of orgTree.ous">
+      <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+        <ngb-panel>
+          <ng-template ngbPanelTitle>
+            <span class="text-success">
+              <h6><i class="far fa-building"></i> Plantel: <span class="text-secondary">{{item.ouLongName}}</span> <i class="fas fa-hashtag"></i> Clave: <span class="text-secondary">{{item.ouName}}</span></h6>
+            </span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <div class="alert alert-success" role="alert">
+              <button type="button" class="btn btn-outline-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(item.query, item.ouType)">
+                <i class="fas fa-chart-pie"></i>
+              </button>
+              <span class="text-success">
+                <h6><i class="far fa-building"></i> Plantel: <span class="text-secondary">{{item.ouLongName}}</span> <i class="fas fa-hashtag"></i> Clave: <span class="text-secondary">{{item.ouName}}</span></h6>
+              </span>
+            </div>
+            <div *ngFor="let itemGrupo of item.groups">
+              <div class="alert alert-success" role="alert">
+                <button type="button" class="btn btn-outline-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getGradesforgroup(itemGrupo.groupId,item.query, item.ouType)">
+                  <i class="fas fa-chart-pie"></i>
+                </button>
+                <i class="fas fa-book-alt"></i> Curso: {{itemGrupo.groupName}} <i class="fas fa-users"></i> Grupo: <span class="text-secondary">{{itemGrupo.groupCode}}</span>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+  </div>
+  <!---->
+  <!---->
+  <div *ngIf="orgTree.ouType=='campus'" class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <h5><i class="far fa-building"></i> Plantel: <span class="text-secondary">{{orgTree.ouLongName}}</span> <i class="fas fa-hashtag"></i> Clave: <span class="text-secondary">{{orgTree.ouName}}</span></h5>
+      </div>
+      <div class="col-4">
+        <button type="button" class="btn btn-outline-success" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(orgTree.query, orgTree.ouType)">
+          <i class="fas fa-chart-pie"></i>
+        </button>
+      </div>
+    </div>
+    <hr>
+    <div *ngFor="let item of orgTree.groups">
+      <div class="alert alert-success" role="alert">
+        <button type="button" class="btn btn-outline-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getGradesforgroup(item.groupId, orgTree.query, orgTree.ouType)">
+          <i class="fas fa-chart-pie"></i>
+        </button>
+        <i class="fas fa-book-alt"></i> Curso: {{item.groupName}} <i class="fas fa-users"></i> Grupo: <span class="text-secondary">{{item.groupCode}}</span>
+      </div>
+    </div>
+  </div>
+  <!---->
+</div>

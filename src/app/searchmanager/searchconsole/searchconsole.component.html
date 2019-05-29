@@ -1,0 +1,219 @@
+<div class="container">
+  <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+    <ngb-panel>
+      <ng-template ngbPanelTitle>
+        <span class="text-success">
+          <i class="fas fa-user"></i> <span class="text-success">Consultar información del alumno</span>
+        </span>
+      </ng-template>
+      <ng-template ngbPanelContent>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" #wordcode  placeholder="Ingresa correo electrónico del alumno">
+          <div class="input-group-append">
+            <button class="btn btn-outline-success" type="button" (click)="searchUser(wordcode.value)">
+              <i [ngClass]=" { 'fa-search':!loading, 'fa-sync fa-spin':loading }" class="fa"></i>
+              <span *ngIf="!loading">Buscar</span>
+              <span *ngIf="loading">Procesando</span>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="userAccount && isFindOk">
+          <h5 class="text-success"><i class="fas fa-id-badge"></i> Nombre completo: <small class="text-secondary">{{userAccount.name}}</small></h5>
+          <hr>
+          <h5 class="text-success"><i class="fas fa-book"></i> Cursos que toma</h5>
+          <div *ngFor="let usergroup of userAccount.groups">
+            <hr>
+            <span class="text-secondary"><i class="fas fa-book"></i> Curso:</span> <span class="text-success">{{usergroup.course}}</span><span class="text-secondary"> <i class="fas fa-hashtag"></i> Código:</span> <span class="text-success">{{usergroup.courseCode}}</span>
+            <br>
+            <span class="text-secondary"><i class="fas fa-users"></i> Grupo:</span> <span class="text-success">{{usergroup.group}}</span> <span class="text-secondary">CLAVE: </span><span class="text-success">{{usergroup.groupCode}}</span>
+          </div>
+          <hr>
+          <h5>Opciones: </h5>
+          <br>
+          <div class="row">
+            <div class="col-3">
+              <button type="button" class="btn btn-success" (click)="showmodal(resetPassword,wordcode.value,'reset')">
+                <i class="fas fa-key"></i> Resetear contraseña
+              </button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-success" (click)="showmodal(updatenewuser,wordcode.value,'update')">
+                <i class="fa fa-sync"></i> Actualizar correo electronico
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!isFindOk">
+          <div class="alert alert-warning" role="alert">
+            <i class="fas fa-id-badge"></i> {{messageError}}
+          </div>
+        </div>
+      </ng-template>
+    </ngb-panel>
+    <ngb-panel>
+      <ng-template ngbPanelTitle>
+        <span class="text-success">
+          <i class="fas fa-user-friends"></i> <span class="text-success">Consultar grupos</span>
+        </span>
+      </ng-template>
+      <ng-template ngbPanelContent>
+
+        <form class="was-validated">
+          <select  #group (change)="findgroup(group.value)" class="form-control">
+            <option value="">*Selecciona un grupo</option>
+            <option *ngFor="let item of groupsmanager" [value]="item.code">
+              {{item.code}}
+            </option>
+          </select>
+        </form>
+
+        <div *ngIf="isFindGroupOk">
+          <hr>
+          <div class="row">
+            <div class="col-md-4">
+              <h5><i class="fas fa-book"></i> Curso: <span class="text-success">{{groupmanager.coursetitle}}</span></h5>
+            </div>
+            <div class="col-md-4">
+              <h5><i class="fas fa-users"></i> Grupo: <span class="text-success">{{groupmanager.groupcode}}</span></h5>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-4">
+              <h6><i class="far fa-calendar-alt"></i> Fecha de inicio: <span class="text-success">{{groupmanager.beginDate | date:'dd-MM-yyyy'}}</span></h6>
+            </div>
+            <div class="col-sm-4">
+              <h6><i class="far fa-calendar-alt"></i> Fecha de termino: <span class="text-success">{{groupmanager.endDate | date:'dd-MM-yyyy'}}</span></h6>
+            </div>
+            <div class="col-sm-4">
+              <h6><i class="far fa-address-book"></i> Estudiantes de este curso: <span class="text-success">{{groupmanager.numStudents}}</span></h6>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-4">
+              <h6><i class="far fa-list-alt"></i> Lista de alumnos</h6>
+            </div>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Nombre Completo</th>
+                <th>Correo electrónico</th>
+                <th>Resetear Contraseña</th>
+                <th>Cambiar correo electrónico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let itemStudent of groupmanager.students; let idS=index">
+                <td>{{itemStudent.userName}} {{itemStudent.userFatherName}} {{itemStudent.userMotherName}}</td>
+                <td>{{itemStudent.useremail}}</td>
+                <td>
+                  <button type="button" class="btn btn-success" (click)="showmodal(resetPassword, itemStudent.useremail, 'reset')">
+                    <i class="fas fa-key"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button type="button" class="btn btn-success" (click)="showmodal(updatenewuser, itemStudent.useremail, 'update')">
+                    <i class="fa fa-sync"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div *ngIf="!isFindGroupOk">
+          <br>
+          <div class="alert alert-warning" role="alert">
+            <i class="fas fa-id-badge"></i> Sin resultados en la busqueda
+          </div>
+        </div>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+</div>
+
+<ng-template #resetPassword let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-key"></i> Resetear contraseña</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal reseteo de contraseña-->
+  <div class="modal-body">
+    <div class="alert alert-warning" role="alert">
+      <i class="fas fa-exclamation-triangle"></i> Al realizar esta acción, se actualizaran los datos del usuario dentro del sistema
+    </div>
+    <div *ngIf="messageSuccessProcess" class="alert alert-success" role="alert">
+      <i class="fas fa-exclamation"></i> {{messageSuccessProcess}}
+    </div>
+    <div *ngIf="messageErrorProcess" class="alert alert-danger" role="alert">
+      <i class="fas fa-times"></i> {{messageErrorProcess}}
+    </div>
+    <div *ngIf="!initialPassword">
+      <form class="was-validated">
+        <input  type="text" #passTemp placeholder="Ingrese una contraseña temporal" class="form-control" (blur)="validatePass(passTemp.value)" required>
+        <br>
+        <button  type="button" class="btn btn-success" (click)="resPass(passTemp.value)" [disabled]="!passinitialtemp">
+          <i class="fas fa-key"></i> Resetear contraseña.
+        </button>
+        <span class="text-success" *ngIf="messageSuccessProcess">{{messageSuccessProcess}}</span>
+        <span class="text-danger" *ngIf="messageErrorProcess">{{messageErrorProcess}}</span>
+        <br>
+      </form>
+    </div>
+    <form class="was-validated" >
+      <button *ngIf="initialPassword" type="button" class="btn btn-success" (click)="resPass()">
+          <i class="fas fa-key"></i> Resetear contraseña.
+      </button>
+      <hr>
+      <button type="button" class="btn btn-success" (click)="closeModal()">
+        <i class="fas fa-times"></i> Cancelar.
+      </button>
+    </form>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+
+<ng-template #updatenewuser let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-key"></i> Actualizar correo electrónico</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal reseteo de contraseña-->
+  <div class="modal-body">
+    <div class="alert alert-warning" role="alert">
+      <i class="fas fa-exclamation-triangle"></i> Al realizar esta acción, se actualizaran los datos del usuario dentro del sistema
+    </div>
+    <div *ngIf="messageSuccessProcess" class="alert alert-success" role="alert">
+      <i class="fas fa-exclamation"></i> {{messageSuccessProcess}}
+    </div>
+    <div *ngIf="messageErrorProcess" class="alert alert-danger" role="alert">
+      <i class="fas fa-times"></i> {{messageErrorProcess}}
+    </div>
+    <form class="was-validated">
+      <input  type="text" #usernow class="form-control" value="{{username}}" disabled>
+      <br>
+      <input  type="text" #usernew placeholder="Ingrese el nuevo correo" class="form-control" (blur)="validateEmail(usernew.value)" required>
+      <span *ngIf="!emailnewOk" class="text-danger">Debes ingresar una cuenta de correo electronico</span>
+      <br>
+      <button type="button" class="btn btn-success" [disabled]="!emailnewOk" (click)="updateemail(usernew.value)">
+        <i class="fas fa-key"></i> Actualizar usuario.
+      </button>
+      <button type="button" class="btn btn-success" (click)="closeModal()">
+        <i class="fas fa-times"></i> Cancelar.
+      </button>
+    </form>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>

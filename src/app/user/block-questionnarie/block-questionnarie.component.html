@@ -1,0 +1,274 @@
+<div *ngIf="block.data.questionnarie.maxAttempts != block.data.attempts">
+  <div class="alert alert-secondary" role="alert">
+    <span><i class="fas fa-exclamation-circle"></i> Has usado {{block.data.attempts}} de {{block.data.questionnarie.maxAttempts}} intentos permitidos</span>
+  </div>
+</div>
+
+<div *ngIf="block.data.questionnarie.maxAttempts == block.data.attempts">
+  <div class="alert alert-danger" role="alert">
+    <span><i class="fas fa-exclamation-triangle"></i> Has agotado los intentos permitidos</span>
+  </div>
+</div>
+
+<div *ngFor="let item of block.data.questionnarie.questions;let idQ = index">
+  <div *ngIf="item.label">
+    <span class="text-success" style="margin-bottom:15px;"><i class="fas fa-info-circle"></i> {{item.label}} {{item.help}} </span>
+  </div>
+  <div *ngIf="!item.label">
+    <span class="text-success" style="margin-bottom:15px;"><i class="fas fa-info-circle"></i> Pregunta {{idQ+1}} {{item.help}}</span>
+  </div>
+
+  <!--Para los headers de las preguntas-->
+  <div *ngIf="item.header">
+    <div [innerHTML]="item.header">
+
+    </div>
+  </div>
+  <!--  -->
+
+  <!--Contenido o texto adicional de la pregunta-->
+  <div [innerHTML]="item.text">
+
+  </div>
+  <!--  -->
+
+  <!--Para las preguntas que tengan pie de pagina-->
+  <div *ngIf="item.footer">
+    <span class="text-success text-justify">
+      <i class="fas fa-quote-left"></i>
+      <p>
+        {{item.footer}}
+      </p>
+    </span>
+  </div>
+  <!--  -->
+
+  <!--Seccion para el tipo de respuesta en optativas-->
+  <div *ngIf="item.type == 'option'" style="margin-top:15px;">
+    <div *ngFor="let itemOpt of item.options;let idOpt=index">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" [name]="idQ" id="idQ" value="itemOpt.value" (change)="getAnswer(item.id, idOpt, item.type, 0, idQ)" >
+        <label class="form-check-label" for="exampleRadios1">
+          {{itemOpt.value}}
+        </label>
+      </div>
+    </div>
+    <hr>
+  </div>
+  <!--  -->
+
+  <!--Seccion para el tipo de preguntas map-->
+  <div *ngIf="item.type == 'map'" style="margin-top:15px;">
+    <div *ngFor="let itemmap of item.group; let idMap = index">
+      <div class="row">
+        <div class="col-5">
+          <div class="alert alert-success" role="alert">
+            <div [innerHTML]="itemmap">
+
+            </div>
+          </div>
+        </div>
+        <div class="col-7">
+          <form class="form-inline ">
+            <div class="form-group" *ngFor="let itemopt of item.options;let idOpcMap = index">
+              <input class="form-check-input" type="radio" [name]="idMap" value="itemopt.value" (change)="getAnswer(item.id, idOpcMap, item.type, idMap,idQ)">
+              <label class="form-control-plaintext">{{itemopt.value}}</label>
+              <hr>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+  <!---->
+
+  <!--Seccion para el tipo de preguntas group-->
+  <div *ngIf="item.type == 'group'" style="margin-top:15px;">
+    <div *ngIf="item.display.length != 0">
+      <div *ngFor="let itemmap of item.group;let indexopt = index;">
+        <div *ngFor="let ordercomp of item.display;let indexorder = index;">
+          <div *ngIf="indexorder == indexopt">
+            <div *ngIf="ordercomp == 0" class="row">
+              <div class="col-6">
+                <input type="text" class="form-control" #answer (blur)="getAnswer(item.id, answer.value, item.type, indexopt, idQ)">
+              </div>
+              <div class="col-6">
+                <div class="alert alert-success" role="alert">
+                  <div [innerHTML]="itemmap">
+
+                  </div>
+                </div>
+                <hr>
+              </div>
+            </div>
+            <div *ngIf="ordercomp == 1" class="row">
+              <div class="col-6">
+                <div class="alert alert-success" role="alert">
+                  <div [innerHTML]="itemmap">
+
+                  </div>
+                </div>
+                <hr>
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" #answer (blur)="getAnswer(item.id, answer.value, item.type, indexopt, idQ)">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="item.display.length == 0">
+      <div class="row" *ngFor="let itemmap of item.group;let idquestion = index;">
+        <div class="col-6">
+          <div class="alert alert-success" role="alert">
+            <div [innerHTML]="itemmap">
+
+            </div>
+          </div>
+          <hr>
+        </div>
+        <div class="col-6">
+          <input type="text" class="form-control" #answer (blur)="getAnswer(item.id, answer.value, item.type, idquestion, idQ)">
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+  <!---->
+
+  <!--Seccion para el tipo de respuesta en texto-->
+  <div *ngIf="item.type == 'text'" style="margin-top:15px;">
+    <textarea class="form-control" rows="3" draggable="false"></textarea>
+    <hr>
+  </div>
+  <!--  -->
+
+  <!--Seccion para el tipo de respuesta en true o false-->
+  <div *ngIf="item.type == 'tf'" style="margin-top:15px;">
+    <div class="form-check">
+      <input class="form-check-input" type="radio" [name]="idQ" id="idQ" value="true" (change)="getAnswer(item.id, 'true', item.type, 0, idQ)">
+      <label class="form-check-label" for="idQ">
+        Verdadero
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" [name]="idQ" id="idQ" value="false" (change)="getAnswer(item.id, 'false', item.type, 0, idQ)">
+      <label class="form-check-label" for="idQ">
+        Falso
+      </label>
+    </div>
+    <hr>
+  </div>
+  <!--  -->
+</div>
+
+<button type="button" class="btn btn-success blockquote" [disabled]="!isValidateAttemp" (click)="showAccept(accept)">
+  <i class="fas fa-check-circle"></i> Validar mis respuestas
+</button>
+<!--  -->
+
+<!--Modal de aceptar enviar la calificacion-->
+<ng-template #accept let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-info-circle"></i> Atención</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal para desplegar el mensaje al usuario de aviso de intento-->
+  <div class="modal-body">
+      <wizard navBarLocation="bottom">
+        <wizard-step>
+          <span class="text-justify">
+            <h5>
+              <p class="text-success">
+                Al envíar las respuestas estaras usando 1 de los {{maxAttempts}} intentos que tienes para realizar la evaluación
+              </p>
+              <br>
+              <div class="alert alert-secondary" role="alert">
+                <i class="fas fa-exclamation-triangle"></i> Has contestado <b class="text-success">{{answerStudent.length}}</b> preguntas de las <b>{{totalQuestions}}</b> preguntas que tiene el cuestinario
+              </div>
+              <p class="text">
+
+              </p>
+              <p>
+                ¿Deseas continuar?
+              </p>
+            </h5>
+          </span>
+
+          <button type="button" class="btn btn-success" (click)="checkAnswersStudent(block.data.questionnarie.type)" nextStep>
+            <i class="fas fa-check"></i> Continuar
+          </button>
+
+          <button type="button" class="btn btn-success" (click)="closeDialog()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+        </wizard-step>
+
+        <wizard-step>
+
+          <div *ngIf="block.data.questionnarie.type == 'test'">
+            <div class="text-center text-success">
+              <h3>Curso: <small>{{block.data.courseCode}}</small></h3>
+              <hr>
+              <h4>Nombre completo: {{identiti.person.name}} {{identiti.person.fatherName}} {{identiti.person.motherName}}</h4>
+              <h4>Usuario: {{identiti.name}}</h4>
+              <hr>
+              <h4>Evaluación: {{block.data.blockTitle}}</h4>
+            </div>
+            <div *ngFor="let item of resultsArrayAnswersAspects" class="row m-2">
+              <div class="col-4">
+                <div class="alert alert-success" role="alert">
+                  <h5>Aspecto: {{item.aspect}}</h5>
+                </div>
+              </div>
+              <div class="col-8">
+                <div class="alert alert-secondary" role="alert">
+                  <h6>Resultado: {{item.messageAspect}}</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="block.data.questionnarie.type != 'test' && grade >= block.data.questionnarie.minimum" class="text-success text-center">
+            <h1>
+              <i class="fas fa-quote-left"></i> Puntuación obtenida en esta evaluación
+            </h1>
+            <br>
+            <h3>Curso: <small>{{block.data.courseCode}}</small></h3>
+            <hr>
+            <h4>Nombre completo: {{identiti.person.name}} {{identiti.person.fatherName}} {{identiti.person.motherName}}</h4>
+            <h4>Usuario: {{identiti.name}}</h4>
+            <hr>
+            <h4>Evaluación: {{block.data.blockTitle}}</h4>
+            <h4>Total de aciertos: {{gradefinal}}</h4>
+            <h4>Calificación obtenida: {{grade | number:'.0-2'}}</h4>
+          </div>
+          <div *ngIf="block.data.questionnarie.type != 'test' && grade < block.data.questionnarie.minimum" class="text-danger text-center">
+            <h2>
+              <i class="fas fa-quote-left"></i> Puntuación obtenida en esta evaluación
+            </h2>
+            <br>
+            <h3>Curso: <small>{{block.data.courseCode}}</small></h3>
+            <hr>
+            <h4>Nombre completo: <small>{{identiti.person.name}} {{identiti.person.fatherName}} {{identiti.person.motherName}}</small></h4>
+            <h4>Usuario: <small>{{identiti.name}}</small></h4>
+            <br>
+            <h4>{{block.data.blockTitle}}</h4>
+            <hr>
+            <h4>Total de aciertos: {{gradefinal}}</h4>
+            <h4>Calificación obtenida: {{grade | number:'.0-2'}}</h4>
+          </div>
+        </wizard-step>
+      </wizard>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>

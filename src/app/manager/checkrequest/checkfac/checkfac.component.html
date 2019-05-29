@@ -1,0 +1,402 @@
+<div *ngIf="closerequestprocess">
+  <div class="row text-center animated fadeIn m-5">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Procesando datos ... </h1>
+    </div>
+  </div>
+</div>
+<div *ngIf="!closerequestprocess">
+  <div *ngIf="invoiceNumber" class="alert alert-success" role="alert">
+    <b><i class="fas fa-info-circle"></i> Solicitud enviada con exito </b><br>
+    <p>
+    Por favor, procede realizar el pago a la cuenta BBVA Bancomer a favor de ACL Systems S.A. de C.V. <b>No. cuenta: 0195533066, CLABE: 012180001955330664</b>,<br><b>IMPORTANTE:</b> en el concepto colocar <b>{{invoiceNumber}}</b>.
+    </p>
+  </div>
+  <div *ngIf="fiscaldetails.length!=0 && !invoiceNumber">
+    <div class="row text-center">
+      <h5><i class="fas fa-money-check"></i> Datos de la factura</h5>
+    </div>
+    <!--lista de rfc registrados por el usuario -->
+    <form  class="was-validated">
+      <label for="idRFC"></label>
+      <select id="idRFC" #userrfc class="form-control" (change)="getUserRFC(userrfc.value)">
+        <option value="">Seleccionar otro RFC</option>
+        <option *ngFor="let item of fiscaldetails" [value]="item.tag">{{item.tag}}</option>
+        <option value="other">Otro</option>
+      </select>
+    </form>
+    <!--lista de rfc registrados por el usuario-->
+    <hr>
+    <form *ngIf="otherrfc=='false'" class="was-validated">
+      <!--Formulario cuando el usuario selecciono un rfc de la lista-->
+      <div class="row">
+        <hr>
+        <div class="col-6">
+          <b>Datos personales</b>
+          <br>
+          <label for="idotherrfc">* RFC</label>
+          <input #rfc id="idotherrfc" class="form-control" type="text" placeholder="Ingrese el RFC" [value]="person.identification" disabled>
+          <br>
+          <label for="username">* Razón Social</label>
+          <input #name id="username" class="form-control" type="text" placeholder="Nombre completo" [value]="person.name"  (blur)="datacheck(emailuser.value, name.value)" disabled>
+          <br>
+          <label for="emailuser">* Correo electrónico</label>
+          <input #emailuser id="emailuser" class="form-control" type="text" placeholder="Ingrese un correo electrónico" [value]="person.email" (blur)="datacheck(emailuser.value,name.value)"  disabled>
+          <br>
+          <label for="telephonenumberuser"> Telefono de casa 1</label>
+          <input id="telephonenumberuser" #phonePrimary class="form-control" type="text">
+          <br>
+          <label for="telephonenumberuser2"> Telefono de casa 2</label>
+          <input id="telephonenumberuser2" #phoneSecondary class="form-control" type="text">
+          <br>
+          <label for="celularphonenumberuser"> Celular</label>
+          <input id="celularphonenumberuser" #mobile class="form-control" type="text">
+          <br>
+          <button type="button" class="btn btn-success" (click)="updatefiscaldates(rfc.value,emailuser.value,name.value,phonePrimary.value,phoneSecondary.value,mobile.value,street.value,extNum.value,intNum.value,zipCode.value,colony.value,locality.value,municipality.value)" [disabled]="updprocess">
+            <i class="fas fa-edit"></i> Actualizar datos
+          </button>
+          <button type="button" class="btn btn-success" [disabled]="updprocess" (click)="showModal(sendEmail)">
+            <i class="fas fa-money-check"></i> Proceder a la orden de pago
+          </button>
+        </div>
+        <div class="col-6">
+          <b>Dirección</b>
+          <br>
+          <label for="street"> Calle</label>
+          <input id="streetuser" #street class="form-control" [value]="person.address.street" type="text">
+          <br>
+          <div class="row">
+            <div class="col-4">
+              <label for="numberaddresuser"> Número exterior</label>
+              <input id="numberaddresuser" #extNum class="form-control" [value]="person.address.extNum" type="text">
+            </div>
+            <div class="col-4">
+              <label for="numberaddresuseropc"> Número interior</label>
+              <input id="numberaddresuseropc" #intNum class="form-control" [value]="person.address.intNum" type="text">
+            </div>
+            <div class="col-4">
+              <label for="zonecodeuser"> Código postal</label>
+              <input id="zonecodeuser" #zipCode class="form-control" [value]="person.address.zipCode" type="text">
+            </div>
+          </div>
+          <br>
+          <label for="locality"> Estado</label>
+          <input id="zonecodeuser" #locality class="form-control" [value]="person.address.locality" type="text">
+          <br>
+          <div class="row">
+            <div class="col">
+              <label for="colony"> Colonia</label>
+              <input id="zoneuser" #colony class="form-control" [value]="person.address.colony" type="text">
+            </div>
+            <div class="col">
+              <label for="statesuser"> Delegación o municipio</label>
+              <input id="statesuser" #municipality class="form-control" [value]="person.address.municipality" type="text">
+            </div>
+          </div>
+          <br>
+          <div *ngIf="!person.fiscalcurrent">
+            <label for=""><i class="fas fa-info"></i> Utilizar este RFC como predeterminado</label>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="currentrfc" id="Checkbox1" #currentrfc (change)="updcurrentrfc(person.tag, currentrfc.value)">
+              <label class="form-check-label" for="Checkbox1">Si</label>
+            </div>
+          </div>
+          <div *ngIf="updprocess" class="alert alert-light" role="alert">
+            <b><i class="fas fa-sync fa-spin"></i> Espere ... </b>
+          </div>
+          <div *ngIf="messageSuccess" class="alert alert-success" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> {{messageSuccess}}
+          </div>
+          <div *ngIf="messageError" class="alert alert-danger" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> {{messageError}}
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!--Termina el formulario cuando el usuario tiene datos fiscales-->
+
+  <!--El usuario no tiene registrados datos fiscales-->
+  <div *ngIf="otherrfc=='true'">
+    <div class="row">
+      <div class="col-6">
+        <form class="was-validated">
+          <select class="form-control" #typerfc (change)="gettyperfc(typerfc.value)" required>
+            <option value="''">*Tipo de RFC</option>
+            <option value="personal">Personal</option>
+            <option value="corporativo">Corporativo</option>
+          </select>
+        </form>
+      </div>
+      <div class="col-6">
+        <form class="was-validated">
+          <select *ngIf="otherrfctype=='corporativo' && rfccoporates.length!=0" class="form-control" #rfccorp (change)="getrfccorp(rfccorp.value)" required>
+            <option value="''">*Seleccione una opción</option>
+            <option *ngFor="let item of rfccoporates" [value]="item.tag">{{item.tag}}</option>
+            <option value="newrfccorp">Nuevo</option>
+          </select>
+        </form>
+      </div>
+    </div>
+    <hr>
+    <form class="was-validated">
+      <div *ngIf="otherrfctype=='personal' || newrfcusercorp" class="row">
+        <div class="col-6">
+          <b>Datos personales</b>
+          <br>
+          <label for="idotherrfc">* RFC</label>
+          <input #newrfc id="idotherrfc" class="form-control" type="text" placeholder="Ingrese el RFC" (blur)="managerservice.validaterfc(newrfc.value)" required>
+          <small *ngIf="!managerservice.validaterfc(newrfc.value)" class="text-danger"><b>* Ingrese un RFC valido</b></small>
+          <br>
+          <label for="username">* Razón Social</label>
+          <input #name class="form-control" type="text" placeholder="Razón Social" (blur)="managerservice.validateSpaceBlank(name.value)" required>
+          <small *ngIf="!managerservice.validateSpaceBlank(name.value)" class="text-danger"><b>* Ingrese la razón social</b></small>
+          <br>
+          <label for="emailuser">* Correo electrónico</label>
+          <input #emailuser id="emailuser" class="form-control" type="text" placeholder="Ingrese un correo electrónico" (blur)="managerservice.validateEmails(emailuser.value)"  required>
+          <small *ngIf="!managerservice.validateEmails(emailuser.value)" class="text-danger"><b>* Ingrese una dirección de correo valida</b></small>
+          <br>
+          <label for="telephonenumberuser"> Telefono de casa 1</label>
+          <input id="telephonenumberuser" #phonePrimary class="form-control" type="text">
+          <br>
+          <label for="telephonenumberuser2"> Telefono de casa 2</label>
+          <input id="telephonenumberuser2" #phoneSecondary class="form-control" type="text">
+          <br>
+          <label for="celularphonenumberuser"> Celular</label>
+          <input id="celularphonenumberuser" #mobile class="form-control" type="text">
+          <br>
+          <div class="row">
+            <div class="col">
+              <div *ngIf="otherrfctype=='corporativo' && newrfcusercorp">
+                <button type="button" class="btn btn-success" [disabled]="!stateBoolean || !orgusboolean || !managerservice.validaterfc(newrfc.value) || !managerservice.validateSpaceBlank(name.value) || !managerservice.validateEmails(emailuser.value)"
+                  (click)="savefiscaldates(newrfc.value, emailuser.value, name.value, phonePrimary.value, phoneSecondary.value, mobile.value, street.value, extnum.value, intnum.value, cp.value, colony.value, orgstate.value, municipality.value)">
+                  <i [ngClass]="{'fa-save':!updprocess, 'fa-sync fa-spin':updprocess}" class="fas "></i>
+                  <span *ngIf="!updprocess">Guardar datos</span>
+                  <span *ngIf="updprocess">Procesando</span>
+                </button>
+              </div>
+              <div *ngIf="otherrfctype!='corporativo'">
+                <button type="button" class="btn btn-success" [disabled]="!managerservice.validaterfc(newrfc.value) || !managerservice.validateSpaceBlank(name.value) || !managerservice.validateEmails(emailuser.value)"
+                  (click)="savefiscaldates(newrfc.value, emailuser.value, name.value, phonePrimary.value, phoneSecondary.value, mobile.value, street.value, extnum.value, intnum.value, cp.value, colony.value, orgstate.value, municipality.value)">
+                  <i [ngClass]="{'fa-save':!updprocess , 'fa-sync fa-spin':updprocess}" class="fas "></i>
+                  <span *ngIf="!updprocess">Guardar</span>
+                  <span *ngIf="updprocess">Procesando</span>
+                </button>
+              </div>
+            </div>
+            <div class="col">
+              <button type="button" class="btn btn-success" [disabled]="updprocess" (click)="showModal(sendEmail)">
+                <i class="fas fa-money-check"></i> Proceder a la orden de pago
+              </button>
+            </div>
+          </div>
+          <div *ngIf="messageSuccess" class="alert alert-success" role="alert">
+            {{messageSuccess}}
+          </div>
+          <div *ngIf="messageError" class="alert alert-danger" role="alert">
+            {{messageError}}
+          </div>
+        </div>
+        <div class="col-6">
+          <b>Dirección</b>
+          <br>
+          <label for="orgState">Estado</label>
+          <select class="form-control" #orgstate (change)="getOrgUnits(orgstate.value)" [required]="otherrfctype=='corporativo'">
+            <option value="" selected>Selecciona un estado</option>
+            <option  *ngFor="let item of statesOU" [value]="item.longName">
+              {{item.longName}}
+            </option>
+          </select>
+          <small *ngIf="otherrfctype=='corporativo' && orgstate.value==''" class="text-danger"><b>*Selecciona un estado</b></small>
+          <br *ngIf="otherrfctype=='corporativo' && newrfcusercorp">
+          <label *ngIf="otherrfctype=='corporativo' && newrfcusercorp" for="orgName">*Plantel</label>
+          <select *ngIf="otherrfctype=='corporativo' &&  newrfcusercorp" id="plantelGroup" #orgunit class="form-control" (change)="getOrgGroup(orgunit.value)" [disabled]="!stateBoolean" required>
+            <option value="" selected>Selecciona un plantel</option>
+            <option *ngFor="let itemOrg of orgUs" [value]="itemOrg.id">{{itemOrg.longName}}</option>
+          </select>
+          <small *ngIf="otherrfctype=='corporativo' && !orgusboolean" class="text-danger"><b>*Selecciona un plantel</b></small>
+          <br>
+          <label for="streetuser"> Calle</label>
+          <input id="streetuser" #street class="form-control" type="text">
+          <br>
+          <div class="row">
+            <div class="col-4">
+              <label for="numberaddresuser"> Número exterior</label>
+              <input id="numberaddresuser" #extnum class="form-control" type="text">
+            </div>
+            <div class="col-4">
+              <label for="numberaddresuseropc"> Número interior</label>
+              <input id="numberaddresuseropc" #intnum class="form-control" type="text">
+            </div>
+            <div class="col-4">
+              <label for="zonecodeuser"> Código postal</label>
+              <input id="zonecodeuser" #cp class="form-control" type="text">
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col">
+              <label for="zoneuser"> Colonia</label>
+              <input id="zoneuser" #colony class="form-control" type="text">
+            </div>
+            <div class="col">
+              <label for="statesuser"> Delegación o municipio</label>
+              <input id="statesuser" #municipality class="form-control" type="text">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Datos del RFC corporativo-->
+      <div *ngIf="person && otherrfctype=='corporativo'" class="row">
+        <div class="col-6">
+          <b>Datos personales</b>
+          <br>
+          <label for="idotherrfc">* RFC corp</label>
+          <input #newrfc id="idotherrfc" class="form-control" type="text" placeholder="Ingrese el RFC" [value]="person.identification" (blur)="managerservice.validaterfc(newrfc.value)" required>
+          <br>
+          <label for="username">* Razón social corp</label>
+          <input #username class="form-control" type="text" placeholder="Razón social" [value]="person.name" (blur)="managerservice.validateSpaceBlank(username.value)" required>
+          <br>
+          <label for="emailuser">* Correo electrónico</label>
+          <input #emailuser id="emailuser" class="form-control" type="text" placeholder="Ingrese un correo electrónico" [value]="person.email" (blur)="managerservice.validateEmails(emailuser.value)"  required>
+          <br>
+          <label for="telephonenumberuser"> Telefono de casa 1</label>
+          <input id="telephonenumberuser" #phonePrimary [value]="person.phonePrimary" class="form-control" type="text">
+          <br>
+          <label for="telephonenumberuser2"> Telefono de casa 2</label>
+          <input id="telephonenumberuser2" #phoneSecondary [value]="person.phoneSecondary" class="form-control" type="text">
+          <br>
+          <label for="celularphonenumberuser"> Celular</label>
+          <input id="celularphonenumberuser" #mobile [value]="person.mobile" class="form-control" type="text">
+          <br>
+          <button type="button" class="btn btn-success" (click)="savefiscaldates(newrfc.value,emailuser.value,username.value,phonePrimary.value,phoneSecondary.value,mobile.value,street.value,extnum.value,intnum.value,cp.value,colony.value,locality.value,municipality.value)">
+            <i class="fas fa-save"></i> Guardar datos
+          </button>
+          <button type="button" class="btn btn-success" [disabled]="updprocess" (click)="showModal(sendEmail)">
+            <i class="fas fa-money-check"></i> Proceder a la orden de pago
+          </button>
+          <div *ngIf="messageSuccess" class="alert alert-success" role="alert">
+            {{messageSuccess}}
+          </div>
+          <div *ngIf="messageError" class="alert alert-danger" role="alert">
+            {{messageError}}
+          </div>
+        </div>
+        <div class="col-6">
+          <b>Dirección</b>
+          <br>
+          <label for="stateuser"> Estado</label>
+          <input id="stateuser" #locality [value]="person.address.locality" class="form-control" type="text">
+          <br>
+          <label for="streetuser"> Calle</label>
+          <input id="streetuser" #street [value]="person.address.street" class="form-control" type="text">
+          <br>
+          <div class="row">
+            <div class="col-4">
+              <label for="numberaddresuser"> Número exterior</label>
+              <input id="numberaddresuser" #extnum [value]="person.address.extNum" class="form-control" type="text">
+            </div>
+            <div class="col-4">
+              <label for="numberaddresuseropc"> Número interior</label>
+              <input id="numberaddresuseropc" #intnum [value]="person.address.intNum" class="form-control" type="text">
+            </div>
+            <div class="col-4">
+              <label for="zonecodeuser"> Código postal</label>
+              <input id="zonecodeuser" #cp [value]="person.address.zipCode" class="form-control" type="text">
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col">
+              <label for="zoneuser"> Colonia</label>
+              <input id="zoneuser" #colony [value]="person.address.colony" class="form-control" type="text">
+            </div>
+            <div class="col">
+              <label for="statesuser"> Delegación o municipio</label>
+              <input id="statesuser" #municipality [value]="person.address.municipality" class="form-control" type="text">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Terminan los datos del RFC corporativo-->
+    </form>
+    <div *ngIf="invoiceNumber" class="alert alert-success" role="alert">
+      <i class="fas fa-info-circle"></i>
+      <p>
+      Por favor, procede realizar el pago a la cuenta BBVA Bancomer a favor de ACL Systems S.A. de C.V. <b>No. cuenta: 0195533066, CLABE: 012180001955330664</b>,  en el concepto colocar <b>{{invoiceNumber}}</b>.
+      </p>
+    </div>
+  </div>
+</div>
+<!--El usuario tiene registrado en sus detalles rfcs -->
+
+<ng-template #sendEmail let-modal>
+  <!--Encabezado del modal -->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Aviso importante</h4>
+  </div>
+  <!--  -->
+  <!--Cuerpo del modal -->
+  <div class="modal-body">
+    <div class="alert alert-warning" role="alert">
+      <h5 class="text-center"><i class="fas fa-exclamation-triangle"></i> Atención</h5>
+      <ul>
+        <li>
+          Te sugerimos revisar bien la solicitud, ya que una vez que se cierre no habrá cambios ni devoluciones.
+        </li>
+        <li>
+          En caso de NO solicitar factura se generará un ticket de venta el cual se podrá canjear por una factura solo durante el mes actual. Si así lo requieres, por favor solicita el cambio a la mesa de soporte soporte@superatemexico.com enviando el ticket de venta.
+        </li>
+        <li>
+          No se canjearán tickets de venta por facturas de meses anteriores.
+        </li>
+        <li>
+          No habrá cambios de facturas una vez que son expedidas.
+        </li>
+      </ul>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="accept" (change)="acceptCheck()">
+        <label class="custom-control-label" for="accept"> Entendido</label>
+      </div>
+    </div>
+    <span class="text-justify text-success">
+      <b>* Se enviara un correo electrónico con los detalles de la transacción a la siguiente dirección: {{person.email}}</b>
+    </span>
+    <hr>
+    Agregar otro correo electrónico
+    <br>
+    <form id="formemail" class="form">
+      <div class="input-group mb-3">
+        <input id="newemail" #newemail type="text" class="form-control" placeholder="correo electrónico alterno" (blur)="validatnewemails(newemail.value)">
+        <div class="input-group-append">
+          <button class="btn btn-success" type="button" [disabled]="!addmails" (click)="addnewemails(newemail.value)"><i class="fas fa-plus"></i></button>
+        </div>
+      </div>
+      <small>* Los correos electronicos que se agreguen deben de ser validos</small>
+      <div *ngIf="emails.length > 1">
+        <hr>
+        <span class="text-secondary">
+          <small> se enviara a los siguientes correos electrónicos:</small>
+          <ul>
+            <li *ngFor="let item of emails">{{item}}</li>
+          </ul>
+        </span>
+        <button type="button" class="btn btn-outline-secondary" (click)="resetemails()">
+          <i class="fas fa-trash"></i> Cancelar envio masivo
+        </button>
+      </div>
+    </form>
+  </div>
+  <!--Termina cuerpo del modal-->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="closeRequestTicket()" [disabled]="!accept">
+      <i class="fas fa-check"></i> Aceptar y enviar
+    </button>
+  </div>
+</ng-template>

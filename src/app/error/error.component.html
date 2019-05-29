@@ -1,0 +1,39 @@
+  <div *ngIf="typeError=='sesionexpired'" class="container-fluid">
+    <div class="alert alert-warning text-center" role="alert">
+      <h1><i class="far fa-tired"></i></h1>
+      <h3>La sesión ha expirado</h3>
+      <p>Es necesario volver a iniciar sesión</p>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-2">
+        <button type="button" class="btn-success blockquote" (click)="logoutExpired()"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="typeError=='notfound'" class="container-fluid">
+    <div class="alert alert-warning text-center" role="alert">
+      <h1><i class="fas fa-window-close"></i></h1>
+      <h3>Página no encontrada</h3>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-2">
+        <button type="button" class="btn-success blockquote" [routerLink]="['/home']"><i class="fas fa-sign-in-alt"></i> Regresar al inicio</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="typeError=='Offline'" class="container-fluid">
+    <div class="alert alert-warning text-center" role="alert">
+      <h1><i class="fas fa-plug"></i></h1>
+      <h3>Sin conexión a internet</h3>
+      <p>Verifica que tengas una conexion estable a internet</p>
+    </div>
+  </div>
+  <div *ngIf="typeError!='Offline' && typeError!='notfound' && typeError!='sesionexpired'" class="container-fluid">
+    <div class="alert alert-danger text-center" role="alert">
+      <h1><i class="fas fa-exclamation-triangle"></i></h1>
+      <b>Se detecto el siguiente error en el sistema:</b>
+      <p>
+        {{typeError}}
+      </p>
+    </div>
+  </div>

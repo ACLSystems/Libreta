@@ -1,0 +1,58 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white">
+  <a class="navbar-brand">
+    <img src="/assets/img/superatemexico.jpg" width="100">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+</nav>
+<div class="container">
+  <div class="alert alert-warning" role="alert">
+    <p class="text-justify"><i class="fas fa-exclamation-circle"></i> Los campos marcados con asterisco (*) son oblitagorios</p>
+  </div>
+
+  <div *ngIf="messageSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong><i class="fas fa-exclamation-circle"></i> {{messageSuccess}}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div *ngIf="messageError" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="fas fa-exclamation-triangle"></i> Se generó el siguiente error en el sistema: <strong>{{messageError}}</strong> ,favor de reportarlo en la mesa de ayuda
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <h3>
+        Recuperar contraseña
+      </h3>
+      <form>
+        <div class="form-group">
+          <label class="form-inline"><b>*Nueva contraseña: </b></label>
+          <input type="{{type}}" class="form-control" #passOne (blur)="getPassword(passOne.value, passTwo.value)" required>
+
+          <label class="form-inline"><b>*Confirmar contraseña; </b></label>
+          <input type="{{type}}" class="form-control" #passTwo (blur)="getPassword(passOne.value, passTwo.value)" required>
+
+          <hr>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="validacion1" (change)="showPass()">
+            <label class="form-check-label" for="validacion1"> <i class="fas fa-eye"></i> Mostrar contraseñas</label>
+          </div>
+          <br>
+          <span *ngIf="!isPassOk" class="text-danger">Las contraseñas deben coincidir</span>
+          <span *ngIf="isPassOk" class="text-success">Las contraseñas coinciden</span>
+        </div>
+        <div class="form-group">
+          <button *ngIf="!isPassOk" type="button" class="btn btn-success blockquote" disabled><i class="fas fa-redo-alt"></i> Cambiar contraseña</button>
+          <button *ngIf="isPassOk" type="button" class="btn btn-success blockquote" (click)="recoverPass()"><i class="fas fa-redo-alt"></i> Cambiar contraseña</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

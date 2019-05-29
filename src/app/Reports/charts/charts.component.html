@@ -1,0 +1,145 @@
+<div class="loaderSpinner text-center text-success" *ngIf="loading">
+  <h4 style="margin-top:20%;">Procesando datos</h4>
+</div>
+<div class="container">
+  <ngb-tabset>
+    <ngb-tab>
+      <ng-template ngbTabTitle>
+        <div class="text-success">
+          <i class="fas fa-users"></i> Concentrado de usuarios
+        </div>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="text-center">
+              <h4>{{orgUnitName}}</h4>
+              <hr>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th colspan="4">Total de usuarios registrados: {{totalUsers}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-secondary">
+                    <td class="text-center">Concepto</td>
+                    <td class="text-center">Total</td>
+                    <td class="text-center" colspan="2">Porcentaje %</td>
+                  </tr>
+                  <tr class="table-info">
+                    <td class="text-center">Usuarios Activos</td>
+                    <td class="text-center">{{usersOnTrack}}</td>
+                    <td class="text-center" colspan="2">{{percentOnTrack | number:'0.0-2'}}%</td>
+                  </tr>
+                  <tr class="table-danger">
+                    <td class="text-center">Usuarios Inactivos</td>
+                    <td class="text-center">{{usersInactives}}</td>
+                    <td class="text-center">{{percentInactives | number:'0.0-2'}}%</td>
+                    <td class="text-center"><button type="button" class="btn btn-outline-danger" placement="bottom" ngbTooltip="Exportar a excel" (click)="getUserInactives()" ><i class="fas fa-file-excel"></i></button></td>
+                  </tr>
+                  <tr class="table-success">
+                    <td class="text-center">Usuarios Aprobados</td>
+                    <td class="text-center">{{usersPassed}}</td>
+                    <td class="text-center" colspan="2">{{percentPassed | number:'0.0-2'}}%</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>{{today | date:'dd-MM-yyyy HH:mm'}}</p>
+            </div>
+          </div>
+          <div class="col-md-6 text-center">
+            <h4>Usuarios Activos</h4>
+            <hr>
+            <canvas baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartType"
+            [colors]="barChartColors"></canvas>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-3">
+          </div>
+          <div class="col-6 text-center">
+            <h4>Aprobados</h4>
+            <hr>
+            <canvas baseChart
+                  [data]="doughnutChartDataPass"
+                  [labels]="doughnutChartLabelsPass"
+                  [chartType]="doughnutChartTypePass"
+                  [colors]="doughnutChartColorPass"></canvas>
+          </div>
+          <div class="col-3">
+
+          </div>
+        </div>
+        <br>
+        <hr>
+        <div *ngIf="ouType!='org' && ouType!='state'">
+          <div class="text-center">
+            <h5>Estatus de usuarios por grupo</h5>
+          </div>
+          <div *ngFor="let item of registers;let idmain = index">
+            <hr>
+            <h3><i class="far fa-building"></i> Plantel: <span class="text-success">{{item.ouLongName}} </span> <i class="fas fa-hashtag"></i>Clave: <span class="text-success">{{item.ouName}}</span></h3>
+            <div *ngFor="let itemOus of item.ous;let idOus = index" class="row">
+              <div class="col-6">
+                <hr>
+                <h6><i class="fas fa-users"></i> Grupo: {{itemOus.groupName}}</h6>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                    <td colspan="2" class="text-center"><b>Datos generales</b></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="table-success">
+                      <td class="text-center">Usuarios activos</td>
+                      <td  *ngIf="itemOus.usersOnTrack" class="text-center">{{itemOus.usersOnTrack}}</td>
+                      <td  *ngIf="!itemOus.usersOnTrack" class="text-center">0</td>
+                    </tr>
+                    <tr class="table-danger">
+                      <td class="text-center">Usuarios inactivos</td>
+                      <td  *ngIf="itemOus.usersOnTrack" class="text-center">{{itemOus.totalUsers-itemOus.usersOnTrack}}</td>
+                      <td  *ngIf="!itemOus.usersOnTrack" class="text-center">{{itemOus.totalUsers}}</td>
+                    </tr>
+
+                    <tr class="table-info">
+                      <td class="text-center">Usuarios aprobados</td>
+                      <td *ngIf="itemOus.usersPassed" class="text-center">{{itemOus.usersPassed}}</td>
+                      <td *ngIf="!itemOus.usersPassed" class="text-center">0</td>
+                    </tr>
+                    <tr class="table-secondary">
+                      <td class="text-center">Total de Usuarios</td>
+                      <td class="text-center">{{itemOus.totalUsers}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <button type="button" class="btn btn-outline-success blockquote" (click)="getGradesforgroup(itemOus.groupId)"><i class="fas fa-users"></i> Revisar grupo</button>
+              </div>
+              <div class="col-6">
+                <hr>
+                <div *ngFor="let itemgraph of registerCharts">
+                  <div *ngIf="itemgraph.indexOu == idmain && itemgraph.indexGroup == idOus">
+                    <canvas baseChart
+                    [data]="[itemgraph.totalUsers,itemgraph.usersPassed,itemgraph.usersOnTrack, itemgraph.usersInactives]"
+                    [labels]="barchartlabelregister"
+                    [options]="barchartoptregister"
+                    [legend]="barchartlegendregister"
+                    [chartType]="barcharttyperegister"
+                    [colors]="barchartcolorsregister"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>

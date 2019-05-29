@@ -1,0 +1,119 @@
+<div *ngIf="identiti" class="container">
+  <h4><i class="fas fa-plus"></i> Nuevo Curso</h4>
+  <hr>
+  <ngb-alert *ngIf="messageSuccessNC" type="success" (close)="messageSuccessNC=null">{{messageSuccessNC}}</ngb-alert>
+  <div class="row">
+    <div class="col-5">
+      <p>
+        <label for="code">*Clave</label>
+        <input type="text" class="form-control" #code required>
+      </p>
+      <p>
+        <label for="title">*Título</label>
+        <input type="text" class="form-control" #title  required>
+      </p>
+      <div class="row">
+        <div class="col-4">
+          <p>
+            <label for="categorie">*Categoría</label>
+            <input type="text" class="form-control" #categorie required>
+          </p>
+        </div>
+        <div class="col-1">
+          <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Agregar" (click)="addCat(categorie.value)">
+            <i class="fas fa-plus-circle"></i>
+          </button>
+        </div>
+        <ngb-alert *ngIf="messageError" type="danger" (close)="messageError=null">{{messageError}}</ngb-alert>
+        <ngb-alert *ngIf="messageSuccess" type="success" (close)="messageSuccess=null">{{messageSuccess}}</ngb-alert>
+      </div>
+      <p>
+        <label for="cost">*Costo</label>
+        <input type="text" class="form-control" #cost required>
+      </p>
+      <p>
+        <label for="duration">*Duración</label>
+        <input type="text" class="form-control" #duration required>
+      </p>
+      <p>
+        <label for="price">*Precio</label>
+        <input type="text" class="form-control" #price required>
+      </p>
+    </div>
+    <div class="col-5">
+      <p>
+        <label for="type">*Tipo</label>
+        <select class="form-control" #type required>
+          <option value="">Tipo de Curso</option>
+          <option value="self-paced">Autonomo</option>
+          <option value="tutor">Con tutor</option>
+        </select>
+      </p>
+      <p>
+        <label for="isVisible">*Visible</label>
+        <select class="form-control" #isVisible required>
+          <option value="">Seleccione una opción</option>
+          <option value="true">Visible</option>
+          <option value="false">No visible</option>
+        </select>
+      </p>
+      <div class="row">
+        <div class="col-4">
+          <p>
+            <label for="keywords">*Palabras clave</label>
+            <input type="text" class="form-control" #keywords required>
+          </p>
+        </div>
+        <div class="col-1">
+          <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Agregar" (click)="addKw(keywords.value)">
+            <i class="fas fa-plus-circle"></i>
+          </button>
+        </div>
+        <ngb-alert *ngIf="messageErrorKW" type="danger" (close)="messageErrorKW=null">{{messageErrorKW}}</ngb-alert>
+        <ngb-alert *ngIf="messageSuccessKW" type="success" (close)="messageSuccessKW=null">{{messageSuccessKW}}</ngb-alert>
+      </div>
+      <p>
+        <label for="status">*Estatus</label>
+        <select class="form-control" #status required>
+          <option value="">Estatus</option>
+          <option value="published">Publicado</option>
+          <option value="draft">Borrador</option>
+        </select>
+      </p>
+      <p>
+        <label for="durationUnits">*Unidad de Duración</label>
+        <select class="form-control" #durationUnits required>
+          <option value="">Unidades</option>
+          <option value="w">Semana</option>
+          <option value="h">Hora</option>
+        </select>
+      </p>
+    </div>
+    <div class="col-2">
+      <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Regresar" (click)="returnManagerEdit()">
+        <i class="fas fa-reply"></i>
+      </button>
+      <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar" (click)="saveNewCourse(code.value, title.value, type.value, categorie.value, isVisible.value, keywords.value, description.value, details.value, price.value, cost.value, status.value, duration.value, durationUnits.value, image.value)">
+        <i class="far fa-save"></i>
+      </button>
+      <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Cancelar">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="col-10">
+      <p>
+        <label for="description">*Descripción</label>
+        <textarea class="form-control" rows="5" cols="80" #description required></textarea>
+      </p>
+      <p>
+        <label for="image">*Imagen del curso (url)</label>
+        <input type="text" class="form-control" #image required>
+      </p>
+      <p>
+        <label for="details">*Detalles</label>
+        <textarea class="form-control" rows="5" cols="80" #details required></textarea>
+      </p>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div data-spy="scroll" data-target="#courseReading" data-offset="0" style="margin-bottom:15px;">
+
+  <!--Titulo de la seccion-->
+  <h1 class="display-5" style="margin-top:25px;">
+    {{block.data.blockTitle}}
+  </h1>
+  <hr>
+  <!--  -->
+
+  <!--Contenedor del video para los cursos-->
+  <div *ngIf="block.data.blockMedia.length!=0 && block.data.blockBegin">
+    <iframe width="100%" height="400" [src]="block.data.blockMedia | videos" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <hr>
+  </div>
+  <!--  -->
+
+  <!--Contenido HTML de la seccion-->
+  <div [innerHTML]="block.data.blockContent">
+
+  </div>
+  <!--  -->
+
+  <!--Seccion del cuestionario cuando aplica a una sección-->
+  <div *ngIf="block.data.questionnarie != null">
+    <app-block-questionnarie [block]="block"></app-block-questionnarie>
+  </div>
+
+  <!--Seccion de las tareas para el bloque-->
+  <div *ngIf="block.data.tasks != null">
+    <app-block-tasks [block]="block"></app-block-tasks>
+  </div>
+
+  <!--Contenedor del video para los cursos-->
+  <div *ngIf="block.data.blockMedia.length!=0 && !block.data.blockBegin">
+    <iframe width="100%" height="400" [src]="block.data.blockMedia | videos" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <hr>
+  </div>
+  <!--  -->
+</div>

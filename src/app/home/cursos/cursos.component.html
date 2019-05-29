@@ -1,0 +1,135 @@
+<div class="container animated fast fadeIn">
+  <h1 class="display-3 text-center">Cursos</h1>
+  <div class="form-group">
+    <p>
+      <input type="text" class="form-control" #wordcode placeholder="curso que busco" (keyup)="findCourse(wordcode.value)">
+    </p>
+  </div>
+</div>
+
+<div *ngIf="loading">
+  <nav id="courseReading" class="navbar navbar-light bg-white fixed-top">
+    <a class="navbar-brand">
+      <img src="/assets/img/superatemexico.jpg" width="100" alt="">
+    </a>
+
+    <a class="navbar-brand"></a>
+    <!--Seccion de botones para controlar los bloques-->
+    <!--    -->
+  </nav>
+  <div class="row text-center animated fadeIn m-5">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Cargando componentes ... </h1>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loading && !isFindOk && !messageNotFound" class="container animated fast fadeIn">
+  <div class="card-columns">
+    <div *ngFor="let crs of cursoslist, let id=index" class="card">
+      <img class="card-img-top" [src]="crs.image" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{crs.title}}</h5>
+        <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+          <ngb-panel>
+            <ng-template ngbPanelTitle>
+              <span class="text-success text-center"><i class="fas fa-search-plus"></i> Ver mas</span>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <div class="row">
+                <h6>Imparte <small>CONALEP</small></h6>
+              </div>
+              <div class="row">
+                <h6>Categorías <small>{{crs.categories}}</small></h6>
+              </div>
+              <div class="row">
+                <h6>CLAVE <small>{{crs.code}}</small></h6>
+              </div>
+              <button type="button" class="btn btn-success blockquote" (click)="verCurso(crs.id)">
+                <i class="far fa-arrow-alt-circle-right"></i> Ir al curso
+              </button>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+      </div>
+    </div>
+  </div>
+  <!--div *ngFor="let crs of cursoslist, let id=index"  class="row animated fadeIn fast">
+    <div class="col-md-4">
+      <hr>
+      <img [src]="crs.image" class="imagenesCurso img-fluid">
+    </div>
+    <div class="col-md-8">
+      <hr>
+      <h3>{{crs.title}}</h3>
+      <div [innerHTML]="crs.description">
+
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col">
+          <h6>Imparte <small>CONALEP</small></h6>
+        </div>
+        <div class="col">
+          <h6>Categorías <small>{{crs.categories}}</small></h6>
+        </div>
+        <div class="col">
+          <h6>CLAVE <small>{{crs.code}}</small></h6>
+        </div>
+        <div class="col">
+          <h6>Grupo <small>Grupo</small> </h6>
+        </div>
+      </div>
+      <button (click)="verCurso(crs.id)" type="button" class="btn btn-success">
+        Ir al curso
+        <i class="far fa-arrow-alt-circle-right"></i>
+      </button>
+    </div>
+    <hr>
+  </div-->
+</div>
+
+<div *ngIf="!loading && isFindOk" class="container animated fast fadeIn">
+  <div *ngFor="let item of course" class="row">
+    <div class="col-md-4">
+      <hr>
+      <img [src]="item.image" class="imagenesCurso img-fluid">
+    </div>
+    <div class="col-md-8">
+      <hr>
+      <h3>{{item.title}}</h3>
+      <div [innerHTML]="item.description">
+
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col">
+          <h6>Imparte <small>CONALEP</small></h6>
+        </div>
+        <div class="col">
+          <h6>Categorías <small>{{item.categories}}</small></h6>
+        </div>
+        <div class="col">
+          <h6>CLAVE <small>{{item.code}}</small></h6>
+        </div>
+        <div class="col">
+          <h6>Grupo <small>Grupo</small> </h6>
+        </div>
+      </div>
+      <button (click)="verCurso(item.id)" type="button" class="btn btn-success">
+        Ir al curso
+        <i class="far fa-arrow-alt-circle-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<div *ngIf="!loading && !isFindOk && messageNotFound!=null" class="container animated fast fadeIn">
+  <div class="alert alert-warning text-center" role="alert">
+    <h1><i class="fas fa-frown-open"></i> {{messageNotFound}}</h1>
+  </div>
+</div>

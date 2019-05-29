@@ -1,0 +1,241 @@
+<div *ngIf="loading">
+  <div class="row text-center animated fadeIn m-5">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Cargando componentes ... </h1>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="identiti && !loading" class="container">
+  <div class="row">
+    <div class="col-4">
+      <button type="button" class="btn btn-success" (click)="showModal(newRequest)">
+        <i class="fas fa-plus"></i> Nueva Solicitud
+      </button>
+    </div>
+    <div class="col-8">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" #numberreq placeholder="Número de solicitud" aria-label="Número de Solicitud" aria-describedby="button-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="findRequest(numberreq.value)">Buscar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-3">
+      <span class="text-success"><i class="fas fa-check"></i></span> <b> Solicitudes enviadas</b>
+    </div>
+    <div class="col-3">
+      <span class="text-warning"><i class="fas fa-cogs"></i></span> <b> Solicitudes en proceso</b>
+    </div>
+    <div class="col-3">
+      <span class="text-danger"><i class="fas fa-ban"></i></span> <b> Solicitudes canceladas</b>
+    </div>
+    <div class="col-3">
+      <span class="text-dark"><i class="fas fa-exclamation-circle"></i></span> <b> Función no disponible</b>
+    </div>
+  </div>
+  <div *ngIf="!isFindOk && !messageNotFound">
+    <table class="table table-striped">
+      <thead>
+        <th class="text-center"><i class="fas fa-lightbulb"></i> Estatus</th>
+        <th class="text-center"><i class="fas fa-hashtag"></i> Número de solicitud</th>
+        <th class="text-center"><i class="fas fa-directions"></i> Descripción</th>
+        <th class="text-center"><i class="fas fa-bars"></i> Revisar solicitud</th>
+        <th class="text-center"><i class="fas fa-envelope"></i>Enviar correo electrónico</th>
+        <th class="text-center"><i class="fas fa-file-excel"></i> Descargar archivo de alumnos</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of requestsManager | paginate: { itemsPerPage: 10, currentPage: p }">
+          <td class="text-center">
+            <span [ngClass]="{'text-warning': item.status=='init', 'text-danger': item.status=='cancelled', 'text-success': item.status=='payment'}">
+              <i [ngClass]="{'fa-cogs': item.status=='init', 'fa-ban': item.status=='cancelled', 'fa-check': item.status=='payment'}" class="fas"></i>
+            </span>
+          </td>
+          <td class="text-center">
+            {{item.reqNumber}}
+          </td>
+          <td class="text-center">
+            {{item.label}}
+          </td>
+          <td class="text-center">
+            <button type="button" [ngClass]="{'btn-warning': item.status=='init', 'btn-danger': item.status=='cancelled', 'btn-success': item.status=='payment'}" class="btn" (click)="getRequestView(item.reqNumber)">
+              <i class="fas fa-bars"></i>
+            </button>
+          </td>
+          <td class="text-center">
+            <button type="button" [ngClass]="{'btn-light':item.status!='payment', 'btn-success':item.status=='payment'}" class="btn" [disabled]="item.status!='payment'" (click)="findEmails(item.reqNumber, sendemail)">
+              <span *ngIf="item.status!='payment'"><i class="fas fa-exclamation-circle"></i></span>
+              <span *ngIf="item.status=='payment'"><i class="fas fa-envelope"></i></span>
+            </button>
+          </td>
+          <td class="text-center">
+            <button type="button" [ngClass]="{'btn-light':item.status!='payment', 'btn-success':item.status=='payment'}" class="btn" [disabled]="item.status!='payment'" (click)="findgroupscsv(item.reqNumber, downloadfiles)">
+              <span *ngIf="item.status!='payment'"><i class="fas fa-exclamation-circle"></i></span>
+              <span *ngIf="item.status=='payment'"><i class="fas fa-file-excel"></i></span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-center text-success">
+      <pagination-controls (pageChange)="p = $event" previousLabel="Atras" nextLabel="Siguiente"></pagination-controls>
+    </div>
+  </div>
+  <div *ngIf="isFindOk && !messageNotFound">
+    <table class="table table-striped">
+      <thead>
+        <th class="text-center"><i class="fas fa-lightbulb"></i> Estatus</th>
+        <th class="text-center"><i class="fas fa-hashtag"></i> Número de solicitud</th>
+        <th class="text-center"><i class="fas fa-directions"></i> Palabra clave</th>
+        <th class="text-center"><i class="fas fa-bars"></i> Revisar solicitud</th>
+        <th class="text-center"><i class="fas fa-envelope"></i>Enviar correo electrónico</th>
+        <th class="text-center"><i class="fas fa-file-excel"></i> Descargar archivo de alumnos</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center">
+            <span [ngClass]="{'text-warning': request.status=='init', 'text-danger': request.status=='cancelled', 'text-success': request.status=='payment' }">
+              <i [ngClass]="{'fa-exclamation-triangle': request.status=='init', 'fa-ban': request.status=='cancelled', 'fa-check': request.status=='payment'}" class="fas fa-exclamation-triangle"></i>
+            </span>
+          </td>
+          <td class="text-center">
+            {{request.reqNumber}}
+          </td>
+          <td class="text-center">
+            {{request.label}}
+          </td>
+          <td class="text-center">
+            <button type="button" [ngClass]="{'btn-warning': request.status=='init', 'btn-danger': request.status=='cancelled', 'btn-success': request.status=='payment'}" class="btn" (click)="getRequestView(request.reqNumber)">
+              <i class="fas fa-bars"></i>
+            </button>
+          </td>
+          <td class="text-center">
+            <button type="button" [ngClass]="{'btn-light':request.status!='payment', 'btn-success':request.status=='payment'}" class="btn" [disabled]="request.status!='payment'" (click)="findEmails(request.reqNumber, sendemail)">
+              <span *ngIf="request.status!='payment'"><i class="fas fa-exclamation-circle"></i></span>
+              <span *ngIf="request.status=='payment'"><i class="fas fa-envelope"></i></span>
+            </button>
+          </td>
+          <td class="text-center">
+            <button type="button" [ngClass]="{'btn-light':request.status!='payment', 'btn-success':request.status=='payment'}" class="btn" [disabled]="request.status!='payment'" (click)="showModal(downloadfiles)">
+              <span *ngIf="request.status!='payment'"><i class="fas fa-exclamation-circle"></i></span>
+              <span *ngIf="request.status=='payment'"><i class="fas fa-file-excel"></i></span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!requestsManager">
+    <div class="alert alert-warning" role="alert">
+      <i class="fas fa-exclamation-triangle"></i> Aun no se tienen solicitudes creadas
+    </div>
+  </div>
+
+  <div *ngIf="!isFindOk && messageNotFound" class="container animated fast fadeIn">
+    <div class="alert alert-warning text-center" role="alert">
+      <h1><i class="fas fa-frown-open"></i> {{messageNotFound}}</h1>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #newRequest let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-folder-plus"></i> Nueva solicitud</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal-->
+  <div class="modal-body">
+    <form class="was-validated">
+      <label><i class="fas fa-directions"></i> Breve descripción</label>
+      <input class="form-control" type="text" #label (blur)="validateLabel(label.value)" required>
+      <br>
+      <button type="button" class="btn btn-success" [disabled]="!labelOk" (click)="getNewResource(label.value)">
+        <i class="fas fa-folder-plus"></i>  Crear Solicitud.
+      </button>
+    </form>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+
+<ng-template #sendemail let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fas fa-envelope"></i> Enviar correo electronico</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal-->
+  <div class="modal-body">
+    <span class="text-justify text-success">
+      <b>* Se enviara un correo electrónico con los detalles de la factura/ticket a la siguiente dirección: {{emailcurrent}}</b>
+    </span>
+    <hr>
+    Agregar otro correo electrónico
+    <br>
+    <form id="formemail" class="form">
+      <div class="input-group mb-3">
+        <input id="newemail" #newemail type="text" class="form-control" placeholder="correo electrónico alterno" (blur)="managerService.validateEmails(newemail.value)">
+        <div class="input-group-append">
+          <button class="btn btn-success" type="button" [disabled]="!managerService.validateEmails(newemail.value)" (click)="addnewemails(newemail.value)"><i class="fas fa-plus"></i></button>
+        </div>
+      </div>
+      <small>* Los correos electronicos que se agreguen deben de ser validos</small>
+      <div *ngIf="emails.length > 1">
+        <hr>
+        <span class="text-secondary">
+          <small> se enviara a los siguientes correos electrónicos:</small>
+          <ul>
+            <li *ngFor="let item of emails">{{item}}</li>
+          </ul>
+        </span>
+        <button type="button" class="btn btn-outline-secondary" (click)="resetemails()">
+          <i class="fas fa-trash"></i> Cancelar envio masivo
+        </button>
+      </div>
+    </form>
+  </div>
+  <!--Termina cuerpo del modal-->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="sendEmails()">
+      <i class="fas fa-check"></i> Aceptar y enviar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #downloadfiles let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-file-excel"></i> Descargar archivos de alumnos</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal-->
+  <div class="modal-body">
+    <div *ngFor="let item of groupscsv" class="alert alert-success" role="alert">
+      <button type="button" class="btn btn-outline-success blockquote" (click)="downloadfile(item.codecourse, item.students)">
+        <i class="fas fa-file-excel"></i> {{item.codecourse}}
+      </button>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,12 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div *ngIf="!identiti">
+  <app-nabvar></app-nabvar>
+</div>
+<div *ngIf="identiti">
+  <app-nabvarlogged></app-nabvarlogged>
+</div>
+<div class="main-container">
+  <router-outlet></router-outlet>
+</div>
+
+<app-footer></app-footer>

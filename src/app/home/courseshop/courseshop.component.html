@@ -1,0 +1,14 @@
+<div *ngIf="courseShop.length > 0">
+  <div *ngIf="courseShop.length > 0 && courseShop.length <= 1" class="alert alert-success" role="alert">
+    <i class="fas fa-shopping-cart"></i> Tienes {{courseShop.length}} curso agregado a tu lista de compras
+  </div>
+  <div *ngIf="courseShop.length > 1 " class="alert alert-success" role="alert">
+    <i class="fas fa-shopping-cart"></i> Tienes {{courseShop.length}} cursos agregados a tu lista de compras
+  </div>
+</div>
+<div *ngIf="messageUser!=null" class="alert alert-warning alert-dismissible fade show" role="alert" dismiss>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <i class="fas fa-info-circle"></i> {{ messageUser }}
+</div>

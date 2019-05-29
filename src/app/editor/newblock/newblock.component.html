@@ -1,0 +1,414 @@
+<div *ngIf="identiti" class="container">
+  <h4><i class="fas fa-puzzle-piece"></i> Agregar bloque</h4>
+  <hr>
+  <ngb-alert type="success" (close)="messageSuccess = null" *ngIf="messageSuccess">
+    {{messageSuccess}}
+  </ngb-alert>
+  <ngb-alert type="warning" (close)="messageWarning = null" *ngIf="messageWarning">
+    {{messageWarning}}
+  </ngb-alert>
+  <div class="row">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-5">
+          <p>
+            <label for="coursecode">*Clave del curso: </label>
+            <select class="form-control" #coursecode="ngModel" [(ngModel)]="newblock.coursecode" (change)="getCourseTitle()" required><!-- required-->
+              <option value="">Selecciona</option>
+              <option  *ngFor="let item of codescourse">
+                {{item.code}}
+              </option>
+            </select>
+          </p>
+        </div>
+      </div>
+      <ngb-alert type="success" [dismissible]="false" *ngIf="messageCode">
+        <b>Curso: </b>{{messageCode.title}}
+      </ngb-alert>
+      <div class="row">
+        <div class="col-3">
+          <p>
+            <label for="code">*Código: </label> <!--coursecode,code,title,type-->
+            <input type="text" class="form-control" #code="ngModel" [(ngModel)]="newblock.code"  required>
+          </p>
+        </div>
+      </div>
+      <p>
+        <label for="title">*Título: </label>
+        <input type="text" class="form-control" #title="ngModel" [(ngModel)]="newblock.title"  required>
+      </p>
+      <p>
+        <label for="type">*Tipo: </label>
+        <select class="form-control" #type="ngModel" [(ngModel)]="newblock.type"  required>
+          <option value="">Tipo de bloque</option>
+          <option value="text">Texto</option>
+          <option value="questionnarie">Cuestionario</option>
+          <option value="task">Tarea</option>
+          <option value="textVideo">Texto/Video</option>
+          <option value="video">Video</option>
+        </select>
+      </p>
+    </div>
+    <div class="col-4">
+      <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Regresar" (click)="returnManagerEdit()">
+        <i class="fas fa-reply"></i>
+      </button>
+      <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar" (click)="saveBlock(coursecode.value,code.value,title.value,type.value)">
+        <i class="far fa-save"></i>
+      </button>
+      <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Cancelar">
+        <i class="fas fa-times"></i>
+      </button>
+      <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Agregar Sección" (click)="addSection(coursecode.value)">
+        <i class="fas fa-clone"></i>
+      </button>
+    </div>
+  </div>
+
+
+  <!--editor para bloques de tipo texto-->
+  <div *ngIf="newblock.type=='text'" class="row">
+    <div class="col-12">
+      <hr>
+      <h4><i class="fas fa-archive"></i> Contenido</h4>
+    </div>
+    <div class="col-11">
+      <hr>
+      <div class="editor block">
+        <app-ngx-editor [config]="editorConfig" [spellcheck]="true" [(ngModel)]="newblock.content"></app-ngx-editor>
+      </div>
+      <hr>
+      <h6><i class="fas fa-code"></i> Editor HTML</h6>
+      <div class="form-group">
+        <textarea class="form-control" rows="8" draggable="false" #content="ngModel" [(ngModel)]="newblock.content" (blur)="getTexthtml()">
+          {{newblock.content}}
+        </textarea>
+      </div>
+    </div>
+    <div class="col-1">
+      <hr>
+      <button type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Vista Previa" (click)="showEditorContent(modalEditortext)">
+        <i class="fas fa-eye"></i>
+      </button>
+      <button type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Revisar archivo JSON" (click)="showEditorContent(modalEditorJSON)">
+        <i class="fas fa-file-code"></i>
+      </button>
+    </div>
+  </div>
+  <!--  -->
+
+  <!--editor para bloques de tipo cuestionario-->
+  <div *ngIf="newblock.type=='questionnarie'" class="row">
+    <div class="col-8">
+      <hr>
+      <h4><i class="fas fa-archive"></i> Contenido</h4>
+    </div>
+
+    <div class="col-12">
+      <div class="row">
+        <div class="col-4">
+          <label for="type">*Tipo de pregunta: </label>
+          <select class="form-control" #type [(ngModel)]="question.type" required>
+            <option value="">Tipo de pregunta</option>
+            <option value="option">Opcional</option>
+            <option value="text">Texto</option>
+            <option value="map">Mapa</option>
+            <option value="group">Grupo</option>
+          </select>
+        </div>
+        <div class="col-3">
+          <p>
+            <label for="footer">*Número máximo de intentos: </label>
+            <input type="text" class="form-control" #maxAttempts [(ngModel)]="questionnarie.maxAttemps" required>
+          </p>
+        </div>
+        <div class="col-3">
+          <p>
+            <label for="footer">*Calificación mínima: </label>
+            <input type="text" class="form-control" #minimum [(ngModel)]="questionnarie.minimum" required>
+          </p>
+        </div>
+        <div class="col-3">
+          <button *ngIf="questions.length > 0" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Vista Previa" (click)="showEditorContent(modalPreviewQuestions)">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      <hr>
+      <ngb-alert type="success" (close)="messageSuccessQues = null" *ngIf="messageSuccessQues">
+        {{messageSuccessQues}}
+      </ngb-alert>
+      <ngb-alert type="danger" (close)="messageErrorQues = null" *ngIf="messageErrorQues">
+        {{messageErrorQues}}
+      </ngb-alert>
+      <div *ngIf="question.type == 'option'" class="row">
+        <div class="col-9">
+          <p>
+            <label for="text">*Texto de la pregunta: </label>
+            <textarea placeholder="Puedes ingresar texto normal o en código HTML" class="form-control" rows="3" draggable="false" #text [(ngModel)]="question.text">
+
+            </textarea>
+          </p>
+        </div>
+
+        <div class="col-2">
+          <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar Pregunta" (click)="saveQuestionOpt()">
+            <i class="fas fa-check"></i>
+          </button>
+        </div>
+
+        <div class="col-9">
+          <p>
+            <label for="help">*Texto de ayuda para la pregunta: </label>
+            <textarea placeholder="Puedes ingresar texto normal o en código HTML" class="form-control" rows="3" draggable="false" #help [(ngModel)]="question.help">
+
+            </textarea>
+          </p>
+        </div>
+        <div class="col-9">
+          <p>
+            <label for="header">Encabezado de la pregunta: </label>
+            <textarea placeholder="Puedes ingresar texto normal o en código HTML" class="form-control" rows="3" draggable="false" #header [(ngModel)]="question.header">
+
+            </textarea>
+          </p>
+        </div>
+        <div class="col-9">
+          <p>
+            <label for="footer">Texto al inferior de la pregunta: </label>
+            <textarea placeholder="Ingresa el pie de pagina para la pregunta" class="form-control" rows="3" draggable="false" #footer [(ngModel)]="question.footer">
+
+            </textarea>
+          </p>
+        </div>
+        <div class="col-6">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <button class="btn btn-success" type="button" (click)="addOption(option.value, option.value)">*Agregar opción</button>
+            </div>
+            <input type="text" class="form-control" placeholder="Opción" #option required>
+          </div>
+          <ngb-alert type="success" (close)="messageSuccessOpt = null" *ngIf="messageSuccessOpt">
+            {{messageSuccessOpt}}
+          </ngb-alert>
+          <ngb-alert type="danger" (close)="messageErrorOpt = null" *ngIf="messageErrorOpt">
+            {{messageErrorOpt}}
+          </ngb-alert>
+        </div>
+        <div class="col-6">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="answer">* Respuesta correcta</label>
+            </div>
+            <select class="custom-select" id="answer" #answer (change)="addAnswer(answer.value)">
+              <option selected>Selecciona la respuesta correcta</option>
+              <option *ngFor="let item of options; let id = index" [value]="id">{{item.value}}</option>
+            </select>
+          </div>
+          <ngb-alert type="success" (close)="messageSuccessAns = null" *ngIf="messageSuccessAns">
+            {{messageSuccessAns}}
+          </ngb-alert>
+          <ngb-alert type="danger" (close)="messageErrorAns = null" *ngIf="messageErrorAns">
+            {{messageErrorAns}}
+          </ngb-alert>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  -->
+
+  <!--editor para bloques de tipo tarea-->
+  <div *ngIf="newblock.type =='task'" class="row">
+    <div class="col-8">
+      <hr>
+      <h4><i class="fas fa-archive"></i> Contenido</h4>
+      <hr>
+      <label for="type">*Tipo de tarea: </label>
+      <select class="form-control" #typetask required>
+        <option value="">Tipo de tarea</option>
+        <option value="text">Texto</option>
+        <option value="file">Archivo</option>
+      </select>
+
+    </div>
+    <div class="col-4">
+      <hr>
+
+      <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Agregar tarea">
+        <i class="fas fa-plus"></i>
+      </button>
+
+      <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Vista Previa">
+        <i class="fas fa-eye"></i>
+      </button>
+
+      <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="Guardar tarea">
+        <i class="fas fa-check"></i>
+      </button>
+
+    </div>
+    <div class="col-11">
+
+    </div>
+  </div>
+  <!---->
+
+  <!--editor para bloques de tipo text/video-->
+  <div *ngIf="newblock.type =='textVideo'" class="row">
+    <div class="col-11">
+      <hr>
+        <h4><i class="fas fa-archive"></i> Contenido</h4>
+      <hr>
+      <div class="editor block">
+        <app-ngx-editor [config]="editorConfig" [spellcheck]="true" [(ngModel)]="textprevView"></app-ngx-editor>
+      </div>
+      <hr>
+      <h6><i class="fas fa-code"></i> Editor HTML</h6>
+      <div class="form-group">
+        <textarea class="form-control" rows="8" draggable="false" #textEdit (blur)="getTexthtml(textEdit.value)">
+          {{textprevView}}
+        </textarea>
+      </div>
+      <div class="input-group mb-3">
+        <hr>
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input type="checkbox" placement="bottom" ngbTooltip="Presentar al principio">
+          </div>
+        </div>
+        <input type="text" class="form-control" placeholder="url del video">
+      </div>
+    </div>
+    <div class="col-1">
+      <hr>
+      <button type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Vista Previa" (click)="showEditorContent(modalEditor)">
+        <i class="fas fa-eye"></i>
+      </button>
+    </div>
+  </div>
+  <!---->
+
+  <!--editor para bloques de tipo videos-->
+  <div *ngIf="newblock.type =='video'" class="row">
+    <div class="col-11">
+      <hr>
+        <h4><i class="fas fa-archive"></i> Contenido</h4>
+      <hr>
+      <div class="input-group mb-3">
+        <hr>
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input type="checkbox" placement="bottom" ngbTooltip="Presentar al principio">
+          </div>
+        </div>
+        <input type="text" class="form-control" placeholder="url del video">
+      </div>
+    </div>
+    <div class="col-1">
+      <hr>
+      <button type="button" class="btn btn-success blockquote" placement="bottom" ngbTooltip="Vista Previa" (click)="showEditorContent(modalEditor)">
+        <i class="fas fa-eye"></i>
+      </button>
+    </div>
+  </div>
+  <!---->
+</div>
+
+<!--Modal content-->
+<ng-template #modalEditortext let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-eye"></i> Vista previa</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeEditor()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+  <!--Cuerpo del modal para desplegar el materail de apoyo-->
+  <div class="modal-body">
+    <div [innerHTML]="newblock.content">
+
+    </div>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+<!---->
+
+<!--Modal content-->
+<ng-template #modalEditorJSON let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-file-code"></i> Archivo JSON</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeEditor()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+  <!--Cuerpo del modal para desplegar el materail de apoyo-->
+  <div class="modal-body">
+    {{newblock | json}}
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+<!---->
+
+<!--Modal para la vita previa de los cuestionarios-->
+<ng-template #modalPreviewQuestions let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-eye"></i> Vista previa</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeEditor()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+  <!--Cuerpo del modal para desplegar el materail de apoyo-->
+  <div class="modal-body">
+    <div *ngFor="let item of questions;let idQ = index">
+      <div *ngIf="item.label">
+        <span class="text-success" style="margin-bottom:15px;"><i class="fas fa-info-circle"></i> {{item.label}} {{item.help}} </span>
+      </div>
+      <div *ngIf="!item.label">
+        <span class="text-success" style="margin-bottom:15px;"><i class="fas fa-info-circle"></i> Pregunta {{idQ+1}} {{item.help}}</span>
+      </div>
+      <!--Headers de las preguntas-->
+      <div *ngIf="item.header">
+        <div [innerHTML]="item.header">
+
+        </div>
+      </div>
+      <!---->
+
+      <!--Seccion html del cuerpo de la pregunta-->
+      <div [innerHTML]="item.text">
+
+      </div>
+      <!--Para las preguntas que tengan pie de pagina-->
+      <div *ngIf="item.footer">
+        <span class="text-success text-justify">
+          <i class="fas fa-quote-left"></i>
+          <p>
+            {{item.footer}}
+          </p>
+        </span>
+      </div>
+      <!--  -->
+
+      <!--Seccion para el tipo de respuesta en optativas-->
+      <div *ngIf="item.type == 'option'" style="margin-top:15px;">
+        <div *ngFor="let itemOpt of item.options;let idOpt=index">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" [name]="idQ" id="idQ" value="itemOpt.value" (change)="getAnswer(idQ, idOpt)" >
+            <label class="form-check-label" for="exampleRadios1">
+              {{itemOpt.value}}
+            </label>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <!--   -->
+    </div>
+    <!---->
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>

@@ -1,0 +1,45 @@
+<div *ngIf="identiti" class="container">
+  <h3><i class="fas fa-pencil-alt"></i> Editar Cursos</h3>
+  <hr>
+  <div class="row">
+    <div class="card">
+      <div class="card-header">
+        <h4>Crear nuevo curso</h4>
+      </div>
+      <div class="card-body">
+        <h1 class="display-1 text-center" ><i class="fas fa-plus"></i></h1>
+      </div>
+      <div class="card-footer">
+        <button type="button" class="btn btn-success blockquote" (click)="getnewCourses()">
+          <i class="fas fa-plus"></i> Nuevo
+        </button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h4>Agregar Bloque</h4>
+      </div>
+      <div class="card-body">
+        <h1 class="display-1 text-center"><i class="fas fa-puzzle-piece"></i></h1>
+      </div>
+      <div class="card-footer">
+        <button type="button" class="btn btn-success blockquote" (click)="getnewBlocks()">
+          <i class="fas fa-puzzle-piece"></i> Agregar
+        </button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h4>Editar contenido</h4>
+      </div>
+      <div class="card-body">
+        <h1 class="display-1 text-center" ><i class="fas fa-edit"></i></h1>
+      </div>
+      <div class="card-footer">
+        <button type="button" class="btn btn-success blockquote" (click)="getEditCourses()">
+          <i class="fas fa-edit"></i> Editar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

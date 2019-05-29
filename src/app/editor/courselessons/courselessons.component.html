@@ -1,0 +1,58 @@
+<div class="container">
+  <div *ngIf="loading">
+    <div class="row text-center animated fadeIn">
+      <div class="col ">
+        <i class="fas fa-sync fa-spin fa-5x"></i>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col">
+        <h1>Cargando componentes ... </h1>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!loading">
+    <h1 class="display-3 text-center">Temario</h1>
+    <hr>
+    <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+      <div *ngFor="let itemBlock of listblock;let indiceBlock = index">
+        <div *ngIf="itemBlock.number==0">
+          <ngb-panel>
+            <ng-template ngbPanelTitle>
+              <span class="text-success"><b>{{itemBlock.title}}</b></span> <span *ngIf="itemBlock.beginDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de inicio: {{itemBlock.beginDate | date}}</span> <span *ngIf="itemBlock.endDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de término: {{itemBlock.endDate | date}}</span><span *ngIf="itemBlock.duration" class="text-right text-secondary"> | <i class="far fa-clock"></i> Duración:{{itemBlock.duration}}</span>
+            </ng-template>
+            <ng-template ngbPanelContent>
+
+              <!---->
+              <div class="alert alert-success" role="alert">
+                <button type="button" class="btn btn-outline-success" (click)="getBlock(itemBlock.id)">
+                  <h6>
+                    <i class="far fa-calendar-check"></i> {{itemBlock.section}}.{{itemBlock.title}}
+                  </h6>
+                </button>
+              </div>
+
+              <!---->
+              <div *ngFor="let itemBlockL of listblock">
+                <!-- <div *ngIf="itemBlockL.number !=0 && itemBlock.section == itemBlockL.section && itemBlockL.track" class="list-group-item"> -->
+                <div *ngIf="itemBlockL.number !=0 && itemBlock.section == itemBlockL.section" class="alert alert-success" role="alert">
+                  <button type="button" class="btn btn-outline-success" (click)="getBlock(itemBlockL.id)">
+                    <i class="far fa-calendar-check"></i> {{itemBlockL.section}}.{{itemBlockL.number}} {{itemBlockL.title | slice:0:85 }}
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-panel>
+        </div>
+        <div *ngIf="itemBlock.number!=0">
+          <ng-template ngbPanelContent>
+            {{itemBlock.section}}. {{itemBlock.title}}
+          </ng-template>
+        </div>
+      </div>
+    </ngb-accordion>
+    <button type="button" class="btn btn-outline-success blockquote" (click)="returnCourses()">
+      <i class="far fa-arrow-alt-circle-left"></i> Regresar
+    </button>
+  </div>
+</div>

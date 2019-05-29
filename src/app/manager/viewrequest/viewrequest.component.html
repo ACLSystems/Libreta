@@ -1,0 +1,318 @@
+<div *ngIf="loading">
+  <div class="row text-center animated fadeIn m-5">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Cargando componentes ... </h1>
+    </div>
+  </div>
+</div>
+<div *ngIf="!loading" class="container">
+  <div class="row">
+    <div class="col-4">
+      <button type="button" class="btn blockquote btn-success" [routerLink]="['/solicitudes']">
+        <i class="fas fa-reply"></i> Buscar otra solicitud
+      </button>
+    </div>
+    <div class="col-6">
+      <h3><i class="fas fa-money-check"></i> Detalle de la solicitud</h3>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-3 text-center">
+      <i class="fas fa-sort-numeric-up"></i> <b>Número de solicitud: </b><span [ngClass]="{'text-warning': request.status=='init', 'text-danger':request.status=='cancelled', 'text-success':request.status=='payment'}"> {{request.reqNumber}}</span>
+    </div>
+    <div class="col-3 text-center">
+      <i class="fas fa-thermometer-three-quarters"></i> <b>Estatus de la solicitud: </b>
+      <span [ngClass]="{'text-warning': request.status=='init', 'text-danger':request.status=='cancelled', 'text-success':request.status=='payment'}">
+        <span *ngIf="request.status=='init'">  Pendiente</span>
+        <span *ngIf="request.status=='cancelled'">  Cancelada</span>
+        <span *ngIf="request.status=='payment'">  Terminada</span>
+      </span>
+    </div>
+    <div class="col-3 text-center">
+      <i class="fas fa-hand-holding-usd"></i> <b>Estatus del pago: </b>
+      <span [ngClass]="{'text-warning':request.paymentStatus=='pending', 'text-info':request.paymentStatus=='partial', 'text-success':request.paymentStatus=='complete', 'text-success':request.paymentStatus=='granted'}">
+        <span *ngIf="request.paymentStatus=='pending'">Pendiente</span>
+        <span *ngIf="request.paymentStatus=='partial'">Parcial</span>
+        <span *ngIf="request.paymentStatus=='complete'">Completado</span>
+        <span *ngIf="request.paymentStatus=='granted'">Completado</span>
+      </span>
+    </div>
+    <div class="col-3 text-center">
+      <i class="fas fa-tag"></i> <b>Palabra clave: </b> <span [ngClass]="{'text-warning': request.status=='init', 'text-danger':request.status=='cancelled', 'text-success':request.status=='payment'}"> {{request.label}} </span>
+    </div>
+  </div>
+  <hr>
+  <div *ngIf="request.details.length!=0">
+    <div class="row">
+      <div class="col-6">
+        <b><i class="fas fa-users"></i> Grupos asociados a esta solicitud</b>
+      </div>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <th class="text-center">Consultar</th>
+        <th class="text-center">Agregar</th>
+        <th class="text-center">Quitar</th>
+        <th class="text-center">Grupo</th>
+        <th class="text-center">Curso</th>
+        <th class="text-center">Total de alumnos</th>
+        <th class="text-center">Nombre del grupo</th>
+        <th class="text-center">Precio</th>
+        <th class="text-center">Precio sin IVA</th>
+        <th class="text-center">Sub total</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of request.details">
+          <td class="text-center">
+            <button type="button" class="btn btn-success" (click)="showGroup(item.item._id, searchgroup)">
+              <i class="fas fa-search"></i>
+            </button>
+          </td>
+          <td class="text-center">
+            <button type="button" class="btn btn-success" [routerLink]="['/addusers', request._id, numberrequest , request.label,item.item._id, item.item.code, item.item.orgUnit.name]" [disabled]="request.status=='payment'">
+              <i class="fas fa-user-cog"></i>
+            </button>
+          </td>
+          <td class="text-center">
+            <button type="button" class="btn btn-danger" (click)="deleteGroupRequest(item.item._id,item.item.code, deleteGroup)" [disabled]="request.status=='payment'">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+          <td class="text-center">{{item.item.code}}</td>
+          <td class="text-center">{{item.item.course.code}}</td>
+          <td class="text-center">
+            <div *ngFor="let itemTemp of request.temp1">
+              <div *ngIf="itemTemp.idgroup == item.item._id">
+                {{itemTemp.studentsforgroup.length}}
+              </div>
+            </div>
+          </td>
+          <td class="text-center">{{item.item.name}}</td>
+          <td class="text-center">
+            {{item.item.course.price | currency:'MXN'}}
+          </td>
+          <td class="text-center">
+            {{item.item.course.cost | currency:'MXN'}}
+          </td>
+          <td class="text-center">
+            <div *ngFor="let itemTemp of request.temp1">
+              <div *ngIf="itemTemp.idgroup == item.item._id">
+                {{itemTemp.studentsforgroup.length * item.item.course.cost | currency:'MXN'}}
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="7" class="text-center">
+          </td>
+          <td colspan="2" class="text-center">
+            <b>Sub total</b>
+          </td>
+          <td>
+            {{subtotal | currency:'MXN'}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="7" class="text-center">
+          </td>
+          <td colspan="2" class="text-center">
+            <b>IVA</b>
+          </td>
+          <td>
+            {{IVA | currency:'MXN'}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="7" class="text-center">
+          </td>
+          <td colspan="2" class="text-center">
+            <b>TOTAL</b>
+          </td>
+          <td>
+            {{total | currency:'MXN'}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="request.details.length==0">
+    <div class="alert alert-warning" role="alert">
+      <i class="fas fa-exclamation-triangle"></i> Aun no se tienen grupos asociados a esta solicitud
+    </div>
+  </div>
+  <hr>
+  <div *ngIf="request.status!='payment' && request.status!='cancelled'" class="row">
+    <div class="col-4">
+      <button type="button" class="btn blockquote btn-secondary" (click)="addnewGroup()">
+        <i class="fas fa-users"></i> Agregar nuevo grupo
+      </button>
+    </div>
+    <div class="col-4">
+      <button type="button" class="btn blockquote btn-danger" (click)="showModal(cancelRequest)">
+        <i class="fas fa-trash-alt"></i> Cancelar solicitud
+      </button>
+    </div>
+    <div class="col-4">
+      <button type="button" class="btn blockquote btn-success" [disabled]="total==0" [routerLink]="['/checkrequest',numberrequest]">
+        <i class="fas fa-shopping-cart"></i> Enviar solicitud
+      </button>
+    </div>
+  </div>
+  <div *ngIf="request.status=='cancelled'" class="">
+    <div class="alert alert-danger" role="alert">
+      <i class="fas fa-info-circle"></i> Esta solicitud fue cancelada por la siguiente razon: <b>{{request.statusReason}}</b>
+    </div>
+  </div>
+  <div *ngIf="request.status=='payment'" class="row">
+    <div class="col">
+      <div class="alert alert-success" role="alert">
+        <b><i class="fas fa-info-circle"></i> Solicitud enviada con exito </b><br> Por favor, procede realizar el pago a la cuenta BBVA Bancomer a favor de ACL Systems S.A. de C.V. <b>No. cuenta: 0195533066, CLABE: 012180001955330664</b>, <br><b>IMPORTANTE:</b> en el concepto colocar <b>{{invoiceNumber}}</b>.
+      </div>
+    </div>
+    <div class="col">
+      <div *ngIf="messageSuccess" class="alert alert-success" role="alert">
+        <i class="fas fa-exclamation-circle"></i> {{messageSuccess}}
+      </div>
+      <div *ngIf="!loadingfile" class="row">
+        <h5><i class="fas fa-file-upload"></i> Adjuntar el comprobante de pago aqui</h5>
+      </div>
+      <div *ngIf="loadingfile" class="row">
+        <h5><i class="fas fa-sync fa-spin"></i> Cargando archivo ...</h5>
+      </div>
+      <p>
+        <input type="file" (change)="uploadFile($event)" [disabled]="loadingfile">
+      </p>
+      <button type="button" class="btn btn-success blockquote" (click)="showModal(sendPayment)" [disabled]="!fileid"><i class="fas fa-file-upload"></i> Enviar archivo</button>
+      <br>
+    </div>
+  </div>
+  <div *ngIf="request.files.length!=0" class="">
+    <hr>
+    <h5><i class="fas fa-clipboard-list"></i> Bitacora de comprobantes de pago</h5>
+    <table class="table table-striped">
+      <thead>
+        <th class="text-center">Nombre del Archivo</th>
+        <th class="text-center">Fecha de envio</th>
+        <th class="text-center">Nota agregada</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of request.files;let file=index">
+          <td class="text-center">{{item.name}}</td>
+          <td class="text-center">{{item.createDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+          <td>
+            <div *ngFor="let itemNotes of request.filesNotes;let note=index">
+              <span *ngIf="note==file" class="text-success text-center">{{itemNotes}}</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #cancelRequest let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-trash-alt"></i> Cancelar solicitud</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal-->
+  <div class="modal-body">
+    <form class="was-validated">
+      <label >Motivo de cancelación</label>
+      <input class="form-control" type="text" #reason (blur)="validateSpaceBlank(reason.value)" required>
+      <br>
+      <button type="button" class="btn btn-success" [disabled]="!reasonOk" (click)="deletedRequest(reason.value)">
+        Cancelar Solicitud.
+      </button>
+    </form>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+
+<ng-template #deleteGroup let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-trash"></i> Quitar grupo</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal-->
+  <div class="modal-body">
+    Se eliminara el grupo  <b>{{codegroup}}</b> ¿Desea continuar?
+  </div>
+  <!--Termina cuerpo del modal-->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success blockquote" (click)="quitGruop()">
+      <i class="fas fa-check"></i> Aceptar
+    </button>
+    <button type="button" class="btn btn-danger blockquote" (click)="closeModal()">
+      <i class="fas fa-times"></i> Cancelar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #sendPayment let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-file-upload"></i> Enviar archivo</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-success" role="alert">
+      <i class="fas fa-info-circle"></i> Se adjuntara el siguiente archivo a la solicitud:
+      <br>{{filename}}
+    </div>
+    <hr>
+    Agregar una descripción a esta operación
+    <input type="text" #notepayment class="form-control">
+    <div class="modal-footer">
+      <button type="button" class="btn btn-success blockquote" (click)="setPayment(notepayment.value)">
+        <i class="fas fa-check"></i> Enviar
+      </button>
+    </div>
+
+  </div>
+</ng-template>
+
+<ng-template #searchgroup let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal">
+  <div class="modal-header">
+    <h4 class="modal-title">Grupo: {{ groupscsv.codecourse }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-striped">
+      <thead>
+        <th class="text-center">Nombre Completo</th>
+        <th class="text-center">Correo electronico</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of groupscsv.students">
+          <td class="text-center">
+            {{item.nombreCompleto}} {{item.apellidoPaterno}} {{item.apellidoMaterno}}
+          </td>
+          <td class="text-center">
+            {{item.correoElectronico}}
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+</ng-template>

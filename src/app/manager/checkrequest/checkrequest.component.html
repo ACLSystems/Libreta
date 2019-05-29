@@ -1,0 +1,165 @@
+<div class="container">
+  <div class="row text-center">
+    <div class="col-2">
+      <button type="button" class="btn btn-success blockquote" [routerLink]="['/viewrequest',numberrequest]">
+        <i class="fas fa-arrow-left"></i> Regresar
+      </button>
+    </div>
+    <div class="col-6">
+      <h3><i class="fas fa-money-check"></i> Datos de la compra</h3>
+    </div>
+  </div>
+  <hr>
+  <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+    <ngb-panel>
+      <ng-template ngbPanelTitle>
+        <h5><span class="text-success"><i class="fas fa-money-check"></i> Detalle de la compra</span></h5>
+      </ng-template>
+      <ng-template ngbPanelContent>
+        <table class="table table-striped">
+          <thead>
+            <th class="text-center">Clave del curso</th>
+            <th class="text-center">Precio unitario sin I.V.A.</th>
+            <th class="text-center">Precio unitario final</th>
+            <th class="text-center">Total de alumnos p/curso</th>
+            <th class="text-center">Subtotal</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let itemreqdet of detailsRequest">
+              <td class="text-center">{{itemreqdet.reference}}</td>
+              <td class="text-center">{{itemreqdet.price | currency:'MXN'}}</td>
+              <td class="text-center">{{itemreqdet.precio | currency:'MXN'}}</td>
+              <td class="text-center">{{itemreqdet.quantity}}</td>
+              <td class="text-center">{{itemreqdet.subtotal | currency:'MXN'}}</td>
+            </tr>
+            <tr>
+              <td colspan="3"></td>
+              <td class="text-center"><b>Sub total</b></td>
+              <td class="text-center">{{subtotal | currency:"MXN"}}</td>
+            </tr>
+            <tr>
+              <td colspan="3"></td>
+              <td class="text-center"><b>I.V.A.</b></td>
+              <td class="text-center">{{ivarequest | currency:"MXN"}}</td>
+            </tr>
+            <tr>
+              <td colspan="3"></td>
+              <td class="text-center"><b>Total</b></td>
+              <td class="text-center">{{totalrequest | currency:"MXN"}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+  <!--Termina el detalle de la compra-->
+  <hr>
+  <!--Validacion de factura-->
+  <form class="was-validated">
+    <div class="alert alert-warning" role="alert">
+      <i class="fas fa-exclamation-triangle"></i> <b>Los datos marcados con asterisco (*) son de carácter obligatorio</b>
+    </div>
+    <label for="checkfactura">* ¿Requiere factura?</label>
+    <select id="checkfactura" #checkfac class="form-control" (change)="getFactura(checkfac.value)" required [disabled]="invoiceNumber">
+      <option value="">Selecciona una opción</option>
+      <option value="si">Si</option>
+      <option value="no">No</option>
+    </select>
+  </form>
+  <!--Termina la validacion de factura-->
+  <hr>
+  <!--Requiere la factura-->
+  <div *ngIf="factura && checktype">
+    <app-checkfac [detailsFactura]="detailsFactura" ></app-checkfac>
+  </div>
+  <!--Termina requiere la factura-->
+  <div *ngIf="closerequestprocess">
+    <div class="row text-center animated fadeIn m-5">
+      <div class="col ">
+        <i class="fas fa-sync fa-spin fa-5x"></i>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col">
+        <h1>Procesando datos ... </h1>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!closerequestprocess">
+    <div *ngIf="invoiceNumber" class="alert alert-success" role="alert">
+      <b><i class="fas fa-info-circle"></i> Solicitud enviada con exito </b><br>
+      <p>
+      Por favor, procede realizar el pago a la cuenta BBVA Bancomer a favor de ACL Systems S.A. de C.V. <b>No. cuenta: 0195533066, CLABE: 012180001955330664</b>, <br><b>IMPORTANTE:</b> en el concepto colocar <b>{{invoiceNumber}}</b>.
+      </p>
+    </div>
+    <div *ngIf="!factura && checktype && !invoiceNumber">
+      <div class="alert alert-warning" role="alert">
+        <h4 class="text-center"><i class="fas fa-exclamation-triangle"></i> Aviso importante</h4>
+        <ul>
+          <li>
+            Te sugerimos revisar bien la solicitud, ya que una vez que se cierre no habrá cambios ni devoluciones.
+          </li>
+          <li>
+            En caso de NO solicitar factura se generará un ticket de venta el cual se podrá canjear por una factura solo durante el mes actual. Si así lo requieres, por favor solicita el cambio a la mesa de soporte soporte@superatemexico.com enviando el ticket de venta y los datos de facturación
+          </li>
+          <li>
+            No se canjearán tickets de venta por facturas de meses anteriores.
+          </li>
+          <li>
+            No habrá cambios de facturas una vez que son expedidas.
+          </li>
+        </ul>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="accept" (change)="acceptCheck()">
+          <label class="custom-control-label" for="accept"> Entendido</label>
+        </div>
+      </div>
+      <br>
+      <button *ngIf="!invoiceNumber" type="button" class="btn btn-success blockquote" (click)="showModal(sendEmail)" [disabled]="!accept"><i class="fas fa-money-check"></i> Proceder a la orden de pago</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #sendEmail let-modal>
+  <!--Encabezado del modal -->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Aviso importante</h4>
+  </div>
+  <!--  -->
+  <!--Cuerpo del modal -->
+  <div class="modal-body">
+    <span class="text-justify text-success">
+      <b>* Se enviara un correo electrónico con los detalles de la solicitud a la siguiente dirección: {{identiti.name}}</b>
+    </span>
+    <hr>
+    Agregar otro correo electrónico
+    <br>
+    <form id="formemail" class="form">
+      <div class="input-group mb-3">
+        <input id="newemail" #newemail type="text" class="form-control" placeholder="correo electrónico alterno" (blur)="validatnewemails(newemail.value)">
+        <div class="input-group-append">
+          <button class="btn btn-success" type="button" [disabled]="!addmails" (click)="addnewemails(newemail.value)"><i class="fas fa-plus"></i></button>
+        </div>
+      </div>
+      <small>* Los correos electronicos que se agreguen deben de ser validos</small>
+      <div *ngIf="emails.length > 1">
+        <hr>
+        <span class="text-secondary">
+          <small> se enviara a los siguientes correos electrónicos:</small>
+          <ul>
+            <li *ngFor="let item of emails">{{item}}</li>
+          </ul>
+        </span>
+        <button type="button" class="btn btn-outline-secondary" (click)="resetemails()">
+          <i class="fas fa-trash"></i> Cancelar envio masivo
+        </button>
+      </div>
+    </form>
+  </div>
+  <!--Termina cuerpo del modal-->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="closeRequestTicket()">
+      <i class="fas fa-check"></i> Aceptar y enviar
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,312 @@
+<div *ngIf="loading">
+  <div class="row text-center animated fadeIn">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Cargando componentes ... </h1>
+    </div>
+  </div>
+</div>
+<div *ngIf="!loading" class="container">
+  <h1 class="text-center"><i class="fas fa-cash-register"></i> Cotizador en línea</h1>
+  <wizard navBarLocation="bottom">
+    <wizard-step>
+      <br>
+      <form class="was-validated">
+        <div [ngClass]="{'alert-warning':!tipo, 'alert-success':tipo}" class="alert" role="alert">
+          * Paso 1) Selecciona el tipo de curso
+        </div>
+        <select #tipe class="form-control" (change)="getType(tipe.value)" required>
+          <option value="">Seleccione la modalidad</option>
+          <option value="presencial">Presencial</option>
+          <option value="linea">En línea</option>
+        </select>
+        <br>
+        <div [ngClass]="{'alert-warning':!sta, 'alert-success':sta}" class="alert" role="alert">
+          * Paso 2) Selecciona un estado
+        </div>
+        <select #state class="form-control" (change)="getCampus(state.value)" required>
+          <option value="">Selecciona un estado</option>
+          <option *ngFor="let itemState of states" [value]="itemState.name">{{itemState.longName}}</option>
+        </select>
+        <br>
+        <div [ngClass]="{'alert-warning':!campusdetails, 'alert-success':campusdetails}" class="alert" role="alert">
+          * Paso 3) Selecciona el plantel de tu preferencia
+        </div>
+        <select #plantel class="form-control" (change)="showCampus(plantel.value)" required [disabled]="campus.length==0">
+          <option value="">Selecciona un plantel</option>
+          <option *ngFor="let itemCampus of campus" [value]="itemCampus.id">{{itemCampus.longName}}</option>
+        </select>
+        <br>
+        <div *ngIf="campusdetails" class="alert alert-success" role="alert">
+          <div class="text-center">
+            <b><i class="fas fa-building"></i> Datos generales del plantel</b>
+          </div>
+          <hr>
+          <b>Nombre completo:</b> {{campusdetails.longName}} <br>
+          <b>Direccion:</b> Calle {{campusdetails.address.line1}}  <b>{{campusdetails.address.line2}}</b><br>
+          <b>C.P.:</b> {{campusdetails.address.postalCode}} <b>{{campusdetails.address.city}}</b>
+        </div>
+        <hr>
+        <div [ngClass]="{'alert-warning':coursesqoutes.length==0, 'alert-success':coursesqoutes.length>0}" class="alert" role="alert">
+          * Paso 4) Selecciona el curso de tu interés
+        </div>
+        <input #wordcode type="text" class="form-control" placeholder="palabra clave" (keyup)="findCourse(wordcode.value)">
+        <br>
+        <div *ngIf="messageCoursOut" class="alert alert-success" role="alert">
+          <i class="fas fa-check"></i> {{messageCoursOut}}
+        </div>
+        <div *ngIf="messageCoursOutError" class="alert alert-warning" role="alert">
+          <i class="fas fa-exclamation-triangle"></i> {{messageCoursOutError}}
+        </div>
+
+        <div *ngIf="!loading && isFindOk" class="container animated fast fadeIn">
+          <div *ngFor="let item of course" class="row">
+            <div class="col-md-4">
+              <hr>
+              <img [src]="item.image" class="imagenesCurso img-fluid">
+            </div>
+            <div class="col-md-8">
+              <hr>
+              <h3>{{item.title}}</h3>
+              <div [innerHTML]="item.description">
+
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col">
+                  <h6>Imparte <small>CONALEP</small></h6>
+                </div>
+                <div class="col">
+                  <h6>Categorías <small>{{item.categories}}</small></h6>
+                </div>
+                <div class="col">
+                  <h6>CLAVE <small>{{item.code}}</small></h6>
+                </div>
+                <div class="col">
+                  <h6>Grupo <small>Grupo</small> </h6>
+                </div>
+              </div>
+              <button (click)="verCurso(item.id)" type="button" class="btn btn-success">
+                <i class="far fa-arrow-alt-circle-right"></i> Descargar ficha técnica
+              </button>
+              <button type="button" (click)="setCourseQuot(item)" class="btn btn-success">
+                <i class="fas fa-check"></i> Seleccionar este curso
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!loading && !isFindOk && messageNotFound!=null" class="container animated fast fadeIn">
+          <div class="alert alert-warning text-center" role="alert">
+            <h1><i class="fas fa-frown-open"></i> {{messageNotFound}}</h1>
+          </div>
+        </div>
+      </form>
+      <br>
+      <button type="button" class="btn btn-success" nextStep><i class="fas fa-chevron-right"></i> Siguiente</button>
+    </wizard-step>
+    <wizard-step>
+      <div class="alert alert-success" role="alert">
+        <p class="text-justify">
+        Las siguientes preguntas nos ayudan a brindarle una mejor experiencia a los participantes del curso, le recomendamos lea detenidamente cada pregunta y seleccione la opción
+        que mas se ajuste a sus necesidades
+        </p>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-4">
+          <label for="">El curso selecciona es:</label>
+          <select class="form-control" name="">
+            <option value="">Seleccione una opción</option>
+            <option value="">De conocimientos generales</option>
+            <option value="">Técnico</option>
+            <option value="">Alineado a estándar de la competencia laboral</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <label for="">Requiere manual del participante como apoyo al curso</label>
+          <select class="form-control" name="">
+            <option value="">Seleccione una opción</option>
+            <option value="">Si</option>
+            <option value="">No</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <label for="">El manual del participante</label>
+          <select class="form-control" name="">
+            <option value="">Seleccione una opción</option>
+            <option value="">Impreso y engargolado por Conalep, a color</option>
+            <option value="">Impreso y engargolado por Conalep, a blanco y negro</option>
+            <option value="">En dispositivo / Medio electrónico</option>
+            <option value="">El interesado (Empresa/Institución) lo proporciona</option>
+            <option value="">No aplica</option>
+          </select>
+        </div>
+      </div>
+      <hr>
+      <br>
+      <div class="row">
+        <div class="col-4">
+          <label for="">Los insumos para practicas (solo para cursos técnicos) </label>
+          <select class="form-control" name="">
+            <option value="">Seleccione una opción</option>
+            <option value="">Por parte del Conalep</option>
+            <option value="">Por parte del interesado</option>
+            <option value="">No aplica</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <label for="">El equipo y herramienta necesarios (solo para cursos técnicos) </label>
+          <select class="form-control" name="">
+            <option value="">Seleccione una opción</option>
+            <option value="">Por parte del Conalep</option>
+            <option value="">Por parte del interesado</option>
+            <option value="">No aplica</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <label for="">El equipo de cómputo y software (para cursos de informática) </label>
+          <select class="form-control" name="">
+            <option value="">Seleccione una opción</option>
+            <option value="">Por parte del Conalep</option>
+            <option value="">Por parte del interesado</option>
+            <option value="">No aplica</option>
+          </select>
+        </div>
+      </div>
+      <hr>
+      <br>
+      <div class="row">
+        <div class="col-4">
+          <label for="">¿Desea incluir un servicio básico de cafetería? </label>
+          <select class="form-control" name="">
+            <option value="">Seleccione una opción</option>
+            <option value="">Si, por parte del Conalep</option>
+            <option value="">Si, por parte del interesado</option>
+            <option value="">No aplica</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <label for="">Número de participantes</label>
+          <select class="form-control" name="">
+            <option value="">Seleccione una opción</option>
+            <option value="">1-20</option>
+            <option value="">20 a mas</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <label for="">Numero de sesiones del curso será de</label>
+          <select class="form-control" name="">
+            <option value="">Seleccione una opción</option>
+            <option value="">1-2 sesiones</option>
+            <option value="">3-4 sesiones</option>
+            <option value="">5 o más sesiones</option>
+          </select>
+        </div>
+      </div>
+      <hr>
+      <br>
+      <div class="row">
+        <div class="col-4">
+          <label for="">Las duraciones de las sesiones del curso serán de</label>
+          <select class="form-control" name="">
+            <option value="">Seleccione una opción</option>
+            <option value="">1-2 horas</option>
+            <option value="">3-4 horas</option>
+            <option value="">5 o más horas</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <label for="">Se requiere que la capacitación se brinde en </label>
+          <select class="form-control" name="">
+            <option value="">Seleccione una opción</option>
+            <option value="">Instalaciones del Conalep</option>
+            <option value="">Instalaciones del interesado</option>
+            <option value="">(Ambos)</option>
+          </select>
+        </div>
+      </div>
+      <hr>
+      <br>
+      <button type="button" class="btn btn-success" previousStep><i class="fas fa-chevron-left"></i> Regresar</button>
+      <button type="button" class="btn btn-success" nextStep><i class="fas fa-chevron-right"></i> Siguiente</button>
+    </wizard-step>
+    <wizard-step>
+      <br>
+      <div class="alert alert-success" role="alert">
+        <h3 class="text-center">Datos del interesado</h3>
+      </div>
+      <form class="" action="index.html" method="post">
+        <div class="row">
+          <div class="col">
+            <label for="">*Origen</label>
+            <select class="form-control" name="">
+              <option value="">Seleccione una opción</option>
+              <option value="">Empresa</option>
+              <option value="">Institución</option>
+              <option value="">Público en general</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="">Razón social</label>
+            <input type="text" class="form-control">
+          </div>
+        </div>
+        <hr>
+        <br>
+        <label for="">Nombre completo</label>
+        <div class="row">
+          <div class="col">
+            <input type="text" class="form-control" name="" value="" placeholder="Nombre(s)" required>
+          </div>
+          <div class="col">
+            <input type="text" class="form-control" name="" value="" placeholder="Apellido Paterno" required>
+          </div>
+          <div class="col">
+            <input type="text" class="form-control" name="" value="" placeholder="Apellido Materno" required>
+          </div>
+        </div>
+        <hr>
+        <br>
+        <div class="row">
+          <label for="">Domicilio</label>
+          <input type="text" class="form-control" name="" value="">
+        </div>
+        <hr>
+        <br>
+        <div class="row">
+          <div class="col">
+            <label for="">Telefono</label>
+            <input type="text" class="form-control" name="" value="">
+          </div>
+          <div class="col">
+            <label for="">Celular</label>
+            <input type="text" class="form-control" name="" value="">
+          </div>
+          <div class="col">
+            <label for="">Correo electrónico</label>
+            <input type="text" class="form-control" name="" value="">
+          </div>
+        </div>
+        <hr>
+        <br>
+        <div class="row">
+          <label for="">Su opinión es importante para brindarle una mejor experiencia en el portal, si tiene alguna observación anotela aquí</label>
+          <textarea name="name" rows="8" cols="80" class="form-control"></textarea>
+        </div>
+      </form>
+      <br>
+      <button type="button" class="btn btn-success" previousStep><i class="fas fa-chevron-left"></i> Regresar</button>
+      <button type="button" class="btn btn-success" nextStep><i class="fas fa-chevron-right"></i> Siguiente</button>
+    </wizard-step>
+  </wizard>
+  <div class="alert alert-success" role="alert">
+    <h3 class="text-center"> <i class="fas fa-exclamation-circle"></i> Aviso importante</h3>
+    <p class="text-justify">
+      Los costos aquí reflejados son un aproximado del valor total, para mayor información de las tarifas y formas de pago, puedes acudir al plantel CONALEP que seleccionaste
+    </p>
+  </div>
+</div>

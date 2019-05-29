@@ -1,0 +1,153 @@
+<div class="container">
+  <div class="row" style="margin-top:15px;">
+    <div class="col-12">
+      <wizard navBarLocation="bottom">
+        <wizard-step navigationSymbol="1">
+          <h4 class="text-center">Ingresa tus datos personales</h4>
+          <form class="was-validated">
+            <label for="name">*Nombre</label>
+            <input type="text" class="form-control"  #name (blur)="datosPersonales(name.value, father.value, mother.value)" required>
+            <br>
+            <label for="surname">*Apellido Paterno</label>
+            <input type="text" class="form-control"  #father (blur)="datosPersonales(name.value, father.value, mother.value)" required>
+            <br>
+            <label for="surname">*Apellido Materno</label>
+            <input type="text" class="form-control"  #mother (blur)="datosPersonales(name.value, father.value, mother.value)" required>
+            <br>
+            <span *ngIf="!isDataPerson" class="text-danger">Los datos marcados con * son obligatorios</span>
+            <hr>
+          </form>
+          <button *ngIf="isDataPerson" type="button" class="btn btn-success" [goToStep] = "datosPersonales(name.value, father.value, mother.value)"> Siguiente <i class="fas fa-angle-right"></i></button>
+          <button *ngIf="!isDataPerson" type="button" class="btn btn-success" disabled> Siguiente <i class="fas fa-angle-right"></i></button>
+        </wizard-step>
+
+        <wizard-step>
+          <div *ngIf="messaerrorg" class="alert alert-warning" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> {{messaerrorg}}
+          </div>
+          <form class="was-validated">
+            <select  #type (change)="typeU(type.value)" class="form-control" required>
+              <option value="">*Tipo de Alumno</option>
+              <option value="internal">Alumno interno</option>
+              <option value="external">Usuario externo</option>
+            </select>
+            <hr>
+            <div *ngIf="usertype!=null && usertype!='' && usertype!='external'" class="">
+              <h4 class="text-center">* Selecciona el plantel que te corresponde</h4>
+
+              <select  #state (change)="verPlantel(state.value)" class="form-control" required>
+                <option value="">Selecciona un estado</option>
+                <option  *ngFor="let item of statesorg">
+                  {{item.longName}}
+                </option>
+              </select>
+              <hr>
+
+              <select #orgUnit class="form-control" (change)="setOrgUnit(orgUnit.value)" required>
+                <option value="">Selecciona tu plantel</option>
+                <option *ngFor="let item of orgUS">
+                  {{item.longName}}
+                </option>
+              </select>
+              <hr>
+              <h4 class="text-center">Selecciona tu carrera</h4>
+              <select #area class="form-control" (change)="verCarrera(area.value)" required>
+                <option value="">Selecciona un área</option>
+                <option *ngFor="let item of areadata">
+                  {{item}}
+                </option>
+              </select>
+              <hr>
+              <select #career class="form-control" (change)="setCarrer(career.value)" required>
+                <option value="">Selecciona tu carrera</option>
+                <option *ngFor="let item of carrerasList">
+                  {{item.longName}}
+                </option>
+              </select>
+              <hr>
+              <h4>Actualmente curso:</h4>
+              <select #term class="form-control" (change)="setSemester(term.value)" required>
+                <option value="">Selecciona una opción</option>
+                <option *ngFor="let item of typesdata">
+                  {{item.name}}
+                </option>
+              </select>
+              <hr>
+            </div>
+
+            <div *ngIf="usertype!=null&&usertype!=''&&usertype!='internal'" class="">
+              <select #state (change)="verPlantel(state.value)" class="form-control" required>
+                <option value="">Selecciona un estado</option>
+                <option  *ngFor="let item of statesorg">
+                  {{item.longName}}
+                </option>
+              </select>
+              <hr>
+              <select #orgUnit class="form-control" (change)="setOrgUnit(orgUnit.value)" required>
+                <option value="">Selecciona tu plantel de afiliación</option>
+                <option *ngFor="let item of orgUS">
+                  {{item.longName}}
+                </option>
+              </select>
+              <hr>
+              <select #external (change)="origU(external.value)" class="form-control" required>
+                <option value="">Origen</option>
+                <option value="private">Privado</option>
+                <option value="public">Publico</option>
+                <option value="particular">Particular</option>
+              </select>
+              <hr>
+            </div>
+
+          </form>
+          <button type="button" class="btn btn-success" style="margin-top:15px;" previousStep>
+            <i class="fas fa-angle-left"></i>
+            Regresar
+          </button>
+          <button type="button" class="btn btn-success" style="margin-top:15px;" [goToStep]="datosOrgs()">
+            Siguiente
+            <i class="fas fa-angle-right"></i>
+          </button>
+        </wizard-step>
+        <wizard-step>
+          <h4>Ingresa un usuario y una contraseña</h4>
+          <div *ngIf="!uservalite" class="alert alert-success" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> Debes de proporcionar una direccion de correo electronica valida
+          </div>
+          <ngb-alert *ngIf="messasuc" type="success" (close)="datosOk = true">{{messa_suc}}</ngb-alert>
+          <ngb-alert *ngIf="!datosOk" type="danger" (close)="datosOk = true">{{messa_err}}</ngb-alert>
+          <p>
+            <label for="email">*Correo electrónico</label>
+            <input type="text" class="form-control" #email aria-describedby="userherlp" (blur)="validateUser(email.value)" required>
+            <small id="userherlp" class="form-text text-muted">*Con tu cuenta de correo electrónico podras tener acceso a la plataforma</small>
+          </p>
+          <p>
+            <label for="pass">*Ingresa una contraseña a tu elección</label>
+            <input type="password" class="form-control" #pass aria-describedby="passhelp" required>
+            <small id="passhelp" class="form-text text-muted">*Anota esta contraseña en lugar seguro y/o recuérdala</small>
+          </p>
+          <p>
+          <button type="button" class="btn btn-success" previousStep>
+            <i class="fas fa-angle-left"></i>
+            Regresar
+          </button>
+          <button class="btn btn-success" (click)="onSubmit(email.value, pass.value)">
+            <i class="fas fa-check"></i>
+            Registrarme
+          </button>
+          </p>
+        </wizard-step>
+      </wizard>
+      <hr>
+      <div class="container">
+        <p class="font-italic" style="font-size:10px">
+        ACL SYSTEMS S.A. de C.V. (nombre comercial: ACL SYSTEMS) con domicilio en Rio Coahuayana 12, Colinas Del Lago, Cuautitlán Izcalli, México, C.P.54744,
+        manifiesta que sus datos personales serán utilizados para fines de contacto, para permitir el registro en el sitio, para acceder al contenido del sitio,
+        para facturación y cobro, para envío de publicidad. Para conocer mayor información sobre los términos y condiciones en que serán tratados sus datos personales,
+        como los terceros con quienes compartimos su información personal y la forma en que podrá ejercer sus derechos ARCO, puede consultar el Aviso de Privacidad Integral
+        en nuestro sitio: <a [routerLink]="['/avisoprivacidad']">Aviso de privacidad</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

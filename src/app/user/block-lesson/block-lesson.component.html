@@ -1,0 +1,186 @@
+<div data-spy="scroll" data-target="#courseLessonReading" data-offset="0" style="margin-bottom:15px;">
+  <ngb-tabset>
+    <ngb-tab>
+      <ng-template ngbTabTitle>
+        <div class="text-success">
+          <i class="fas fa-book"></i> Contenido
+        </div>
+      </ng-template>
+      <!---->
+      <ng-template ngbTabContent>
+        <!--Titulo de la leccion-->
+        <h5 style="margin-top:20px;">
+          {{block.data.blockSection}}.{{block.data.blockNumber}}. {{block.data.blockTitle}}
+        </h5>
+        <hr>
+
+        <!--Contenedor del video para los cursos-->
+        <div *ngIf="block.data.blockMedia.length!=0 && block.data.blockBegin">
+          <iframe width="100%" height="400" [src]="block.data.blockMedia | videos" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          <hr>
+        </div>
+        <!--  -->
+
+        <!--Contenido de la leccion-->
+        <div [innerHTML]="block.data.blockContent">
+
+        </div>
+        <!---->
+
+        <!--Seccion del cuestionario cuando aplica a una sección-->
+        <div *ngIf="block.data.questionnarie">
+          <app-block-questionnarie [block]="block"></app-block-questionnarie>
+        </div>
+
+        <!--Seccion de las tareas para el bloque-->
+        <div *ngIf="block.data.tasks">
+          <app-block-tasks [block]="block"></app-block-tasks>
+        </div>
+
+        <!--Seccion para embeber el video cuando en la etiqueta venga al final-->
+
+        <div *ngIf="block.data.blockMedia.length!=0 && !block.data.blockBegin">
+          <iframe width="100%" height="400" [src]=" block.data.blockMedia | videos" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          <hr>
+        </div>
+
+        <!--  -->
+      </ng-template>
+    </ngb-tab>
+    <!--  -->
+
+    <!--Sección de dudas y comentarios-->
+    <div class="" *ngIf="!block.data.questionnarie && !block.data.tasks">
+      <ngb-tab>
+        <ng-template ngbTabTitle>
+          <div class="text-success">
+            <i class="fas fa-question"></i> Dudas y comentarios
+          </div>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <button class="btn btn-success blockquote" style="margin-top:15px" type="button" (click)="shownewDoubt(newDoubtComment)"><i class="fas fa-tag"></i> Envia tu duda o comentario acerca de esta lección</button>
+          <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+            <div *ngFor="let itemDiscussion of blockDiscussion | paginate: { itemsPerPage: 20, currentPage: p }; let idDC = index">
+              <ngb-panel>
+                <ng-template ngbPanelTitle>
+                  <span class="text-success">
+                    <h6><i class="fas fa-quote-left"></i> {{itemDiscussion.title}}</h6>
+                  </span>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                  <small><i class="fas fa-user-circle"></i> {{itemDiscussion.user}}  <i class="far fa-clock"></i> {{itemDiscussion.when}}</small>
+                  <span class="text-muted">
+                    <h5>{{itemDiscussion.text}}</h5>
+                  </span>
+                  <!--Seccion de comentarios-->
+                  <div *ngFor="let itemComment of blockComments" class="text-success font-italic">
+                    <div *ngIf="itemDiscussion.discussionId == itemComment.root" class="col-8 text-left">
+                      <hr>
+                      <div class="alert alert-success" role="alert">
+                        <i class="far fa-comments"></i> {{itemComment.text}} <br>
+                        <small><i class="fas fa-user-circle"></i> {{itemComment.user}}  <i class="far fa-clock"></i> {{itemComment.when}}</small>
+                        <br>
+                        <button class="btn btn-outline-success btn-sm" type="button" (click)="showReply(replyto, itemComment.discussionId, itemComment.root, itemComment.userId, itemComment.text,itemComment.block)"><i class="far fa-comment"></i> Responder</button>
+                      </div>
+                      <!--Seccion de las respuestas a los comentarios-->
+                      <div *ngFor="let itemReply of blockReplys" class="text-secondary font-weight-light">
+                        <div *ngIf="itemComment.discussionId == itemReply.replyto" class="col-8 text-right">
+                          <div class="alert alert-secondary" role="alert">
+                            <i class="far fa-comment"></i> {{itemReply.text}}<br>
+                            <small><i class="fas fa-user-circle"></i> {{itemReply.user}}  <i class="far fa-clock"></i> {{itemReply.when}}</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="btn btn-success btn-sm" type="button" (click)="showComment(newcomment, itemDiscussion.discussionId, itemDiscussion.userId, itemDiscussion.title,itemDiscussion.block)"><i class="far fa-comments"></i> Agregar un comentario</button>
+                </ng-template>
+              </ngb-panel>
+            </div>
+          </ngb-accordion>
+          <hr>
+          <div class="text-center text-success">
+            <pagination-controls (pageChange)="p = $event" previousLabel="Atras" nextLabel="Siguiente"></pagination-controls>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </div>
+    <!--Termina la pestaña de dudas y comentarios -->
+  </ngb-tabset>
+</div>
+
+<!--Modal para agregar nuevas dudas o comentarios newDoubtComment-->
+<ng-template #newDoubtComment let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-tag"></i> Enviar duda o comentario comentario</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal-->
+  <div class="modal-body">
+    <form>
+      <p>
+        <label for="title" class="text-success">* Título</label>
+        <input type="text" class="form-control" #title>
+      </p>
+      <p>
+        <label for="description" class="text-success">* Descripción de Duda o Comentario</label>
+        <textarea rows="5" class="form-control" #descr></textarea>
+      </p>
+      <button type="button" name="button" class="btn-success" (click)="setDoubt(title.value, descr.value)"><i class="far fa-share-square"></i> Enviar</button>
+    </form>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+<!---->
+
+<!-- Modal para agregar nuevos comentarios -->
+<ng-template #newcomment let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="far fa-comments"></i> Agregar comentario</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal para agregar un nuevo comentario-->
+  <div class="modal-body">
+    <p>
+      <textarea name="name" rows="8" class="form-control" #descr></textarea>
+    </p>
+    <button type="button" name="button" class="btn btn-success" (click)="setComment(descr.value)"><i class="far fa-comments"></i> Enviar comentario</button>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+<!--  -->
+
+<!-- Modal para agregar nuevas respuestas -->
+<ng-template #replyto let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="far fa-comment"></i> Responder</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal para agregar una respuesta-->
+  <div class="modal-body">
+    <p>
+      <input type="text" class="form-control" #descr>
+    </p>
+    <button type="button" name="button" class="btn btn-success" (click)="setReply(descr.value)"><i class="far fa-comment"></i> Responder</button>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+<!--  -->

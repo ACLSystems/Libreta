@@ -1,0 +1,42 @@
+<div class="loaderSpinner text-center text-success" *ngIf="loading">
+  <h4 style="margin-top:20%;">Procesando datos</h4>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-8">
+      <h4>Grupo: {{group}}</h4>
+    </div>
+    <div class="col-md-4">
+      <button type="button" class="btn btn-outline-dark" placement="bottom" ngbTooltip="Regresar" (click)="returnCharts()"><i class="fas fa-reply"></i></button>
+      <button type="button" class="btn btn-outline-secondary" placement="bottom" ngbTooltip="Exportar a Excel" (click)="getReportexcel()"><i class="fas fa-file-excel"></i> .csv</button>
+      <button type="button" class="btn btn-outline-success" placement="bottom" ngbTooltip="Exportar a Excel" (click)="getExceltest()"><i class="fas fa-file-excel"></i> .xls</button>
+      <button type="button" class="btn btn-outline-success" placement="bottom" ngbTooltip="Exportar a Excel" (click)="printCertificatedMass()"><i class="fas fa-window-restore"></i> Impresión masiva</button>
+    </div>
+  </div>
+  <br>
+  <table class="table table-responsive-sm">
+    <thead>
+      <th>Nombre completo</th>
+      <th>Correo electrónico</th>
+      <th>Avance del curso</th>
+      <th>Test</th>
+      <th>Examen intermedio</th>
+      <th>Examen final</th>
+      <th>Calificación final</th>
+      <th>Imprimir Constancia</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of roosterstudents;let idrooster=index">
+        <td>{{item.name}} {{item.fatherName}} {{item.motherName}}</td>
+        <td>{{item.email}}</td>
+        <td>{{item.track}}</td>
+        <td *ngFor="let itemgrade of item.grades">{{itemgrade.blockGrade | number:'.0-2'}}</td>
+        <td>{{item.finalGrade | number:'.0-2'}}</td>
+        <td>
+          <button *ngIf="item.pass  && item.passDate" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Imprimir constancia" (click)="getCertificated(item.name,item.fatherName,item.motherName, item.passDate, item.finalGrade, item.certificateNumber, item.passDateSpa)"><i class="fas fa-certificate"></i></button>
+          <button *ngIf="!item.pass && !item.passDate" type="button" class="btn btn-success" placement="bottom" ngbTooltip="Imprimir constancia" disabled><i class="fas fa-certificate"></i></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

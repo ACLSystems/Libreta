@@ -1,0 +1,461 @@
+<div *ngIf="loading">
+  <div class="row text-center animated fadeIn">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Cargando componentes ... </h1>
+    </div>
+  </div>
+</div>
+<div *ngIf="!loading" class="container">
+  <div class="row">
+    <div class="col-3">
+      <div class="card">
+        <img class="card-img-top" [src]="contcourse.image" alt="Card image">
+        <div class="card-body">
+          <h5 class="card-title">{{contcourse.title}}</h5>
+          <p class="card-text text-justify"><b>Descripción:</b></p>
+          <div [innerHTML]="contcourse.description">
+
+          </div>
+          <hr>
+          <h6>CLAVE <small>{{contcourse.code}}</small></h6>
+          <h6>Categoría</h6>
+          <div *ngFor="let itemCat of contcourse.categories">
+            <li>{{itemCat}}</li>
+          </div>
+          <hr>
+          <h6>Autor: {{contcourse.author}}</h6>
+          <h6><small>Fecha de inicio: {{beginDateSpa}}</small></h6>
+          <h6><small>Fecha de cierre: {{endDateSpa}}</small></h6>
+        </div>
+        <div class="card-footer">
+          <button type="button" name="button" class="btn btn-success" [routerLink]="['/mygroups']">
+            <i class="fas fa-reply"></i> Regresar
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--Seccion de las pestañas para el cuerpo de la vista del curso-->
+    <div class="col-9">
+      <ngb-tabset>
+        <ngb-tab *ngIf="endCourse">
+          <!--Seccion del temario del curso-->
+          <ng-template ngbTabTitle><div class="text-success">Contenido</div></ng-template>
+          <ng-template ngbTabContent>
+            <!--Comienza el temario del curso-->
+            <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+              <div *ngFor="let itemBlock of block;let indiceBlock = index">
+                <div *ngIf="itemBlock.number == 0">
+                  <ngb-panel>
+                    <ng-template ngbPanelTitle>
+                      <span class="text-success"><b>{{itemBlock.title}}</b></span> <span *ngIf="itemBlock.beginDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de inicio: {{itemBlock.beginDate | date}}</span> <span *ngIf="itemBlock.endDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de término: {{itemBlock.endDate | date}}</span><span *ngIf="itemBlock.duration" class="text-right text-secondary"> | <i class="far fa-clock"></i> Duración:{{itemBlock.duration}}</span>
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                      <!---->
+                      <div *ngIf="indiceBlock==0 && !itemBlock.track" class="alert alert-secondary" role="alert">
+                        <button type="button" class="btn btn-link enlace" (click)="getBlock(itemBlock.id)">
+                          <h6>
+                            <i class="far fa-flag"></i> Iniciar Curso
+                          </h6>
+                        </button>
+                      </div>
+
+                      <!---->
+                      <div *ngIf="itemBlock.track " class="alert alert-success text-justify" role="alert">
+                        <button *ngIf="itemBlock.type =='text'" type="button" class="btn btn-link text-success" (click)="getBlock(itemBlock.id)">
+                          <h6>
+                            <i class="fas fa-book-open"></i> {{itemBlock.section}}.{{itemBlock.title | slice:0:80}}
+                          </h6>
+                        </button>
+                        <button *ngIf="itemBlock.type =='questionnarie'" type="button" class="btn btn-link text-success" (click)="getBlock(itemBlock.id)">
+                          <h6>
+                            <i class="fas fa-book-open"></i> {{itemBlock.section}}.{{itemBlock.title | slice:0:80}}
+                          </h6>
+                        </button>
+                        <button *ngIf="itemBlock.type =='textVideo' || itemBlock.type =='video'" type="button" class="btn btn-link text-success" (click)="getBlock(itemBlock.id)">
+                          <h6>
+                            <i class="fas fa-book-open"></i> {{itemBlock.section}}.{{itemBlock.title | slice:0:80}}
+                          </h6>
+                        </button>
+                        <button *ngIf="itemBlock.type =='task'" type="button" class="btn btn-link text-success" (click)="getBlock(itemBlock.id)">
+                          <h6>
+                            <i class="fas fa-book-open"></i> {{itemBlock.section}}.{{itemBlock.title | slice:0:80}}
+                          </h6>
+                        </button>
+                      </div>
+
+                      <!-- -->
+                      <div *ngIf="!itemBlock.track" class="alert alert-secondary" role="alert">
+                        <h6>
+                          <i class="far fa-calendar-times"></i> {{itemBlock.section}}.{{itemBlock.title}}
+                        </h6>
+                      </div>
+
+                      <!---->
+                      <div *ngFor="let itemBlockL of block">
+                        <!-- <div *ngIf="itemBlockL.number !=0 && itemBlock.section == itemBlockL.section && itemBlockL.track" class="list-group-item"> -->
+                        <div *ngIf="itemBlockL.number !=0 && itemBlock.section == itemBlockL.section && itemBlockL.track" class="alert alert-success text-justify" role="alert">
+                          <button *ngIf="itemBlockL.type =='text'" type="button" class="btn btn-link text-success" (click)="getBlock(itemBlockL.id)">
+                            <i class="fas fa-book-open"></i> {{itemBlockL.section}}.{{itemBlockL.number}} {{itemBlockL.title | slice:0:85 }}
+                          </button>
+                          <button *ngIf="itemBlockL.type =='questionnarie'" type="button" class="btn btn-link text-success" (click)="getBlock(itemBlockL.id)">
+                            <i class="fas fa-edit"></i> {{itemBlockL.section}}.{{itemBlockL.number}} {{itemBlockL.title | slice:0:85 }}
+                          </button>
+                          <button *ngIf="itemBlockL.type =='textVideo' || itemBlockL.type =='video'" type="button" class="btn btn-link text-success" (click)="getBlock(itemBlockL.id)">
+                            <i class="fas fa-video"></i> {{itemBlockL.section}}.{{itemBlockL.number}} {{itemBlockL.title | slice:0:85 }}
+                          </button>
+                          <button *ngIf="itemBlockL.type =='task'" type="button" class="btn btn-link text-success" (click)="getBlock(itemBlockL.id)">
+                            <i class="fas fa-tasks"></i> {{itemBlockL.section}}.{{itemBlockL.number}} {{itemBlockL.title | slice:0:85 }}
+                          </button>
+                        </div>
+                        <!--<div *ngIf="itemBlockL.number !=0 && itemBlock.section == itemBlockL.section && !itemBlockL.track" class="list-group-item">-->
+                        <div *ngIf="itemBlockL.number !=0 && itemBlock.section == itemBlockL.section && !itemBlockL.track" class="alert alert-secondary text-justify" role="alert">
+                          <i class="far fa-calendar-times"></i> {{itemBlockL.section}}.{{itemBlockL.number}} {{itemBlockL.title | slice:0:85 }}
+                        </div>
+                      </div>
+                    </ng-template>
+                  </ngb-panel>
+                </div>
+              </div>
+            </ngb-accordion>
+            <!--Termina el temario del curso-->
+          </ng-template>
+          <!--  -->
+        </ngb-tab>
+        <ngb-tab>
+          <!--Dashboard del alumno en el curso-->
+          <ng-template ngbTabTitle><div class="text-success">Mi progreso actual</div></ng-template>
+          <ng-template ngbTabContent>
+            <br>
+
+            <div *ngIf="!endCourse" class="alert alert-warning text-center" role="alert">
+              <h3><i class="fas fa-exclamation-triangle"></i> Curso Cerrado</h3>
+            </div>
+
+            <div class="alert alert-success" role="alert">
+
+              <div *ngIf="data.certificateActive">
+
+                <div *ngIf="data.groupType == 'tutor'">
+                  <div *ngIf="!data.pass || data.status=='pending' || !certificateTutor">
+                    <button type="button" class="btn btn-success blockquote" style="margin-top:15px;" disabled>
+                      <i class="fas fa-certificate"></i> Imprimir constancia
+                    </button>
+                  </div>
+                </div>
+                <div *ngIf="data.groupType != 'tutor'">
+                  <div *ngIf="!data.pass || data.status=='pending'">
+                    <button type="button" class="btn btn-success blockquote" style="margin-top:15px;" disabled>
+                      <i class="fas fa-certificate"></i> Imprimir constancia
+                    </button>
+                  </div>
+
+                  <span *ngIf="data.status=='pending'" class="text-success font-italic"><i class="fas fa-exclamation-circle"></i> Pago pendiente</span>
+
+                  <div *ngIf="data.pass && data.certificateNumber != null && data.status!='pending'">
+                    <a href='https://goo.gl/forms/ysPqeLpN4yIJPmeZ2' target="_blank" type="button" class="btn btn-success blockquote" style="margin-top:15px;" (click)="shownewDoubt(infoconst)"><i class="fas fa-certificate"></i> Imprimir constancia</a>
+                  </div>
+                </div>
+              </div>
+
+              <button *ngIf="endCourse" type="button" class="btn btn-outline-success blockquote" style="margin-top:15px;" (click)="getLesson()">
+                <i class="fas fa-play"></i> Ir al curso
+              </button>
+
+            </div>
+
+            <div class="alert alert-secondary" role="alert">
+              <h4>Para poder obtener la constancia de este curso, necesitas los siguientes ponderadores:</h4>
+              <p class="font-italic">
+                <li>
+                  Calificación final minima aprobatoria: {{data.minGrade}}
+                </li>
+                <li>
+                  Avance de este curso: {{data.minTrack}}
+                </li>
+              </p>
+            </div>
+            <div class="alert alert-success" role="alert">
+              <h4>Avance actual en este curso: </h4>
+              <ngb-progressbar showValue="true" type="success" [value]="trackPercent | number:'.0-0'"></ngb-progressbar>
+            </div>
+            <div>
+              <table class="table table-bordered">
+                <thead>
+                  <tr class="text-center">
+                    <td colspan="5"><b>Estructura de la calificación</b></td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="table-secondary">Lección</td>
+                    <td class="table-active"><b>Evaluación / Actividad</b></td>
+                    <td class="table-info"><b>Ponderación</b></td>
+                    <td class="table-warning"><b>Obtuviste</b></td>
+                    <td class="table-success"><b>Tu calificación</b></td>
+                  </tr>
+
+                </thead>
+                <tbody>
+
+                  <tr *ngFor="let item of blockgrades;let idblock=index" class="text-center table-light">
+                    <td>{{item.blockSection}} . {{item.blockNumber}}</td>
+                    <td>{{item.blockTitle}}</td>
+                    <td>{{item.blockW | number:'.0-2'}}%</td>
+                    <td>{{item.grade | number:'.0-2'}}</td>
+                    <td>
+                      <div *ngFor="let itemgrade of grades;let idgrade = index">
+                        <div *ngIf="idgrade==idblock">
+                          {{itemgrade | number:'.0-2'}}
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="table-secondary"> </td>
+                    <td class="table-active"><b>Total de calificación</b></td>
+                    <td class="table-info"><b>{{totalgrades | number:'.0-2'}}%</b></td>
+                    <td class="table-warning"></td>
+                    <td class="table-success"><b>{{gradefinal | number:'.0-2'}}</b></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-template>
+          <!--  -->
+        </ngb-tab>
+        <ngb-tab *ngIf="endCourse">
+          <!--Seccion del material de apoyo del curso-->
+          <ng-template ngbTabTitle><div class="text-success">Material de apoyo</div></ng-template>
+          <ng-template ngbTabContent>
+            <div *ngFor="let itemResource of resources" style="margin-top:15px">
+              <h4>{{itemResource.title}}</h4>
+              <div [innerHTML]=itemResource.content>
+
+              </div>
+              <div *ngIf="itemResource.embedded">
+                <iframe width="100%" height="400" [src]=" itemResource.embedded | videos" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+              </div>
+              <hr>
+            </div>
+          </ng-template>
+          <!--  -->
+        </ngb-tab>
+        <!--Seccion del FAQ del curso-->
+        <ngb-tab *ngIf="endCourse">
+          <ng-template ngbTabTitle><div class="text-success">Foro de discusión</div></ng-template>
+            <ng-template ngbTabContent>
+              <button class="btn btn-success blockquote" style="margin-top:15px" type="button" (click)="shownewDoubt(newDoubtComment)"><i class="fas fa-tag"></i> Envia tu duda o comentario acerca de este curso</button>
+              <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+                <div *ngFor="let itemDiscussion of discussions | paginate: { itemsPerPage: 20, currentPage: p }; let idDC = index">
+                  <ngb-panel>
+                    <ng-template ngbPanelTitle>
+                      <span class="text-success">
+                        <h6><i class="fas fa-quote-left"></i> {{itemDiscussion.title}}</h6>
+                      </span>
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+
+                      <div *ngIf="!itemDiscussion.followid" class="form-check">
+                        <input class="form-check-input " type="checkbox" (change)="setFollow(itemDiscussion.discussionId)">
+                        <label class="form-check-label"> Seguir</label>
+                      </div>
+
+                      <div *ngIf="itemDiscussion.followid" class="form-check" (change)="deleteFollow(itemDiscussion.followid)">
+                        <input class="form-check-input " type="checkbox" checked>
+                        <label class="form-check-label"> Dejar de seguir</label>
+                      </div>
+
+                      <small><i class="fas fa-user-circle"></i> {{itemDiscussion.user}}  <i class="far fa-clock"></i> {{itemDiscussion.when}}</small>
+                      <span class="text-muted">
+                        <h5>{{itemDiscussion.text}}</h5>
+                      </span>
+                      <!--Seccion de comentarios-->
+                      <div *ngFor="let itemComment of comments" class="text-success font-italic">
+                        <div *ngIf="itemDiscussion.discussionId == itemComment.root">
+                          <!--  Comentarios-->
+                          <div class="card">
+                            <div class="card-body">
+                              <span class="text-success">
+                                <small><i class="fas fa-user-circle"></i> {{itemComment.user}}  <i class="far fa-clock"></i> {{itemComment.when}}</small><br>
+                                <i class="far fa-comments"></i> Comentó: {{itemComment.text}}
+                              </span>
+                              <hr>
+                              <button *ngIf="!itemComment.block" class="btn btn-outline-success blockquote" type="button" (click)="showReply(replyto,itemComment.discussionId, itemComment.root, itemComment.userId, itemComment.text)"><i class="far fa-comment"></i> Responder</button>
+                              <button *ngIf="itemComment.block" class="btn btn-outline-success blockquote" type="button" (click)="showReply(replyto,itemComment.discussionId, itemComment.root, itemComment.userId, itemComment.text, itemComment.block)"><i class="far fa-comment"></i> Responder</button>
+                            </div>
+                            <div class="card-footer">
+                              <!--Seccion de las respuestas a los comentarios-->
+                              <div *ngFor="let itemReply of replys" class="text-secondary font-weight-light">
+                                <div *ngIf="itemComment.discussionId == itemReply.replyto" class="col-8 text-sm-left">
+                                  <div class="row text-left">
+                                    <span class="text-secondary">
+                                      <small><i class="fas fa-user-circle"></i> {{itemReply.user}} <i class="far fa-clock"></i> {{itemReply.when}}</small> <br>
+                                      <i class="far fa-comment"></i> Respondió: {{itemReply.text}}
+                                    </span>
+                                  </div>
+                                  <hr>
+                                </div>
+                              </div>
+                              <!--  -->
+                            </div>
+                          </div>
+                          <br>
+                        </div>
+                      </div>
+                      <!--  Termina la sección de los comentarios-->
+
+                      <!--  Boton para agregar un nuevo comentario  -->
+                      <button *ngIf="itemDiscussion.block" class="btn btn-success blockquote" type="button" (click)="showComment(newcomment, itemDiscussion.discussionId, itemDiscussion.userId, itemDiscussion.title,itemDiscussion.block)"><i class="far fa-comments"></i> Agregar un comentario</button>
+                      <button *ngIf="!itemDiscussion.block" class="btn btn-success blockquote" type="button" (click)="showComment(newcomment, itemDiscussion.discussionId, itemDiscussion.userId, itemDiscussion.title)"><i class="far fa-comments"></i> Agregar un comentario</button>
+                      <!--  -->
+                    </ng-template>
+                  </ngb-panel>
+                </div>
+              </ngb-accordion>
+              <hr>
+              <div class="text-center text-success">
+                <pagination-controls (pageChange)="p = $event" previousLabel="Atras" nextLabel="Siguiente"></pagination-controls>
+              </div>
+            </ng-template>
+        </ngb-tab>
+        <!--Termina la sección del FAQ-->
+        <!--Seccion de mi actividad-->
+        <ngb-tab>
+          <ng-template ngbTabTitle><div class="text-success">Avisos</div></ng-template>
+          <ng-template ngbTabContent>
+            <hr>
+            <div *ngFor="let itemAnnouncement of announcements" class="alert alert-warning" role="alert">
+              <h5><i class="fas fa-bullhorn"></i> <b>{{itemAnnouncement.title}}</b>
+                <br>
+                <small><i>{{itemAnnouncement.text}}</i></small>
+              </h5>
+              <i class="far fa-clock"></i> {{itemAnnouncement.when}}
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <!---->
+        <ngb-tab>
+          <ng-template ngbTabTitle><div class="text-success">Calendario</div></ng-template>
+          <ng-template ngbTabContent>
+            <hr>
+            <ng-fullcalendar #ucCalendar [options]="calendarOptions" [(eventsModel)]="events"></ng-fullcalendar>
+          </ng-template>
+        </ngb-tab>
+
+      </ngb-tabset>
+    </div>
+    <!--Termina la seccion de las pestañas-->
+  </div>
+</div>
+<!--Modal para agregar nuevas dudas o comentarios newDoubtComment-->
+<ng-template #newDoubtComment let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-tag"></i> Enviar duda o comentario comentario</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal para desplegar el mensaje al usuario de aviso de intento-->
+  <div class="modal-body">
+    <form>
+      <p>
+        <label for="title" class="text-success">* Título</label>
+        <input type="text" class="form-control" #title >
+      </p>
+      <p>
+        <label for="description" class="text-success">* Descripción de Duda o Comentario</label>
+        <textarea rows="5" class="form-control" #descr ></textarea>
+      </p>
+      <button type="button" name="button" class="btn-success" (click)="setDoubt(title.value, descr.value)"><i class="far fa-share-square"></i> Enviar</button>
+    </form>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+<!---->
+
+<!-- Modal para agregar nuevos comentarios -->
+<ng-template #newcomment let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="far fa-comments"></i> Agregar comentario</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal para agregar un nuevo comentario-->
+  <div class="modal-body">
+    <p>
+      <textarea name="name" rows="8" class="form-control" #descr> </textarea>
+    </p>
+    <button type="button" name="button" class="btn btn-success" (click)="setComment(descr.value)"><i class="far fa-comments"></i> Enviar comentario</button>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+<!--  -->
+
+<!-- Modal para agregar nuevas respuestas -->
+<ng-template #replyto let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="far fa-comment"></i> Responder</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal para agregar una respuesta-->
+  <div class="modal-body">
+    <p>
+      <input type="text" class="form-control" #descr>
+    </p>
+    <button type="button" name="button" class="btn btn-success" (click)="setReply(descr.value)"><i class="far fa-comment"></i> Responder</button>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+<!--  -->
+
+<!-- Modal para confirmar datos de la constancia -->
+<ng-template #infoconst let-c="close" let-d="dismiss" class="animated fast fadeIn modal-side modal-">
+
+  <!--Encabezado del modal-->
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-info-circle"></i> ¡Atención!</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--  -->
+
+  <!--Cuerpo del modal para agregar una respuesta-->
+  <div class="modal-body">
+    <div [ngClass]="{'alert-success':data.finalGrade >= data.minGrade , 'alert-secondary':data.finalGrade <= data.minGrade}" class="alert alert-success" role="alert">
+      <h6>Se expedirá la constancia con los siguientes datos:</h6>
+      <p>
+        <b>Nombre completo: </b>{{data.name}} <br>
+        <b>Curso: </b>{{data.course}} <br>
+        <b *ngIf="data.finalGrade >= data.minGrade">Calificación final: </b> {{data.finalGrade | number:'.0-2'}}
+      </p>
+    </div>
+    <button type="button" name="button" class="btn btn-success" (click)="getCertificated()"><i class="fas fa-check"></i> Acepto</button>
+    <button type="button" class="btn btn-success" (click)="closeDialog()"><i class="fas fa-times"></i> Cancelar</button>
+    <hr>
+    <p class="text-success">
+      <i>
+        <i class="fas fa-info-circle"></i> "Una vez expedida la constancia no se pueden realizar modificaciones. Si hay algún dato que requieras modificar, antes de continuar, presiona CANCELAR, y envía un correo a soporte@superatemexico.com, indicándonos los datos correctos. En el correo incluye el RFC."
+      </i>
+    </p>
+  </div>
+  <!--Termina cuerpo del modal-->
+</ng-template>
+<!--  -->

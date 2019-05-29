@@ -1,0 +1,34 @@
+<div *ngIf="loading">
+  <div class="row text-center animated fadeIn">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Cargando componentes ... </h1>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loading" class="container">
+  <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+    <div *ngFor="let itemTitle of courseTitle;let indexTitles = index" class="">
+      <ngb-panel>
+        <ng-template ngbPanelTitle>
+          <h4>
+            <span class="text-success"><i class="fas fa-book"></i> Curso: {{itemTitle}}</span>
+          </h4>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <div *ngFor="let itemContent of mygrouplist">
+            <div *ngIf="itemContent.courseTitle == itemTitle" class="alert alert-success" role="alert">
+              <button type="button" class="btn btn-outline-success float-right" (click)="getTasksReview(itemContent.groupCode)"><i class="fas fa-glasses"></i> Revisar </button>
+              <h5 class="text-success"><i class="fab fa-black-tie"></i> Grupo: {{itemContent.groupCode}}</h5>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-panel>
+    </div>
+  </ngb-accordion>
+</div>

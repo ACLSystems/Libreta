@@ -1,0 +1,113 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white">
+  <a class="navbar-brand">
+    <img src="/assets/img/superatemexico.jpg" width="100">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+</nav>
+<div class="container">
+  <div class="alert alert-warning" role="alert">
+    <h4 class="text-justify">
+      <p class="text-center"><i class="fas fa-info"></i> Aviso importante:</p>
+      <p class="text-center">Una vez aceptados estos datos, no podran ser modificados posteriormente</p>
+    </h4>
+  </div>
+
+  <div *ngIf="messageSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>{{messageSuccess}}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div *ngIf="messageError" class="alert alert-danger alert-dismissible fade show" role="alert">
+    Se generó el siguiente error en el sistema: <strong>{{messageError}}</strong> ,favor de reportarlo en la mesa de ayuda
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <h3>Datos personales</h3>
+
+      <form>
+        <label class="form-inline"><b>*Nombre : </b></label>
+        <input type="text" class="form-control" value={{name}} #namecheck required>
+        <br>
+        <label class="form-inline"><b>*Apellido Paterno : </b></label>
+        <input type="text" class="form-control" value={{fathername}} #fname required>
+        <br>
+        <label class="form-inline"><b>*Apellido Materno : </b></label>
+        <input type="text" class="form-control" value={{mothername}} #mname required>
+        <br>
+      </form>
+      <form class="was-validated">
+        <div class="custom-control custom-checkbox mb-3">
+          <input type="checkbox" class="custom-control-input" id="validacion1" (change)="getData($event, namecheck.value, fname.value, mname.value)" required> <!--(change)="getData($event, namecheck.value, fname.value, mname.value)"-->
+          <label class="custom-control-label" for="validacion1"><b>Mis datos son correctos</b></label>
+          <br>
+          <span *ngIf="!isDataOk" class="text-danger">Datos no validados por el usuario</span>
+        </div>
+
+      <!--
+        <div class="input-group mb-3">
+          <label class="form-inline">Nombre : </label>
+          <input type="text" class="form-control" value={{name}} #namecheck required>
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <input type="checkbox" (change)="getData($event, namecheck.value, 'namecheck')">
+              <label class="form-check-label"> Correcto</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="form-inline">A. Paterno : </label>
+          <input type="text" class="form-control" value={{fathername}} #fname required>
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <input type="checkbox" (change)="getData($event, fname.value, 'fatname')">
+              <label class="form-check-label"> Correcto</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="form-inline">A. Materno : </label>
+          <input type="text" class="form-control" value={{mothername}} #mname required>
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <input type="checkbox" (change)="getData($event, mname.value, 'motname')">
+              <label class="form-check-label"> Correcto</label>
+            </div>
+          </div>
+        </div>
+      -->
+      </form>
+      <hr>
+      <h3>Ingrese nueva contraseña</h3>
+      <form>
+        <div class="form-group">
+
+          <label for="txtpass">Contraseña</label>
+          <input type="password" id="txtpass" class="form-control" #passOne (blur)="getPassword(passOne.value, passTwo.value)" required>
+
+          <label for="txtpassc">Confirmar nueva contraseña</label>
+          <input type="password" id="txtpassc" class="form-control" #passTwo (blur)="getPassword(passOne.value, passTwo.value)" required>
+
+          <span *ngIf="!isPassOk" class="text-danger">Las contraseñas no coinciden</span>
+          <span *ngIf="isPassOk" class="text-success">Las contraseñas coinciden</span>
+
+        </div>
+        <div class="alert alert-warning" role="alert">
+          <h6><b>*Al enviar esta información aceptas los terminos y condiciones de uso de </b><a [routerLink]="['/avisoprivacidad']">superatemexico</a></h6>
+        </div>
+        <div class="form-group">
+          <button *ngIf="!isDataOk || !isPassOk" type="button" class="btn btn-success blockquote" disabled ><i class="fas fa-check"></i> Enviar</button>
+          <button *ngIf="isDataOk && isPassOk" type="button" class="btn btn-success blockquote" (click)="sendData()"><i class="fas fa-check"></i> Enviar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

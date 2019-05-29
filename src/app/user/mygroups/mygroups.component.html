@@ -1,0 +1,111 @@
+<div *ngIf="loading">
+  <div class="row text-center animated fadeIn">
+    <div class="col ">
+      <i class="fas fa-sync fa-spin fa-5x"></i>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <h1>Cargando componentes ... </h1>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loading" class="container">
+  <div *ngIf="identiti">
+    <h2 class="text-center"><i class="fas fa-graduation-cap"></i> Mis cursos</h2>
+    <hr>
+    <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+      <ngb-panel>
+        <ng-template ngbPanelTitle>
+          <span class="text-success">
+            <i class="fas fa-graduation-cap"></i> Mis cursos activos
+          </span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+            <div class="card-deck">
+              <div class="card" *ngFor="let crs of cursoslist | paginate: { itemsPerPage: 4, currentPage: p }">
+                <img class="card-img-top imagenesCurso img-responsive" [src]="crs.imagen" alt="Card image cap">
+                <div class="card-title text-center">
+                  <h5><i class="fas fa-users"></i> Grupo: {{crs.curso.name}} <br> <small>CLAVE: {{crs.curso.code}}</small></h5>
+                </div>
+                <div class="card-body">
+                  <i class="fas fa-book"></i> Curso: {{crs.curso.course}} <br>
+                  <i class="fas fa-hashtag"></i> Código: {{crs.curso.courseCode}}
+                </div>
+                <div class="card-footer">
+                  <button type="button" class="btn btn-success blockquote" (click)="getMycourse(crs.curso.course, crs.curso.groupid, crs.curso.courseid, crs.curso.lastSeenBlock, crs.curso.firstBlock)">
+                    <i class="far fa-arrow-alt-circle-right"></i> Ir al curso
+                  </button>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="text-center text-success">
+              <pagination-controls (pageChange)="p = $event" previousLabel="Atras" nextLabel="Siguiente"></pagination-controls>
+            </div>
+        </ng-template>
+      </ngb-panel>
+      <ngb-panel>
+        <ng-template ngbPanelTitle>
+          <span class="text-info">
+            <i class="fas fa-graduation-cap"></i> Mis otros cursos
+          </span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+            <div class="card-deck">
+                <div class="card" *ngFor="let crs of cursosinactive | paginate: { itemsPerPage: 4, currentPage: p }">
+                  <img class="card-img-top imagenesCurso img-responsive" [src]="crs.imagen" alt="Card image cap">
+                  <div class="card-title text-center">
+                    <h5><i class="fas fa-users"></i> Grupo: {{crs.curso.name}} <br> <small>CLAVE: {{crs.curso.code}}</small></h5>
+                  </div>
+                  <div class="card-body">
+                    <i class="fas fa-book"></i> Curso: {{crs.curso.course}} <br>
+                    <i class="fas fa-hashtag"></i> Código: {{crs.curso.courseCode}}
+                  </div>
+                  <div class="card-footer">
+                    <button type="button" class="btn btn-success blockquote" (click)="getMycourse(crs.curso.course, crs.curso.groupid, crs.curso.courseid, crs.curso.lastSeenBlock, crs.curso.firstBlock)">
+                      <i class="far fa-arrow-alt-circle-right"></i> Ir al curso
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="text-center text-success">
+                <pagination-controls (pageChange)="p = $event" previousLabel="Atras" nextLabel="Siguiente"></pagination-controls>
+              </div>
+        </ng-template>
+      </ngb-panel>
+      <ngb-panel>
+        <ng-template ngbPanelTitle>
+          <span class="text-secondary">
+            <i class="fas fa-graduation-cap"></i> Mis proximos cursos
+          </span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+            <div class="card-deck">
+                <div class="card" *ngFor="let crs of cursosnext | paginate: { itemsPerPage: 4, currentPage: p }">
+                  <img class="card-img-top imagenesCurso img-responsive" [src]="crs.imagen" alt="Card image cap">
+                  <div class="card-title text-center">
+                    <h5><i class="fas fa-users"></i> Grupo: {{crs.curso.name}} <br> <small>CLAVE: {{crs.curso.code}}</small></h5>
+                  </div>
+                  <div class="card-body">
+                    <i class="fas fa-book"></i> Curso: {{crs.curso.course}} <br>
+                    <i class="fas fa-hashtag"></i> Código: {{crs.curso.courseCode}}
+                  </div>
+                  <div class="card-footer">
+                    <div class="alert alert-dark" role="alert">
+                      Fecha de inicio: {{crs.curso.beginDate | date:"dd/MM/yy" }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="text-center text-success">
+                <pagination-controls (pageChange)="p = $event" previousLabel="Atras" nextLabel="Siguiente"></pagination-controls>
+              </div>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </div>
+</div>
