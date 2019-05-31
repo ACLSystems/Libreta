@@ -67,14 +67,17 @@ export class BlockTasksComponent implements OnInit {
       this.courseService.setAttachment(
         $event.target.files[0],
         this.block.data.courseCode,
-        this.block.data.groupCode, this.token).subscribe(data => {
+        this.block.data.groupCode).subscribe(data => {
+        console.log(data);
         this.messageUserSucces = 'Se cargo el archivo correctamente';
         this.setTask(data.fileId, 'file', idtask, label);
+        this.isAttachmen = true;
       }, error => {
         console.log(error);
       });
     } else {
       this.messageUserError = 'El archivo no puede ser mayor a 1 MB';
+      this.isAttachmen = false;
     }
   }
 
