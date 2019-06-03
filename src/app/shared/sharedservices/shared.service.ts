@@ -11,15 +11,15 @@ export class SharedService {
 
   url:string;
 
-  constructor(private http:HttpClient) {
+  constructor(private http: HttpClient) {
     this.url = environment.url;
   }
 
   /*
   funcion para usar el api de recuperacion de contraseña (envio de email al usuario)
   */
-  recoverPassword(email:any){
-    return this.http.get(this.url+"api/user/validateemail?email="+email)//.map(res=>res.json());
+  recoverPassword(email: any){
+    return this.http.get(this.url + 'api/user/validateemail?email=' + email);
   }
 
 }

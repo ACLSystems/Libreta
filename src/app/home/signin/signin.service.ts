@@ -16,30 +16,31 @@ export class SigninService{
   //metodo para aplicar el login al usuario
   singUp(usertologin):Observable<any>{
     let json = JSON.stringify(usertologin);
-    return this.http.post(this.url+'login', json);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.post(this.url+'login', json, {headers});
   }
 
   /*
   metodo para obtener la informacion del usuario
   */
   getUser(username):Observable<any>{
+    
     return this.http.get(this.url+'api/v1/user/getdetails?name='+username)
   }
 
   //Servicio para registrar al usuario
   registerUser(usertosave){
     let params = JSON.stringify(usertosave);
-    let headers = {
-      headers: new HttpHeaders({'Content-Type':'application/json'})
-    }
-
-    return this.http.post(this.url+'api/user/register', params, headers)//.map(res=>res.json());
+    let headers = new HttpHeaders({'Content-Type':'application/json'});
+    return this.http.post(this.url+'api/user/register', params, {headers});
   }
 
   //funcion para obtener los estados de la republica
-  getStates(org:string, query:any):Observable<any>{
+  getStates(org: string, query: any): Observable<any> {
     let json = JSON.stringify(query);
-    return this.http.get(this.url+'api/orgunit/list?org='+org+"&query="+json+"&limit=100")//.map(res=>res.json());
+    return this.http.get(this.url + 'api/orgunit/list?org=' + org + '&query=' + json + '&limit=100');
   }
 
   //metodo para obtener las areas de educacion

@@ -194,7 +194,7 @@
                   <tr class="text-center">
                     <td class="table-secondary">Lección</td>
                     <td class="table-active"><b>Evaluación / Actividad</b></td>
-                    <td class="table-active"><b>Detalle de la actividad</b></td>
+                    <!--td class="table-active"><b>Detalle de la actividad</b></td-->
                     <td class="table-info"><b>Ponderación</b></td>
                     <td class="table-warning"><b>Obtuviste</b></td>
                     <td class="table-success"><b>Tu calificación</b></td>
@@ -206,7 +206,7 @@
                   <tr *ngFor="let item of blockgrades;let idblock=index" class="text-center table-light">
                     <td>{{item.blockSection}} . {{item.blockNumber}}</td>
                     <td>{{item.blockTitle}}</td>
-                    <td><small>Ejemplo de texto de la rúbrica</small></td>
+                    <!--td><small>Ejemplo de texto de la rúbrica</small></td-->
                     <td>{{item.blockW | number:'.0-2'}}%</td>
                     <td>{{item.grade | number:'.0-2'}}</td>
                     <td>

@@ -17,20 +17,20 @@ export class InsertUserService {
 
   //Servicio para registrar al usuario
   registerUser(usertosave){
-    let params = JSON.stringify(usertosave);
-    let headers = new HttpHeaders({'Content-Type':'application/json'});
-    return this._http.post(this.url+'api/user/register', params, {headers:headers})//.map(res=>res.json());
+    const params = JSON.stringify(usertosave);
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this._http.post(this.url+'api/user/register', params, {headers});
   }
 
   //funcion para obtener los estados de la republica
-  getStates(org:string, query:any){
-    let json = JSON.stringify(query);
-    return this._http.get(this.url+'api/orgunit/list?org='+org+"&query="+json+"&limit=32")//.map(res=>res.json());
+  getStates(org: string, query: any) {
+    const json = JSON.stringify(query);
+    return this._http.get(this.url + 'api/orgunit/list?org=' + org + '&query=' + json + '&limit=32');
   }
 
   //metodo para obtener las areas de educacion
-  getAreas(org:string){
-    return this._http.get(this.url+'api/career/listareas?org='+org)//.map(res=>res.json());
+  getAreas(org: string) {
+    return this._http.get(this.url+ 'api/career/listareas?org=' + org);
   }
 
   //metodo para obtener las carreras en base a area de educacion

@@ -1,5 +1,4 @@
 import { environment } from './../../../environments/environment';
-import { GLOBAL } from './global';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -21,8 +20,6 @@ export class CourseService {
   constructor(public http: HttpClient, private user: UserService) {
     this.url = environment.url;
     this.token = this.user.getToken();
-    console.log(this.token);
-    
   }
 
   /*
@@ -33,43 +30,32 @@ export class CourseService {
     formData.append('file', file);
     formData.append('fileName', file.name);
     const headers = new HttpHeaders({
-      'x-access-token':this.token
+      'x-access-token': this.token,
+      'Content-Type': 'multipart/form-data',
     });
-    return this.http.post(this.url + 'api/v1/file/upload?dir1=' + dir1 + '&dir2=' + dir2, formData, {headers:headers});
+    return this.http.post(this.url + 'api/v1/file/upload?dir1=' + dir1 + '&dir2=' + dir2, formData, {headers});
   }
 
   /*
   Metodo para enviar las tareas
   */
-  setTasks(task):Observable<any>{
-    let params = JSON.stringify(task);
-    let headers = new HttpHeaders({
-      'Content-Type':'application/json',
-      'x-access-token':this.token
+  setTasks(task): Observable <any>{
+    const params = JSON.stringify(task);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'x-access-token': this.token
     });
-
-    return this.http.put(this.url +'api/v1/user/savetask' ,params ,{headers:headers})//.map(res=>res.json());
+    return this.http.put(this.url + 'api/v1/user/savetask' , params, {headers});
   }
   /*
   Metodo para obtener los recursos de un curso
   */
   getResources(groupid:any, token:any):Observable<any>{
     let headers = new HttpHeaders({
-      'x-access-token':token
+      'x-access-token': token
     });
 
-    return this.http.get(this.url+'api/v1/user/getresource?groupid='+groupid,{headers:headers})//.map(res=>res.json());
-  }
-
-  /*
-  funcion para obtener el material de apoyo de los cursos
-  */
-  getAssetsCourse():Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-
-    return this.http.get(this.url+'');
+    return this.http.get(this.url + 'api/v1/user/getresource?groupid=' + groupid, {headers});
   }
 
   /*
@@ -79,7 +65,7 @@ export class CourseService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this.http.get(this.url+'api/v1/user/comment/get?query={"pubtype":"discussion","type":"reply","block":"'+blockid+'"}&order=1&skip=0&limit=500',{headers:headers})//.map(res=>res.json());
+    return this.http.get(this.url+'api/v1/user/comment/get?query={"pubtype":"discussion","type":"reply","block":"'+blockid+'"}&order=1&skip=0&limit=500',{headers});
   }
 
   /*
@@ -89,7 +75,7 @@ export class CourseService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this.http.get(this.url+'api/v1/user/comment/get?query={"course":"'+courseid+'","group":"'+groupid+'","pubtype":"discussion","type":"reply"}&order=1&skip=0&limit=500',{headers:headers})//.map(res=>res.json());
+    return this.http.get(this.url+'api/v1/user/comment/get?query={"course":"'+courseid+'","group":"'+groupid+'","pubtype":"discussion","type":"reply"}&order=1&skip=0&limit=500',{headers});
   }
 
   /*
@@ -99,7 +85,7 @@ export class CourseService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this.http.get(this.url+'api/v1/user/comment/get?query={"pubtype":"discussion","type":"comment","block":"'+blockid+'"}&order=1&skip=0&limit=500',{headers:headers})//.map(res=>res.json());
+    return this.http.get(this.url+'api/v1/user/comment/get?query={"pubtype":"discussion","type":"comment","block":"'+blockid+'"}&order=1&skip=0&limit=500',{headers});
   }
 
   /*
@@ -109,18 +95,17 @@ export class CourseService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this.http.get(this.url+'api/v1/user/comment/get?query={"course":"'+courseid+'","group":"'+groupid+'","pubtype":"discussion","type":"comment"}&order=1&skip=0&limit=500',{headers:headers})//.map(res=>res.json());
+    return this.http.get(this.url+'api/v1/user/comment/get?query={"course":"'+courseid+'","group":"'+groupid+'","pubtype":"discussion","type":"comment"}&order=1&skip=0&limit=500',{headers});
   }
 
   /*
   listar las dudas y comentarios de los bloques
   */
   getDiscussion(blockid):Observable<any>{
-    //api/v1/user/comment/get?query={"pubtype":"discussion", "block":
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this.http.get(this.url+'api/v1/user/comment/get?query={"pubtype":"discussion","type":"root","block":"'+blockid+'"}&order=-1&skip=0&limit=500',{headers:headers})//.map(res=>res.json());
+    return this.http.get(this.url+'api/v1/user/comment/get?query={"pubtype":"discussion","type":"root","block":"'+blockid+'"}&order=-1&skip=0&limit=500',{headers});
   }
 
   /*
@@ -130,7 +115,7 @@ export class CourseService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this.http.get(this.url+'api/v1/user/comment/get?query={"course":"'+courseid+'","group":"'+groupid+'","pubtype":"discussion","type":"root"}&order=-1&skip=0&limit=500',{headers:headers})//.map(res=>res.json());
+    return this.http.get(this.url+'api/v1/user/comment/get?query={"course":"'+courseid+'","group":"'+groupid+'","pubtype":"discussion","type":"root"}&order=-1&skip=0&limit=500',{headers});
   }
 
   /*
@@ -140,31 +125,31 @@ export class CourseService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this.http.get(this.url+'api/v1/user/comment/get?query={"course":"'+courseid+'","group":"'+groupid+'","pubtype":"announcement","type":"root"}&order=-1&skip=0&limit=500',{headers:headers})//.map(res=>res.json());
+    return this.http.get(this.url+'api/v1/user/comment/get?query={"course":"'+courseid+'","group":"'+groupid+'","pubtype":"announcement","type":"root"}&order=-1&skip=0&limit=500',{headers});
   }
 
   /*
   comentar en un tema del foro de discusion
   */
-  setReplytto(reply):Observable<any>{
-    let params = JSON.stringify(reply);
-    let headers = new HttpHeaders({
-      'Content-Type':'application/json',
-      'x-access-token':this.token
+  setReplytto(reply): Observable<any> {
+    const params = JSON.stringify(reply);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'x-access-token': this.token
     });
-    return this.http.post(this.url+"api/v1/user/comment/create",params,{headers:headers});
+    return this.http.post(this.url + 'api/v1/user/comment/create', params, {headers});
   }
 
   /*
   crear un tema para el foro de discusión
   */
   setDiscusion(discusion):Observable<any>{
-    let params = JSON.stringify(discusion);
-    let headers = new HttpHeaders({
-      'Content-Type':'application/json',
-      'x-access-token':this.token
+    const params = JSON.stringify(discusion);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'x-access-token': this.token
     });
-    return this.http.post(this.url + "api/v1/user/comment/create", params, {headers: headers});
+    return this.http.post(this.url + "api/v1/user/comment/create", params, {headers});
   }
 
   /*
@@ -174,7 +159,7 @@ export class CourseService {
     let headers = new HttpHeaders({
       'x-access-token':token
     });
-    return this.http.get(this.url + 'api/v1/user/mygrades?groupid=' + groupid , {headers: headers});
+    return this.http.get(this.url + 'api/v1/user/mygrades?groupid=' + groupid , {headers});
   }
 
   /*
@@ -188,22 +173,30 @@ export class CourseService {
         'x-access-token':this.token
       }
     );
-    return this.http.put(this.url+'api/v1/user/createattempt',params,{headers:headers})//.map(res=>res.json());
+    return this.http.put(this.url+'api/v1/user/createattempt', params, {headers});
   }
 
   getCourses(token:any):Observable<any>{
     let headers = new HttpHeaders({
+      'Content-Type':'application/json',
       'x-access-token':token
     });
-    return this.http.get(this.url+'api/v1/user/mygroups',{headers:headers})//.map(res=>res.json());
+    return this.http.get(this.url+'api/v1/user/mygroups', {headers});
   }
 
   getCoursesOrg():Observable<any>{
-    return this.http.get(this.url+'api/course/list?org=conalep')//.map(res=>res.json());
+    let headers = new HttpHeaders({
+      'x-access-token': this.token
+    });
+    
+    return this.http.get(this.url+'api/course/list?org=conalep', {headers});
   }
 
   showBlocks(id:any):Observable<any>{
-    return this.http.get(this.url+'api/course/getblocklist?id='+id)//.map(res=>res.json());
+    let headers = new HttpHeaders({
+      'x-access-token': this.token
+    });
+    return this.http.get(this.url+'api/course/getblocklist?id='+id, {headers});
   }
 
 
@@ -215,7 +208,7 @@ export class CourseService {
     let headers = new HttpHeaders({
       'x-access-token':token
     });
-    return this.http.get(this.url+'api/v1/user/mygroup?groupid='+id,{headers:headers})//.map(res=>res.json());
+    return this.http.get(this.url+'api/v1/user/mygroup?groupid='+id,{headers})//.map(res=>res.json());
   }
 
 
@@ -227,9 +220,9 @@ export class CourseService {
       'x-access-token':this.token
     });
     if(prev){
-      return this.http.get(this.url+'api/v1/user/nextblock?groupid='+groupid+'&courseid='+courseid+'&blockid='+blockid+'&lastid='+blockid,{headers:headers})//.map(res=>res.json());
+      return this.http.get(this.url + 'api/v1/user/nextblock?groupid=' + groupid + '&courseid=' + courseid + '&blockid=' + blockid + '&lastid=' + blockid, {headers});
     }else{
-      return this.http.get(this.url+'api/v1/user/nextblock?groupid='+groupid+'&courseid='+courseid+'&blockid='+blockid,{headers:headers})//.map(res=>res.json());
+      return this.http.get(this.url + 'api/v1/user/nextblock?groupid=' + groupid + '&courseid=' + courseid + '&blockid=' + blockid, {headers});
     }
   }
 
@@ -237,33 +230,14 @@ export class CourseService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this.http.get(this.url+'api/v1/user/nextblock?groupid='+groupid+'&courseid='+courseid+'&blockid='+blockid+'&lastid='+blockid,{headers:headers})//.map(res=>res.json());
+    return this.http.get(this.url+'api/v1/user/nextblock?groupid='+groupid+'&courseid='+courseid+'&blockid='+blockid+'&lastid='+blockid,{headers});
   }
-
-  /*
-  getVideos(id:any):Observable<any>{
-    let url = `${this.youtubeUrl}/videos`;
-    let params = new URLSearchParams();
-    params.set('part','snippet');
-    params.set('id',id);
-    params.set('key',this.apikey);
-
-    return this.http.get(url).map(res=> {
-      let videos : any []=[];
-      for(let video of res.json().items){
-        let snippet = video.id;
-        videos.push(snippet);
-      }
-        return videos;
-    });
-  }
-  */
 
   getMyGradesTask(groupid: any, blockid: any): Observable<any> {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     })
-    return this.http.get(this.url+'api/v1/user/getgrade?groupid='+groupid+'&blockid='+blockid,{headers:headers})//.map(res=>res.json());
+    return this.http.get(this.url+'api/v1/user/getgrade?groupid='+groupid+'&blockid='+blockid,{headers});
   }
 
 }

@@ -24,21 +24,32 @@ export class UserService{
   //metodo para aplicar el login al usuario
   singUp(usertologin: any): Observable<any> {
     const json = JSON.stringify(usertologin);
-    return this.http.post(this.url + 'login', json);
+    const headers = new HttpHeaders({
+      'Content-Type':'application/json'
+    });
+    return this.http.post(this.url + 'login', json, {headers});
   }
 
   /*
   metodo para obtener la informacion del usuario
   */
   getUser(username): Observable<any> {
-    return this.http.get(this.url + 'api/v1/user/getdetails?name=' + username);
+    const headers = new HttpHeaders(
+      {
+        'x-access-token': this.token
+      })
+    return this.http.get(this.url + 'api/v1/user/getdetails?name=' + username, {headers});
   }
 
   /*
   metodo para obtener la informacion del usuario cuando inicia por primera ves sesion
   */
   getUserDetails(username: any): Observable<any> {
-    return this.http.get(this.url + 'api/user/getdetails?name=' + username);
+    const headers = new HttpHeaders(
+      {
+        'x-access-token': this.token
+      })
+    return this.http.get(this.url + 'api/user/getdetails?name=' + username, {headers});
   }
 
   /*
@@ -72,12 +83,10 @@ export class UserService{
   */
   getRoles():Observable<any>{
     let isOrg:any=[];
-    /*
-    let headers = {headers:new HttpHeaders({
+    let headers = new HttpHeaders({
       'x-access-token':this.getToken()
-    })};
-    */
-    return this.http.get(this.url+'api/v1/user/myroles');
+    });
+    return this.http.get(this.url+'api/v1/user/myroles', {headers});
   }
 
   /*
@@ -94,37 +103,28 @@ export class UserService{
   Metodo para validar al usuario que se acaba de registrar
   */
   userConfirm(confirm):Observable<any>{
-    console.log(confirm);
     let params = JSON.stringify(confirm);
-    /*
-    let headers = {headers:new HttpHeaders({
-      'Content-Type':'application/json',
-    })};
-    */
-    return this.http.put(this.url+'api/user/confirm',params)//,headers)//.map(res=>res.json());
-    //return this.http.get(this.url+'api/user/confirm?email='+emailuser+'&token='+tokentemp+'&password='+password).map(res=>res.json());;
+    const headers = new HttpHeaders(
+      {
+        'Content-Type':'application/json',
+        'x-access-token': this.token
+      })
+    
+    return this.http.put(this.url+'api/user/confirm', params, {headers});
   }
 
-  /*
-  funcion para usar el api de recuperacion de contraseña (envio de email al usuario)
-  */
-  /*
-  recoverPassword(email:any){
-    return this.http.get(this.url+"api/user/validateemail?email="+email).map(res=>res.json());
-  }
-  */
   /*
   funcion para el cambio de contraseña
   */
   changePassword(newpassword){
     let params = JSON.stringify(newpassword);
-    let headers ={headers: new HttpHeaders(
+    let headers = new HttpHeaders(
       {
         'Content-Type':'application/json',
         'x-access-token':this.token
       }
-    )};
-    return this.http.put(this.url+'api/v1/user/passwordchange',params,headers)//.map(res=>res.json());
+    );
+    return this.http.put(this.url+'api/v1/user/passwordchange', params, {headers});
   }
 
   /*
@@ -132,51 +132,50 @@ export class UserService{
   */
   recoverPass(passwordrecover){
     let params = JSON.stringify(passwordrecover);
-    let headers = {headers:new HttpHeaders(
+    let headers = new HttpHeaders(
       {
         'Content-Type':'application/json',
       }
-    )};
-    return this.http.put(this.url+'api/user/passwordrecovery',params,headers)//.map(res=>res.json());
+    );
+    return this.http.put(this.url+'api/user/passwordrecovery', params, {headers});
   }
 
   /*
   metodo para devolver el total de notificaciones nuevas
   */
   getNotifications():Observable<any>{
-    let headers = { headers:new HttpHeaders(
+    let headers = new HttpHeaders(
       {
         'Content-Type':'application/json',
         'x-access-token':this.token
       }
-    )};
-    return this.http.get(this.url+'api/v1/user/message/new',headers)//.map(res=>res.json());
+    );
+    return this.http.get(this.url+'api/v1/user/message/new', {headers});
   }
 
   /*
   metodo para obtener mis notificaciones
   */
-  getMyNotificationsBell():Observable<any>{
-    let headers ={headers:new HttpHeaders(
+  getMyNotificationsBell(): Observable<any> {
+    let headers = new HttpHeaders(
       {
         'Content-Type':'application/json',
         'x-access-token':this.token
-      })
-    };
-    return this.http.get(this.url+'api/v1/user/message/my?read=false',headers)//.map(res=>res.json());
+      });
+    return this.http.get(this.url+'api/v1/user/message/my?read=false', {headers});
   }
 
   /*
   metodo para obtener mis notificaciones
   */
   getMyNotifications():Observable<any>{
-    let headers = {headers: new HttpHeaders(
+    let headers = new HttpHeaders(
       {
         'Content-Type':'application/json',
         'x-access-token':this.token
       }
-    )};
-    return this.http.get(this.url+'api/v1/user/message/my', headers)//.map(res=>res.json());
+    );
+    return this.http.get(this.url + 'api/v1/user/message/my', {headers});
   }
 
   /*
@@ -184,11 +183,11 @@ export class UserService{
   */
   setNotification(message){
     let params = JSON.stringify(message);
-    let headers = {headers: new HttpHeaders({
+    let headers = new HttpHeaders({
       'Content-Type':'application/json',
       'x-access-token':this.token
-    })}
-    return this.http.post(this.url+'api/v1/user/message/create', params, headers)//.map(res=>res.json());
+    });
+    return this.http.post(this.url+'api/v1/user/message/create', params, {headers});
   }
 
   /*
@@ -196,11 +195,11 @@ export class UserService{
   */
   closeNotification(notificationid){
     let params = JSON.stringify(notificationid)
-    let headers = {headers : new HttpHeaders({
+    let headers = new HttpHeaders({
       'Content-Type':'application/json',
       'x-access-token':this.token
-    })}
-    return this.http.put(this.url+'api/v1/user/message/close', params, headers);
+    });
+    return this.http.put(this.url+'api/v1/user/message/close', params, {headers});
   }
 
   /*
@@ -208,11 +207,11 @@ export class UserService{
   */
   setFollow(follow){
     const params = JSON.stringify(follow);
-    const headers = {headers : new HttpHeaders({
+    const headers = new HttpHeaders({
       'Content-Type':'application/json',
       'x-access-token':this.token
-    })}
-    return this.http.post(this.url+'api/v1/user/follow/create', params, headers);
+    });
+    return this.http.post(this.url+'api/v1/user/follow/create', params, {headers});
   }
 
   /*
@@ -220,24 +219,22 @@ export class UserService{
   */
   quitFollow(followid: any) {
     const params = JSON.stringify(followid);
-    const headers = {headers: new HttpHeaders
+    const headers = new HttpHeaders
       ({
       'Content-Type': 'application/json',
       'x-access-token': this.token
-      })
-    };
-    return this.http.put(this.url + 'api/v1/user/follow/delete', params, headers);
+      });
+    return this.http.put(this.url + 'api/v1/user/follow/delete', params, {headers});
   }
   /*
   metodo para modificar los datos del usuario
   */
   userModify(person: any) {
     const params = JSON.stringify(person);
-    const headers = {headers : new HttpHeaders({
+    const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'x-access-token': this.token
-      })
-    };
-    return this.http.put(this.url + 'api/v1/user/modify', params, headers);
+      });
+    return this.http.put(this.url + 'api/v1/user/modify', params, {headers});
   }
 }

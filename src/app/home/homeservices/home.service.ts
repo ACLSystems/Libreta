@@ -32,8 +32,8 @@ export class HomeService {
   metodo para poner el token del usuario logueado donde el api lo requiera
   */
   getToken() {
-    let token = localStorage.getItem('token');
-    if (token != 'undefined') {
+    const token = localStorage.getItem('token');
+    if (token !== 'undefined') {
       this.token = token;
     } else {
       this.token = null;
@@ -75,19 +75,19 @@ export class HomeService {
   /*
   Metodo para traer los cursos de la organizacion
   */
-  getCoursesOrg():Observable<any> {
-    return this.http.get(this.url+'api/course/list?org=conalep',{observe:'response'});
+  getCoursesOrg(): Observable<any> {
+    return this.http.get(this.url+'api/course/list?org=conalep', {observe: 'response'});
   }
 
   /*
   Metodo para mostrar el contenido del temario del curso al usuario final
   */
-  showBlocks(id:any):Observable<any> {
-    return this.http.get(this.url+'api/course/getblocklist?id='+id,{observe:'response'});
+  showBlocks(id: any): Observable<any> {
+    return this.http.get(this.url + 'api/course/getblocklist?id=' + id, {observe: 'response'});
   }
   //metodo para obtener las areas de educacion
-  getAreas(org:string):Observable<any> {
-    return this.http.get(this.url+'api/career/listareas?org='+org,{observe:'response'});
+  getAreas(org: string): Observable<any> {
+    return this.http.get(this.url + 'api/career/listareas?org=' + org, {observe: 'response'});
   }
 
   //metodo para obtener las carreras en base a area de educacion
