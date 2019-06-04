@@ -25,9 +25,9 @@ export class UserService{
   singUp(usertologin: any): Observable<any> {
     const json = JSON.stringify(usertologin);
     const headers = new HttpHeaders({
-      'Content-Type':'application/json'
+      'Content-Type': 'application/json'
     });
-    return this.http.post(this.url + 'login', json, {headers});
+    return this.http.post(this.url + 'login', json, {headers:headers});
   }
 
   /*
@@ -38,7 +38,7 @@ export class UserService{
       {
         'x-access-token': this.token
       })
-    return this.http.get(this.url + 'api/v1/user/getdetails?name=' + username, {headers});
+    return this.http.get(this.url + 'api/v1/user/getdetails?name=' + username);
   }
 
   /*
@@ -49,7 +49,7 @@ export class UserService{
       {
         'x-access-token': this.token
       })
-    return this.http.get(this.url + 'api/user/getdetails?name=' + username, {headers});
+    return this.http.get(this.url + 'api/user/getdetails?name=' + username);
   }
 
   /*
@@ -86,7 +86,7 @@ export class UserService{
     let headers = new HttpHeaders({
       'x-access-token':this.getToken()
     });
-    return this.http.get(this.url+'api/v1/user/myroles', {headers});
+    return this.http.get(this.url+'api/v1/user/myroles', );
   }
 
   /*
@@ -106,11 +106,9 @@ export class UserService{
     let params = JSON.stringify(confirm);
     const headers = new HttpHeaders(
       {
-        'Content-Type':'application/json',
-        'x-access-token': this.token
-      })
-    
-    return this.http.put(this.url+'api/user/confirm', params, {headers});
+        'Content-Type':'application/json'
+      });
+    return this.http.put(this.url+'api/user/confirm', params, {headers:headers});
   }
 
   /*
@@ -124,7 +122,7 @@ export class UserService{
         'x-access-token':this.token
       }
     );
-    return this.http.put(this.url+'api/v1/user/passwordchange', params, {headers});
+    return this.http.put(this.url+'api/v1/user/passwordchange', params, {headers:headers});
   }
 
   /*
@@ -137,7 +135,7 @@ export class UserService{
         'Content-Type':'application/json',
       }
     );
-    return this.http.put(this.url+'api/user/passwordrecovery', params, {headers});
+    return this.http.put(this.url+'api/user/passwordrecovery', params, {headers:headers});
   }
 
   /*
@@ -150,7 +148,7 @@ export class UserService{
         'x-access-token':this.token
       }
     );
-    return this.http.get(this.url+'api/v1/user/message/new', {headers});
+    return this.http.get(this.url+'api/v1/user/message/new', );
   }
 
   /*
@@ -162,7 +160,7 @@ export class UserService{
         'Content-Type':'application/json',
         'x-access-token':this.token
       });
-    return this.http.get(this.url+'api/v1/user/message/my?read=false', {headers});
+    return this.http.get(this.url+'api/v1/user/message/my?read=false');
   }
 
   /*
@@ -175,7 +173,7 @@ export class UserService{
         'x-access-token':this.token
       }
     );
-    return this.http.get(this.url + 'api/v1/user/message/my', {headers});
+    return this.http.get(this.url + 'api/v1/user/message/my');
   }
 
   /*
@@ -184,22 +182,20 @@ export class UserService{
   setNotification(message){
     let params = JSON.stringify(message);
     let headers = new HttpHeaders({
-      'Content-Type':'application/json',
-      'x-access-token':this.token
+      'Content-Type':'application/json'
     });
-    return this.http.post(this.url+'api/v1/user/message/create', params, {headers});
+    return this.http.post(this.url+'api/v1/user/message/create', params, {headers:headers});
   }
 
   /*
   metodo para cerrar notificaciones
   */
   closeNotification(notificationid){
-    let params = JSON.stringify(notificationid)
+    let params = JSON.stringify(notificationid);
     let headers = new HttpHeaders({
-      'Content-Type':'application/json',
-      'x-access-token':this.token
+      'Content-Type': 'application/json'
     });
-    return this.http.put(this.url+'api/v1/user/message/close', params, {headers});
+    return this.http.put(this.url+'api/v1/user/message/close', params, {headers:headers});
   }
 
   /*
@@ -208,10 +204,9 @@ export class UserService{
   setFollow(follow){
     const params = JSON.stringify(follow);
     const headers = new HttpHeaders({
-      'Content-Type':'application/json',
-      'x-access-token':this.token
+      'Content-Type':'application/json'
     });
-    return this.http.post(this.url+'api/v1/user/follow/create', params, {headers});
+    return this.http.post(this.url+'api/v1/user/follow/create', params, {headers:headers});
   }
 
   /*
@@ -221,10 +216,9 @@ export class UserService{
     const params = JSON.stringify(followid);
     const headers = new HttpHeaders
       ({
-      'Content-Type': 'application/json',
-      'x-access-token': this.token
+      'Content-Type': 'application/json'
       });
-    return this.http.put(this.url + 'api/v1/user/follow/delete', params, {headers});
+    return this.http.put(this.url + 'api/v1/user/follow/delete', params, {headers:headers});
   }
   /*
   metodo para modificar los datos del usuario
@@ -232,9 +226,8 @@ export class UserService{
   userModify(person: any) {
     const params = JSON.stringify(person);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'x-access-token': this.token
+      'Content-Type': 'application/json'
       });
-    return this.http.put(this.url + 'api/v1/user/modify', params, {headers});
+    return this.http.put(this.url + 'api/v1/user/modify', params, {headers:headers});
   }
 }

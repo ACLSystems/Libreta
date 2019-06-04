@@ -19,7 +19,7 @@ export class InsertUserService {
   registerUser(usertosave){
     const params = JSON.stringify(usertosave);
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    return this._http.post(this.url+'api/user/register', params, {headers});
+    return this._http.post(this.url+'api/user/register', params, {headers:headers});
   }
 
   //funcion para obtener los estados de la republica

@@ -30,7 +30,7 @@ export class ServiceisorgService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this._http.get(this.url + 'api/v1/user/tookcert?groupid=' + groupid, {headers});
+    return this._http.get(this.url + 'api/v1/user/tookcert?groupid=' + groupid, {headers:headers});
   }
 
   /*
@@ -40,7 +40,7 @@ export class ServiceisorgService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this._http.get(this.url + 'api/v1/supervisor/report/rostersummary', {headers});
+    return this._http.get(this.url + 'api/v1/supervisor/report/rostersummary', {headers:headers});
   }
 
   /*
@@ -50,7 +50,7 @@ export class ServiceisorgService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this._http.get(this.url+'api/v1/instructor/group/studentgrades?groupid='+groupid+'&studentid='+studentid,{headers});
+    return this._http.get(this.url+'api/v1/instructor/group/studentgrades?groupid='+groupid+'&studentid='+studentid,{headers:headers});
   }
 
   /*
@@ -60,7 +60,7 @@ export class ServiceisorgService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this._http.get(this.url+'api/v1/supervisor/report/gradesbygroup?groupid='+idgroup,{headers});
+    return this._http.get(this.url+'api/v1/supervisor/report/gradesbygroup?groupid='+idgroup,{headers:headers});
   }
   /*
   Metodo para los alumnos inactivos
@@ -69,7 +69,7 @@ export class ServiceisorgService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this._http.get(this.url+'api/v1/supervisor/report/userswoactivity',{headers});
+    return this._http.get(this.url+'api/v1/supervisor/report/userswoactivity',{headers:headers});
   }
   /*
   Metodo para los reportes estadisticos
@@ -79,7 +79,7 @@ export class ServiceisorgService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this._http.get(this.url+'api/v1/supervisor/report/percentil?ou='+queryJson,{headers});
+    return this._http.get(this.url+'api/v1/supervisor/report/percentil?ou='+queryJson,{headers:headers});
   }
 
   /*
@@ -89,7 +89,7 @@ export class ServiceisorgService {
     let headers = new HttpHeaders({
       'x-access-token':this.token
     });
-    return this._http.get(this.url+'api/v1/orgadm/user/passwordreset?username='+emailuser,{headers});
+    return this._http.get(this.url+'api/v1/orgadm/user/passwordreset?username='+emailuser,{headers:headers});
   }
 
   /*
@@ -98,10 +98,9 @@ export class ServiceisorgService {
   public setSection(coursecode): Observable<any> {
     const params = JSON.stringify(coursecode);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'x-access-token': this.token
+      'Content-Type': 'application/json'
     });
-    return this._http.put(this.url + 'api/v1/author/course/newsection' , params , {headers});
+    return this._http.put(this.url + 'api/v1/author/course/newsection' , params , {headers:headers});
   }
 
   /*
@@ -110,10 +109,9 @@ export class ServiceisorgService {
   public setNewBlock(block): Observable<any> {
     const params = JSON.stringify(block);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'x-access-token': this.token
+      'Content-Type': 'application/json'
     });
-    return this._http.post(this.url +'api/v1/author/course/createblock' , params , {headers});
+    return this._http.post(this.url +'api/v1/author/course/createblock' , params , {headers:headers});
 
   }
   /*
@@ -122,10 +120,9 @@ export class ServiceisorgService {
   public setNewCourse(course): Observable<any> {
     const params = JSON.stringify(course);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'x-access-token': this.token
+      'Content-Type': 'application/json'
     });
-    return this._http.post(this.url + 'api/v1/author/course/create', params , {headers});
+    return this._http.post(this.url + 'api/v1/author/course/create', params , {headers:headers});
   }
 
   /*
@@ -134,10 +131,9 @@ export class ServiceisorgService {
   public setgradeTask(gradetask): Observable<any>{
     const params = JSON.stringify(gradetask);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'x-access-token': this.token
+      'Content-Type': 'application/json'
     });
-    return this._http.put(this.url + 'api/v1/instructor/group/gradetask', params, {headers});
+    return this._http.put(this.url + 'api/v1/instructor/group/gradetask', params, {headers:headers});
   }
 
   /*
@@ -145,11 +141,10 @@ export class ServiceisorgService {
   */
   public setgradeTaskconcatMap(task: any[]): Observable<any>{
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'x-access-token': this.token
+      'Content-Type': 'application/json'
     });
     return from(task).pipe(concatMap(
-      idTask => this._http.put(this.url + 'api/v1/instructor/group/gradetask', idTask, {headers}) as Observable<any>));
+      idTask => this._http.put(this.url + 'api/v1/instructor/group/gradetask', idTask, {headers:headers}) as Observable<any>));
   }
 
   /*
@@ -158,137 +153,97 @@ export class ServiceisorgService {
   public updateContent(block: any): Observable<any> {
     const params = JSON.stringify(block);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'x-access-token': this.token
+      'Content-Type': 'application/json'
     });
-    return this._http.put(this.url + 'api/v1/author/course/modifyblock', params , {headers});
+    return this._http.put(this.url + 'api/v1/author/course/modifyblock', params , {headers:headers});
   }
   /*
   Metodo para traer el contenido del curso que editara el autor
   */
   public getContent(id):Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    return this._http.get(this.url + 'api/v1/author/course/getblock?id=' + id, {headers});
+    return this._http.get(this.url + 'api/v1/author/course/getblock?id=' + id);
   }
 
   /*
   metodo para obtener el temario por cada curso y mostrarlo al autor
   */
   public getlistBlock(courseid):Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    return this._http.get(this.url+'api/v1/author/course/getblocklist?id=' + courseid + '&section1=0&section2=500',{headers});
+    return this._http.get(this.url+'api/v1/author/course/getblocklist?id=' + courseid + '&section1=0&section2=500');
   }
 
   /*
   metodo para obtener el listado de cursos y mostrarlos al autor
   */
   public getCoursesAuth():Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    return this._http.get(this.url+'api/v1/course/listcourses',{headers});
+    return this._http.get(this.url+'api/v1/course/listcourses');
   }
 
   /*
   obtener la tarea por alumno
   */
   public getTask(groupid, studentid, blockid):Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    //api/v1/instructor/group/studenttask?groupid='+groupid+'&studentid='+studentid+'&blockid='+blockid
-    return this._http.get(this.url+'api/v1/instructor/group/studenttask?groupid='+groupid+'&studentid='+studentid+'&blockid='+blockid,{headers});
+    return this._http.get(this.url+'api/v1/instructor/group/studenttask?groupid='+groupid+'&studentid='+studentid+'&blockid='+blockid);
   }
   /*
   Obtener el listado de los alumnos con el detalle de cada uno
   */
   public getlistroster(groupcode):Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    return this._http.get(this.url+'api/v1/instructor/group/listroster?code='+groupcode,{headers});
+    return this._http.get(this.url+'api/v1/instructor/group/listroster?code='+groupcode);
   }
 
   /*
   Obtener el listado de los grupos asignados por tutor
   */
   public mylistgroup():Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    return this._http.get(this.url+'api/v1/instructor/group/mylist',{headers});
+    return this._http.get(this.url+'api/v1/instructor/group/mylist');
   }
 
   /*
   Reportes por campo
   */
   public getReportsOrg():Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    return this._http.get(this.url+'api/v1/supervisor/report/gradesbycampus',{headers});
+    return this._http.get(this.url+'api/v1/supervisor/report/gradesbycampus');
   }
 
   /*
   api para la descarga de archivos
   */
   public downloadFile(id:any):Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    return this._http.get(this.url+'api/v1/file/download?fileid='+id+'&link=true',{headers});
+    return this._http.get(this.url+'api/v1/file/download?fileid='+id+'&link=true');
   }
 
   /*
   api para obtener el arbol de organizaciones para los reportes
   */
   public getOrgTree():Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    return this._http.get(this.url+'api/v1/supervisor/report/orgtree',{headers});
+    return this._http.get(this.url+'api/v1/supervisor/report/orgtree');
   }
 
   public getUserAccount(username):Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    return this._http.get(this.url+'api/v1/supervisor/user/getgroups?username='+username,{headers});
+    return this._http.get(this.url+'api/v1/supervisor/user/getgroups?username='+username);
   }
 
   public getGroupsManager(ou):Observable<any>{
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    return this._http.get(this.url+'api/v1/supervisor/group/list?ou='+ou,{headers});
+    return this._http.get(this.url+'api/v1/supervisor/group/list?ou='+ou);
   }
 
   public getUserBySupervisor(username): Observable<any> {
-    const headers = new HttpHeaders({
-      'x-access-token': this.token
-    });
-    return this._http.get(this.url + 'api/v1/supervisor/user/getdetails?username=' + username, {headers});
+    return this._http.get(this.url + 'api/v1/supervisor/user/getdetails?username=' + username);
   }
 
   public resetpassBySupervisor(bodypass): Observable<any> {
     const params = JSON.stringify(bodypass);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'x-access-token': this.token
     });
-    return this._http.put(this.url +'api/v1/supervisor/user/passwordreset', params, {headers});
+    return this._http.put(this.url +'api/v1/supervisor/user/passwordreset', params, {headers: headers});
   }
 
   public updateuserBySupervisor(bodynewuser): Observable<any> {
     let params = JSON.stringify(bodynewuser);
     let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'x-access-token': this.token
+      'Content-Type': 'application/json'
     });
-    return this._http.put(this.url + 'api/v1/supervisor/user/changeuser', params, {headers});
+    return this._http.put(this.url + 'api/v1/supervisor/user/changeuser', params, {headers: headers});
   }
 }

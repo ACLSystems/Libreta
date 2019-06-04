@@ -19,7 +19,7 @@ export class SigninService{
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.http.post(this.url+'login', json, {headers});
+    return this.http.post(this.url+'login', json, {headers:headers});
   }
 
   /*
@@ -34,7 +34,7 @@ export class SigninService{
   registerUser(usertosave){
     let params = JSON.stringify(usertosave);
     let headers = new HttpHeaders({'Content-Type':'application/json'});
-    return this.http.post(this.url+'api/user/register', params, {headers});
+    return this.http.post(this.url+'api/user/register', params, {headers:headers});
   }
 
   //funcion para obtener los estados de la republica

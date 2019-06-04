@@ -64,8 +64,8 @@ import { UserModule } from './user/user.module';
     StoreRouterConnectingModule.forRoot({stateKey: 'router'})
   ],
   providers: [
-    ErrorService
-    //{provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true}
+    ErrorService,
+    {provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })
