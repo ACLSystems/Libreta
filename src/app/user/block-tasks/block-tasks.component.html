@@ -19,7 +19,7 @@
     <input type="text" class="form-control" #answerTaskTxt (blur)="setTask(answerTaskTxt.value, 'text',itemTask.id, itemTask.label)">
   </div>
   <div *ngIf="itemTask.type == 'file'">
-    <input type="file" (change)="uploadFile($event,itemTask.id,itemTask.label)">
+		<input type="file" (change)="uploadFile($event,itemTask.id,itemTask.label)">
   </div>
 </div>
 <hr>

@@ -1,2 +1,6 @@
-node_modules
-dist
+# No incluir nada de node_modules
+# Si se quiere instalar, correr estos dos comandos:
+# npm install --save --save-exact
+# npm install --save-dev --save-exact
+node_modules/*
+dist/*

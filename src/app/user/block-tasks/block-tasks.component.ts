@@ -6,7 +6,6 @@ import { TaskEntry } from './../../models/course/task';
 import { UserService } from './../../shared/sharedservices/user.service';
 
 
-
 declare var $: any ;
 
 @Component({
@@ -60,23 +59,31 @@ export class BlockTasksComponent implements OnInit {
   subir archivos de las tareas
   */
   public uploadFile($event: any, idtask: any, label: number) {
-    this.messageUserSucces = null;
+		const maxSize = 1048576;
+		this.messageUserSucces = null;
     this.messageUserError = null;
     this.isAttachmen = false;
-    if ($event.target.files.length === 1 && $event.target.files[0].size <= 1048576) {
+		var sizeOf = function (bytes) {
+			if(bytes == 0) { return '0.00 B'; }
+			var e = Math.floor(Math.log(bytes) / Math.log(1024));
+			return (bytes/Math.pow(1024, e)).toFixed(2)+' '+ ' KMGTP'.charAt(e)+'B';
+		}
+    if ($event.target.files.length === 1 && $event.target.files[0].size <= maxSize) {
+			// var that = this;
       this.courseService.setAttachment(
         $event.target.files[0],
         this.block.data.courseCode,
-        this.block.data.groupCode, this.token).subscribe(data => {
-        this.messageUserSucces = 'Se cargo el archivo correctamente';
-        this.setTask(data.fileId, 'file', idtask, label);
+        this.block.data.groupCode).subscribe(data => {
+	      this.messageUserSucces = 'Se cargo el archivo correctamente';
+	      this.setTask(data.fileId, 'file', idtask, label);
       }, error => {
         console.log(error);
       });
     } else {
-      this.messageUserError = 'El archivo no puede ser mayor a 1 MB';
+      this.messageUserError = 'Archivo mide: '+ sizeOf($event.target.files[0].size) +' El archivo no puede ser mayor a ' + sizeOf(maxSize);
     }
   }
+
 
   /*
   Metodo para setear las tareas del usuario

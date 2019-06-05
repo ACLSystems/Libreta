@@ -1,5 +1,5 @@
 import { environment } from './../../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { UserService } from './user.service';
@@ -25,14 +25,18 @@ export class CourseService {
   /*
   metodo para enviar los archivos de la tareas
   */
-  setAttachment(file: any, dir1: any, dir2: any, token: any): Observable<any> {
+  setAttachment(file: File, dir1: any, dir2: any): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('fileName', file.name);
-    const headers = new HttpHeaders({
-      'Content-Type': 'multipart/form-data'
-    });
-    return this.http.post(this.url + 'api/v1/file/upload?dir1=' + dir1 + '&dir2=' + dir2, formData, {headers:headers});
+    //formData.append('fileName', file.name);
+    // const headers = new HttpHeaders({
+    //   'Content-Type': 'multipart/form-data'
+    // });
+		const req = new HttpRequest('POST', this.url+'api/v1/file/upload?dir1=' + dir1 + '&dir2=' + dir2, formData, {
+			reportProgress: true,
+			responseType: 'text'
+		});
+    return this.http.request(req);
   }
 
   /*
