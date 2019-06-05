@@ -25,7 +25,7 @@ export class CourseService {
   /*
   metodo para enviar los archivos de la tareas
   */
-  setAttachment(file: any, dir1: any, dir2: any): Observable<any> {
+  setAttachment(file: any, dir1: any, dir2: any, token: any): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('fileName', file.name);

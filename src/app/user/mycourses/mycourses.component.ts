@@ -1,3 +1,5 @@
+import * as $ from 'jquery';
+import * as jsPDF from 'jspdf';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalendarComponent } from 'ng-fullcalendar';
 import { Comment } from './../../models/course/comment';
@@ -74,8 +76,6 @@ export class MycoursesComponent implements OnInit, DoCheck {
   public grades: number[] = [];
   public announcements: any[] = [];
   public dataevents: any[] = [];
-  datecertificate: any;
-  approvalcertificate: boolean;
 
   public imgconalogo: any;
   public groupid: string;
@@ -157,7 +157,13 @@ export class MycoursesComponent implements OnInit, DoCheck {
   ngOnInit() {
     this.identiti = this.userService.getIdentiti();
     this.token = this.userService.getToken();
-  
+    this.informationCourse(this.courseid);
+    this.getMyGrades();
+    this.getDiscussionCourse();
+    this.getCommentsCourses();
+    this.getReplysCourses();
+    this.getAnnouncementCourse();
+
     this.cursosService.showBlocksTrack(this.groupid, this.token).subscribe(data => {
       this.block = data.message.blocks;
       for (const idevent of data.message.dates) {
@@ -165,17 +171,10 @@ export class MycoursesComponent implements OnInit, DoCheck {
           title: idevent.label,
           start: this.datePipe.transform(idevent.beginDate, 'yyyy-MM-dd 00:00:01'),
           end: this.datePipe.transform(idevent.endDate, 'yyyy-MM-dd 23:59:00'),
-          color: this.colorevents(idevent.type),
-          type: idevent.type
+          color: this.colorevents(idevent.type)
         });
       }
-      this.datecertificate =  this.dataevents.find(id  => id.type === 'certificate');
-      if ( this.datecertificate != null ) {
-        const today = new Date();
-        const todayDate = this.datePipe.transform(today.toDateString() , 'yyyy-MM-dd');
-        const certiDate = this.datePipe.transform(this.datecertificate.start, 'yyyy-MM-dd');
-        this.approvalcertificate =  certiDate >= todayDate;
-      }
+
       this.calendarOptions = {
         locale: 'es',
         height: 500,
@@ -198,13 +197,6 @@ export class MycoursesComponent implements OnInit, DoCheck {
     }, error => {
       console.log(error);
     });
-
-    this.informationCourse(this.courseid);
-    this.getMyGrades();
-    this.getDiscussionCourse();
-    this.getCommentsCourses();
-    this.getReplysCourses();
-    this.getAnnouncementCourse();
     this.percentTrack();
   }
 
@@ -286,6 +278,7 @@ export class MycoursesComponent implements OnInit, DoCheck {
     this.loading = true;
     const today = new Date();
     this.cursosService.getMyGrades(this.groupid, this.token).subscribe(data => {
+      console.log(data);
       const res = data.message;
       this.data = data.message;
       this.finalGrade = res.finalGrade;
@@ -327,9 +320,6 @@ export class MycoursesComponent implements OnInit, DoCheck {
     }, () => {
       this.loading = false;
     });
-
-    
-    
   }
 
   /*

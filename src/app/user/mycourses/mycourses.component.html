@@ -141,12 +141,10 @@
               <div *ngIf="data.certificateActive">
 
                 <div *ngIf="data.groupType == 'tutor'">
-                  <div *ngIf="approvalcertificate">
-                      <div *ngIf="!data.pass || data.status=='pending' || !certificateTutor">
-                        <button type="button" class="btn btn-success blockquote" style="margin-top:15px;" disabled>
-                          <i class="fas fa-certificate"></i> Imprimir constancia
-                        </button>
-                      </div>
+                  <div *ngIf="!data.pass || data.status=='pending' || !certificateTutor">
+                    <button type="button" class="btn btn-success blockquote" style="margin-top:15px;" disabled>
+                      <i class="fas fa-certificate"></i> Imprimir constancia
+                    </button>
                   </div>
                 </div>
                 <div *ngIf="data.groupType != 'tutor'">
@@ -155,7 +153,7 @@
                       <i class="fas fa-certificate"></i> Imprimir constancia
                     </button>
                   </div>
-                  
+
                   <span *ngIf="data.status=='pending'" class="text-success font-italic"><i class="fas fa-exclamation-circle"></i> Pago pendiente</span>
 
                   <div *ngIf="data.pass && data.certificateNumber != null && data.status!='pending'">
@@ -189,12 +187,15 @@
               <table class="table table-bordered">
                 <thead>
                   <tr class="text-center">
-                    <td colspan="5"><b>Estructura de la calificación / Rúbrica</b></td>
+                    <td colspan="5"><b>Estructura de la calificación</b></td>
                   </tr>
                   <tr class="text-center">
                     <td class="table-secondary">Lección</td>
                     <td class="table-active"><b>Evaluación / Actividad</b></td>
+<<<<<<< HEAD
                     <!--td class="table-active"><b>Detalle de la actividad</b></td-->
+=======
+>>>>>>> parent of ca20760... Actualizacion 30/05/2019
                     <td class="table-info"><b>Ponderación</b></td>
                     <td class="table-warning"><b>Obtuviste</b></td>
                     <td class="table-success"><b>Tu calificación</b></td>
@@ -206,7 +207,10 @@
                   <tr *ngFor="let item of blockgrades;let idblock=index" class="text-center table-light">
                     <td>{{item.blockSection}} . {{item.blockNumber}}</td>
                     <td>{{item.blockTitle}}</td>
+<<<<<<< HEAD
                     <!--td><small>Ejemplo de texto de la rúbrica</small></td-->
+=======
+>>>>>>> parent of ca20760... Actualizacion 30/05/2019
                     <td>{{item.blockW | number:'.0-2'}}%</td>
                     <td>{{item.grade | number:'.0-2'}}</td>
                     <td>
