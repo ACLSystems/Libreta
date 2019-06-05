@@ -4,3 +4,8 @@
 # npm install --save-dev --save-exact
 node_modules/*
 dist/*
+
+
+# Otros archivos no deseados
+.DS_Store
+.DS_Store?
