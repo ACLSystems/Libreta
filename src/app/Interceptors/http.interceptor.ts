@@ -30,7 +30,8 @@ export class HttpConfigInterceptor implements HttpInterceptor{
       }),
       catchError((error: HttpErrorResponse) => {
 				if(error.error.message === 'Error 205: User not authorized' || // Con estatus 403
-					error.error.message === 'Error 200: Missing token' // Con estatus 401
+					error.error.message === 'Error 200: Missing token' || // Con estatus 401
+					error.error.message === 'Error 204: Token expired' // Con estatus 403
 			) {
 					localStorage.removeItem('identiti');
 			    localStorage.removeItem('token');
