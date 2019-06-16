@@ -48,18 +48,22 @@ export class ConsoleuserComponent implements OnInit {
   isFindOk: boolean;
   messageNotFound: any;
 
+
   constructor(private userService: UserService, private course: CourseService, private router: Router) {
     this.token = this.userService.getToken();
     this.identiti = this.userService.getIdentiti();
-    this.environment = environment.production;
   }
 
   ngOnInit() {
     this.token = this.userService.getToken();
     this.identiti = this.userService.getIdentiti();
-    this.getRolesUser();
-    this.getDetailsUser();
-    this.getCourses();
+		if(this.token === null && this.identiti === null) {
+			this.router.navigate(['/home']);
+		} else {
+	    this.getRolesUser();
+	    this.getDetailsUser();
+			this.getCourses();
+		}
   }
 
   /*
@@ -110,11 +114,10 @@ export class ConsoleuserComponent implements OnInit {
   public getDetailsUser() {
     this.loading = true;
     const name = this.identiti.name;
-    this.userService.getUser(name).subscribe(data => {
-        this.userlms = data;
-        this.loading = false;
-      }
-    );
+		this.userService.getUser(name).subscribe(data => {
+			this.userlms = data;
+      this.loading = false;
+    });
   }
 
   /*

@@ -18,20 +18,48 @@
     <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
       <ngb-panel>
         <ng-template ngbPanelTitle>
-          <span class="text-success">
-            <i class="fas fa-graduation-cap"></i> Mis cursos activos
-          </span>
+					<span class="text-success">
+        		<i class="fas fa-graduation-cap"></i> Mis cursos activos
+      		</span>
+					<span class="badge badge-success">
+						{{cursoslist?.length}}
+					</span>
         </ng-template>
         <ng-template ngbPanelContent>
             <div class="card-deck">
               <div class="card" *ngFor="let crs of cursoslist | paginate: { itemsPerPage: 4, currentPage: p }">
-                <img class="card-img-top imagenesCurso img-responsive" [src]="crs.imagen" alt="Card image cap">
-                <div class="card-title text-center">
-                  <h5><i class="fas fa-users"></i> Grupo: {{crs.curso.name}} <br> <small>CLAVE: {{crs.curso.code}}</small></h5>
-                </div>
+                <img class="card-img-top imagenesCurso mx-auto d-block" [src]="crs.imagen" alt="Card image cap">
+                <!-- <div class="card-title text-center">
+                  <h5><i class="fas fa-users"></i> Grupo:<span class="text-success">{{crs.curso.name}}</span> <br>
+										<small>
+											Código de grupo: <span class="text-success">{{crs.curso.code}}</span>
+											<br>
+											 Instructor: <span class="text-success">{{crs.curso.instructor}}</span>
+										 </small></h5>
+                </div> -->
                 <div class="card-body">
-                  <i class="fas fa-book"></i> Curso: {{crs.curso.course}} <br>
-                  <i class="fas fa-hashtag"></i> Código: {{crs.curso.courseCode}}
+									<table class="table">
+										<tr>
+											<th><i class="fas fa-users"></i> </th><th>Grupo:</th>
+											<td><span class="text-success">{{crs.curso.name}}</span></td>
+										</tr>
+										<tr>
+											<th><i class="fas fa-barcode"></i>  </th><th>Código del grupo:</th>
+											<td><span class="text-success">{{crs.curso.code}}</span></td>
+										</tr>
+										<tr>
+											<th><i class="fas fa-user-tie"></i>  </th><th>Instructor: </th>
+											<td><span class="text-success">{{crs.curso.instructor}}</span></td>
+										</tr>
+										<tr>
+											<th><i class="fas fa-book"></i>  </th><th>Curso: </th>
+											<td><span class="text-success">{{crs.curso.course}}</span></td>
+										</tr>
+										<tr>
+											<th><i class="fas fa-barcode"></i>  </th><th>Código del curso: </th>
+											<td><span class="text-success">{{crs.curso.courseCode}}</span></td>
+										</tr>
+									</table>
                 </div>
                 <div class="card-footer">
                   <button type="button" class="btn btn-success blockquote" (click)="getMycourse(crs.curso.course, crs.curso.groupid, crs.curso.courseid, crs.curso.lastSeenBlock, crs.curso.firstBlock)">
@@ -49,37 +77,8 @@
       <ngb-panel>
         <ng-template ngbPanelTitle>
           <span class="text-info">
-            <i class="fas fa-graduation-cap"></i> Mis otros cursos
-          </span>
-        </ng-template>
-        <ng-template ngbPanelContent>
-            <div class="card-deck">
-                <div class="card" *ngFor="let crs of cursosinactive | paginate: { itemsPerPage: 4, currentPage: p }">
-                  <img class="card-img-top imagenesCurso img-responsive" [src]="crs.imagen" alt="Card image cap">
-                  <div class="card-title text-center">
-                    <h5><i class="fas fa-users"></i> Grupo: {{crs.curso.name}} <br> <small>CLAVE: {{crs.curso.code}}</small></h5>
-                  </div>
-                  <div class="card-body">
-                    <i class="fas fa-book"></i> Curso: {{crs.curso.course}} <br>
-                    <i class="fas fa-hashtag"></i> Código: {{crs.curso.courseCode}}
-                  </div>
-                  <div class="card-footer">
-                    <button type="button" class="btn btn-success blockquote" (click)="getMycourse(crs.curso.course, crs.curso.groupid, crs.curso.courseid, crs.curso.lastSeenBlock, crs.curso.firstBlock)">
-                      <i class="far fa-arrow-alt-circle-right"></i> Ir al curso
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <br>
-              <div class="text-center text-success">
-                <pagination-controls (pageChange)="p = $event" previousLabel="Atras" nextLabel="Siguiente"></pagination-controls>
-              </div>
-        </ng-template>
-      </ngb-panel>
-      <ngb-panel>
-        <ng-template ngbPanelTitle>
-          <span class="text-secondary">
-            <i class="fas fa-graduation-cap"></i> Mis proximos cursos
+            <i class="fas fa-graduation-cap"></i> Mis próximos cursos
+						<span class="badge badge-info">{{cursosnext?.length}}</span>
           </span>
         </ng-template>
         <ng-template ngbPanelContent>
@@ -97,6 +96,37 @@
                     <div class="alert alert-dark" role="alert">
                       Fecha de inicio: {{crs.curso.beginDate | date:"dd/MM/yy" }}
                     </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="text-center text-success">
+                <pagination-controls (pageChange)="p = $event" previousLabel="Atras" nextLabel="Siguiente"></pagination-controls>
+              </div>
+        </ng-template>
+      </ngb-panel>
+			<ngb-panel>
+        <ng-template ngbPanelTitle>
+          <span class="text-secondary">
+            <i class="fas fa-graduation-cap"></i> Mis cursos cerrados
+						<span class="badge badge-secondary">{{cursosinactive?.length}}</span>
+          </span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+            <div class="card-deck">
+                <div class="card" *ngFor="let crs of cursosinactive | paginate: { itemsPerPage: 4, currentPage: p }">
+                  <img class="card-img-top imagenesCurso img-responsive" [src]="crs.imagen" alt="Card image cap">
+                  <div class="card-title text-center">
+                    <h5><i class="fas fa-users"></i> Grupo: {{crs.curso.name}} <br> <small>CLAVE: {{crs.curso.code}}</small></h5>
+                  </div>
+                  <div class="card-body">
+                    <i class="fas fa-book"></i> Curso: {{crs.curso.course}} <br>
+                    <i class="fas fa-hashtag"></i> Código: {{crs.curso.courseCode}}
+                  </div>
+                  <div class="card-footer">
+                    <button type="button" class="btn btn-success blockquote" (click)="getMycourse(crs.curso.course, crs.curso.groupid, crs.curso.courseid, crs.curso.lastSeenBlock, crs.curso.firstBlock)">
+                      <i class="far fa-arrow-alt-circle-right"></i> Ir al curso
+                    </button>
                   </div>
                 </div>
               </div>

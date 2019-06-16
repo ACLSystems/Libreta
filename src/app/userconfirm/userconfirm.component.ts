@@ -26,6 +26,7 @@ export class UserconfirmComponent implements OnInit {
   public mothername:string;
   public emailuser:any;
   public password:string;
+	public validated:boolean;
 
   public datosOkInfo : boolean =false;
 
@@ -54,10 +55,11 @@ export class UserconfirmComponent implements OnInit {
   public getDetails(){
     this.user.getUserDetails(this.emailuser).subscribe(
       data=>{
-        console.log(data)
-        //this.name = data.user.person.name;
-        //this.fathername = data.user.person.fatherName;
-        //this.mothername = data.user.person.motherName;
+        //console.log(data);
+        this.name = data.user.person.name;
+        this.fathername = data.user.person.fatherName;
+        this.mothername = data.user.person.motherName;
+				this.validated = data.validated;
       },
       error=>{
         console.log(error);
@@ -98,10 +100,13 @@ export class UserconfirmComponent implements OnInit {
   public sendData(){
     this.confirm = new Confirm(this.emailuser, this.token, this.password, this.name, this.fathername, this.mothername);
     this.user.userConfirm(this.confirm).subscribe(data=>{
-      this.messageSuccess = "Se han guardado los datos exitosamente"
+      this.messageSuccess = "Se han guardado los datos exitosamente. Usarás tus credenciales para entrar en la siguiente pantalla."
       location.reload(true);
-      location.replace(this.urlConalep);
+      location.replace(this.urlConalep + '#/login');
     },error=>{
+			if(error.message === 'Token is not valid. Please verify') {
+				this.messageError = 'Los datos ya fueron validados. Favor de no utilizar esta página para volver a ingresar. Ve directamente a: ' + this.urlConalep;
+			}
       console.log(error);
       this.messageError = error;
     });

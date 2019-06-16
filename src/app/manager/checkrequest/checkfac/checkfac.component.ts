@@ -102,7 +102,7 @@ export class CheckfacComponent implements OnInit {
   */
   public getOU(){
     this.userservice.getRoles().subscribe(data=>{
-      console.log(data);
+      //console.log(data);
       /*
       this.parent = data.message.ou.parent;
       this.state = data.message.ou.state;
@@ -350,7 +350,7 @@ export class CheckfacComponent implements OnInit {
             for(let reqid of this.detailsFactura.detailsrequest.details){
               let grptmp = reqtmp.temp1.find(grid => grid.idgroup == reqid.item._id);
               this.roostermodel = new roostermodels(reqid.item.code, grptmp.studentsforgroup);
-              console.log(this.roostermodel);
+              //console.log(this.roostermodel);
 
               this.managerservice.createroosterbymanager(this.roostermodel).subscribe(
                 data=>{

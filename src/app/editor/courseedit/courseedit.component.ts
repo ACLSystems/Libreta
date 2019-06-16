@@ -284,7 +284,7 @@ export class CourseeditComponent implements OnInit {
     this.serviceorg.updateContent(this.mfBlock).subscribe(data=>{
       this.getBlock();
       this.editblockMedia = false;
-      console.log(data);
+      //console.log(data);
     },error=>{
       this.editblockMedia = false;
       console.log(error)
@@ -308,7 +308,7 @@ export class CourseeditComponent implements OnInit {
     this.serviceorg.updateContent(this.mfBlock).subscribe(data=>{
       this.getBlock();
       this.editblockWb = false;
-      console.log(data);
+      //console.log(data);
     },error=>{
       this.editblockWb = false;
       console.log(error)
@@ -331,7 +331,7 @@ export class CourseeditComponent implements OnInit {
     this.serviceorg.updateContent(this.mfBlock).subscribe(data=>{
       this.getBlock();
       this.editblockWq = false;
-      console.log(data);
+      //console.log(data);
     },error=>{
       this.editblockWq = false;
       console.log(error)
@@ -354,7 +354,7 @@ export class CourseeditComponent implements OnInit {
     this.serviceorg.updateContent(this.mfBlock).subscribe(data=>{
       this.getBlock();
       this.editblockWt = false;
-      console.log(data);
+      //console.log(data);
     },error=>{
       this.editblockWt = false;
       console.log(error)
@@ -377,7 +377,7 @@ export class CourseeditComponent implements OnInit {
     this.serviceorg.updateContent(this.mfBlock).subscribe(data=>{
       this.getBlock();
       this.editblockCode = false;
-      console.log(data);
+      //console.log(data);
     },error=>{
       this.editblockCode = false;
       console.log(error)

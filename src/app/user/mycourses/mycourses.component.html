@@ -22,13 +22,14 @@
 
           </div>
           <hr>
-          <h6>CLAVE <small>{{contcourse.code}}</small></h6>
-          <h6>Categoría</h6>
+          <h6>Código del curso<small> {{contcourse.code}}</small></h6>
+
+          <!-- <h6>Categoría</h6>
           <div *ngFor="let itemCat of contcourse.categories">
             <li>{{itemCat}}</li>
           </div>
           <hr>
-          <h6>Autor: {{contcourse.author}}</h6>
+          <h6>Autor: {{contcourse.author}}</h6> -->
           <h6><small>Fecha de inicio: {{beginDateSpa}}</small></h6>
           <h6><small>Fecha de cierre: {{endDateSpa}}</small></h6>
         </div>
@@ -52,12 +53,32 @@
                 <div *ngIf="itemBlock.number == 0">
                   <ngb-panel>
                     <ng-template ngbPanelTitle>
-                      <span class="text-success"><b>{{itemBlock.title}}</b></span> <span *ngIf="itemBlock.beginDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de inicio: {{itemBlock.beginDate | date}}</span> <span *ngIf="itemBlock.endDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de término: {{itemBlock.endDate | date}}</span><span *ngIf="itemBlock.duration" class="text-right text-secondary"> | <i class="far fa-clock"></i> Duración:{{itemBlock.duration}}</span>
+                      <span class="text-success">
+												<b>{{itemBlock.title}}</b>
+											</span>
+											<span
+												*ngIf="itemBlock.beginDate"
+												class="text-right text-secondary"> |
+												<i class="far fa-calendar-alt"></i>
+												Fecha de inicio: {{itemBlock.beginDate | date}}
+											</span>
+											<span
+												*ngIf="itemBlock.endDate"
+												class="text-right text-secondary"> |
+												<i class="far fa-calendar-alt"></i>
+												Fecha de término: {{itemBlock.endDate | date}}
+											</span>
+											<span
+												*ngIf="itemBlock.duration"
+												class="text-right text-secondary"> |
+												<i class="far fa-clock"></i>
+												Duración:{{itemBlock.duration}}
+											</span>
                     </ng-template>
                     <ng-template ngbPanelContent>
                       <!---->
                       <div *ngIf="indiceBlock==0 && !itemBlock.track" class="alert alert-secondary" role="alert">
-                        <button type="button" class="btn btn-link enlace" (click)="getBlock(itemBlock.id)">
+                        <button type="button" class="btn btn-success" (click)="getBlock(itemBlock.id)">
                           <h6>
                             <i class="far fa-flag"></i> Iniciar Curso
                           </h6>
@@ -141,11 +162,14 @@
               <div *ngIf="data.certificateActive">
 
                 <div *ngIf="data.groupType == 'tutor'">
-                  <div *ngIf="!data.pass || data.status=='pending' || !certificateTutor">
+                  <div *ngIf="!data.pass || data.status=='pending' || !data.certificateTutor || !approvalCertificate">
                     <button type="button" class="btn btn-success blockquote" style="margin-top:15px;" disabled>
                       <i class="fas fa-certificate"></i> Imprimir constancia
                     </button>
                   </div>
+									<span *ngIf="data.status=='pending'" class="text-success font-italic"><i class="fas fa-exclamation-circle"></i> Pago pendiente</span>
+									<span *ngIf="!data.certificateTutor" class="text-success font-italic"><br><i class="fas fa-exclamation-circle"></i> El tutor de este curso no ha liberado tu constancia</span>
+									<span *ngIf="!approvalCertificate" class="text-success font-italic"><br><i class="fas fa-exclamation-circle"></i> La constancia se libera el:  {{startCertificateDate}}</span>
                 </div>
                 <div *ngIf="data.groupType != 'tutor'">
                   <div *ngIf="!data.pass || data.status=='pending'">
@@ -177,6 +201,9 @@
                 <li>
                   Avance de este curso: {{data.minTrack}}
                 </li>
+								<li *ngIf="data.groupType==='tutor'">
+                  Este curso es tutoreado, así que el tutor debe liberar tu constancia
+                </li>
               </p>
             </div>
             <div class="alert alert-success" role="alert">
@@ -187,7 +214,7 @@
               <table class="table table-bordered">
                 <thead>
                   <tr class="text-center">
-                    <td colspan="5"><b>Estructura de la calificación</b></td>
+                    <td colspan="5"><b>Estructura de la calificación (Rúbrica)</b></td>
                   </tr>
                   <tr class="text-center">
                     <td class="table-secondary">Lección</td>
@@ -203,8 +230,13 @@
 
                   <tr *ngFor="let item of blockgrades;let idblock=index" class="text-center table-light">
                     <td>{{item.blockSection}} . {{item.blockNumber}}</td>
-                    <td>{{item.blockTitle}}</td>
-                    <!--td><small>Ejemplo de texto de la rúbrica</small></td-->
+                    <td>{{item.blockTitle}}
+											<div *ngIf="item.blockRubricText" class="bg-info rounded">
+												<small class="text-white text-justify">
+													{{item.blockRubricText}}
+												</small>
+											</div>
+										</td>
                     <td>{{item.blockW | number:'.0-2'}}%</td>
                     <td>{{item.grade | number:'.0-2'}}</td>
                     <td>
@@ -344,6 +376,31 @@
           <ng-template ngbTabContent>
             <hr>
             <ng-fullcalendar #ucCalendar [options]="calendarOptions" [(eventsModel)]="events"></ng-fullcalendar>
+						<hr>
+						<small><table class="table table-bordered table-sm table-hover">
+							<thead><tr>
+								<th scope="col">Etiqueta</th>
+								<th scope="col">Descripción de las etiquetas en el calendario</th>
+							</tr></thead>
+							<tbody><tr>
+								<td scope="row" style="background-color:#FAEBD7">Evento general</td>
+								<td scope="row">Se usa esta etiqueta para informar acerca de un evento en forma enunciativa.</td>
+							</tr>
+							<tr>
+								<td scope="row" style="background-color:#87CEEB">Actividad</td>
+								<td scope="row">Se utiliza esta etiqueta para referir tiempos de entrega de actividades o tareas que son
+								consideradas para tu calificación.</td>
+							</tr>
+							<tr>
+								<td scope="row" style="background-color:#DC143C"><span class="text-white">Evaluación</span></td>
+								<td scope="row" >Se utiliza esta etiqueta para referir tiempos límite para elaborar evaluaciones que son
+								consideradas para tu calificación.</td>
+							</tr>
+							<tr>
+								<td scope="row" style="background-color:#20B2AA"><span class="text-white">Liberación de constancia</span></td>
+								<td scope="row" >Se utiliza esta etiqueta para definir fechas en las que se entregan las constancias del curso.</td>
+							</tr></tbody>
+						</table></small>
           </ng-template>
         </ngb-tab>
 

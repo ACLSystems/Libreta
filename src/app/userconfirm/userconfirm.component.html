@@ -2,10 +2,22 @@
   <a class="navbar-brand">
     <img src="/assets/img/superatemexico.jpg" width="100">
   </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
-  </button>
+  </button> -->
 </nav>
+<div *ngIf="validated; then thenBlock else elseBlock"></div>
+<ng-template #thenBlock>
+	<div class="container">
+		<div class="alert alert-danger text-center" role="alert">
+			<h4><i class="fas fa-info"></i> Aviso importante:</h4>
+			<p>La cuenta <b>{{emailuser}}</b> ya fue validada y no se puede modificar.</p>
+		</div>
+		<div class="alert alert-light text-center" role="alert">
+			<p>Si lo que deseas es ingresar a la plataforma, dirígete a <br><a href="{{urlConalep}}">{{urlConalep}}</a></p>
+		</div></div>
+</ng-template>
+<ng-template #elseBlock>
 <div class="container">
   <div class="alert alert-warning" role="alert">
     <h4 class="text-justify">
@@ -67,8 +79,11 @@
             <span *ngIf="isPassOk" class="text-success">Las contraseñas coinciden</span>
 
           </div>
+					<div class="alert alert-warning" role="alert">
+            <h6>Asegúrate de guardar bien tu contraseña, ya que solo con ella podrás entrar al sistema.</h6>
+          </div>
           <div class="alert alert-warning" role="alert">
-            <h6><b>*Al enviar esta información aceptas los terminos y condiciones de uso de </b><a [routerLink]="['/avisoprivacidad']">superatemexico</a></h6>
+            <h6><b>*Al enviar esta información aceptas los terminos y condiciones de uso de </b><a [routerLink]="['/avisoprivacidad']" target="_blank">superatemexico</a></h6>
           </div>
           <div class="form-group">
             <button *ngIf="!isDataOk || !isPassOk" type="button" class="btn btn-success blockquote" disabled ><i class="fas fa-check"></i> Enviar</button>
@@ -79,3 +94,4 @@
     </div>
   </div>
 </div>
+</ng-template>

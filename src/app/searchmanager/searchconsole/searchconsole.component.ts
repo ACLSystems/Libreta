@@ -51,12 +51,12 @@ export class SearchconsoleComponent implements OnInit {
           this.loading = false;
           this.isFindOk = true;
         }else{
-          this.messageError = "El usuario no esta enrolado en un curso"
+          this.messageError = "El usuario no tiene grupos asignados"
           this.loading = false;
           this.isFindOk = false;
         }
       }else{
-        this.messageError = "Sin resultados en la busqueda"
+        this.messageError = "El usuario ingresado no existe en plataforma"
         this.loading = false;
         this.isFindOk = false;
       }

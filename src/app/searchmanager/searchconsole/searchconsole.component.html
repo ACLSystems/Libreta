@@ -18,15 +18,36 @@
           </div>
         </div>
         <div *ngIf="userAccount && isFindOk">
-          <h5 class="text-success"><i class="fas fa-id-badge"></i> Nombre completo: <small class="text-secondary">{{userAccount.name}}</small></h5>
+          <h5 class="text-success"><i class="fas fa-book"></i> Cursos de <i class="fas fa-id-badge"></i> <small class="text-secondary"> {{userAccount.name}}</small></h5>
           <hr>
-          <h5 class="text-success"><i class="fas fa-book"></i> Cursos que toma</h5>
-          <div *ngFor="let usergroup of userAccount.groups">
+					<table class="table table-striped">
+						<thead>
+							<tr class="text-secondary">
+								<th scope="col"><i class="fas fa-book"></i> Curso</th>
+								<!-- <th><i class="fas fa-barcode"></i> Código</th> -->
+								<th scope="col"><i class="fas fa-users"></i> Grupo</th>
+								<!-- <th><i class="fas fa-barcode"></i> Código</th> -->
+								<th scope="col"><i class="fas fa-calendar-alt"></i> Inicio</th>
+								<th scope="col"><i class="far fa-calendar-alt"></i> Cierre</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let usergroup of userAccount.groups">
+								<td scope="row">{{usergroup.course.title}}<br><span class="text-success">({{usergroup.course.code}})</span></td>
+								<!-- <td>{{usergroup.course.code}}</td> -->
+								<td>{{usergroup.group.name}}<br><span class="text-success">({{usergroup.group.code}})</span></td>
+								<!-- <td>{{usergroup.group.code}}</td> -->
+								<td>{{usergroup.group.beginDate}}</td>
+								<td>{{usergroup.group.endDate}}</td>
+							</tr>
+						</tbody>
+					</table>
+          <!-- <div *ngFor="let usergroup of userAccount.groups">
             <hr>
-            <span class="text-secondary"><i class="fas fa-book"></i> Curso:</span> <span class="text-success">{{usergroup.course}}</span><span class="text-secondary"> <i class="fas fa-hashtag"></i> Código:</span> <span class="text-success">{{usergroup.courseCode}}</span>
+            <span class="text-secondary"><i class="fas fa-book"></i> Curso:</span> <span class="text-success">{{usergroup.course.title}}</span><span class="text-secondary"> <i class="fas fa-hashtag"></i> Código:</span> <span class="text-success">{{usergroup.course.code}}</span>
             <br>
-            <span class="text-secondary"><i class="fas fa-users"></i> Grupo:</span> <span class="text-success">{{usergroup.group}}</span> <span class="text-secondary">CLAVE: </span><span class="text-success">{{usergroup.groupCode}}</span>
-          </div>
+            <span class="text-secondary"><i class="fas fa-users"></i> Grupo:</span> <span class="text-success">{{usergroup.group.name}}</span> <span class="text-secondary">Código: </span><span class="text-success">{{usergroup.group.code}}</span>
+          </div> -->
           <hr>
           <h5>Opciones: </h5>
           <br>

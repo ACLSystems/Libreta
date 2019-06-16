@@ -204,10 +204,10 @@
       </ng-template>
     </ngb-tab>
     <ngb-tab>
-      <ng-template ngbTabTitle><div class="text-success"><i class="far fa-calendar-alt"></i> Actividades</div></ng-template>
+      <ng-template ngbTabTitle><div class="text-success"><i class="far fa-calendar-alt"></i> Calendario de Actividades</div></ng-template>
       <ng-template ngbTabContent>
         <button type="button" class="btn btn-success blockquote" (click)="showModal(newevent)">
-          <i class="fas fa-calendar-alt"></i> Agregar nueva actividad
+          <i class="fas fa-calendar-alt"></i> Agregar nuevo evento
         </button>
         <br>
         <ng-fullcalendar #calendarActivities [options]="calendarOptions" [(eventsModel)]="dataTask"></ng-fullcalendar>
@@ -254,9 +254,20 @@
   </div>
   <div class="modal-body">
     <div class="container-fluid">
-      <div *ngFor="let item of dataGrades"class="alert alert-success" role="alert">
+			<table class="table table-striped text-success">
+				<thead>
+					<tr><th scope="col">Lección</th><th>Calificación</th></tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let item of dataGrades">
+						<td scope="row">{{item.blockSection}}.{{item.blockNumber}} {{item.blockTitle}}</td>
+						<td>{{item.grade}}</td>
+					</tr>
+				</tbody>
+			</table>
+      <!-- <div *ngFor="let item of dataGrades"class="alert alert-success" role="alert">
         {{item.blockSection}}.{{item.blockNumber}} {{item.blockTitle}} Calificación obtenida: {{item.grade}}
-      </div>
+      </div> -->
     </div>
   </div>
 </ng-template>
@@ -383,7 +394,7 @@
 
 <ng-template #newevent let-c="close" let-d="dismiss" class="animated fast fadeIn">
   <div class="modal-header">
-    <h4 class="modal-title"><i class="far fa-calendar-alt"></i> Agregar nueva actividad</h4>
+    <h4 class="modal-title"><i class="far fa-calendar-alt"></i> Agregar nuevo evento</h4>
     <button type="button" class="close" aria-label="Close" (click)="closeModal()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -399,26 +410,26 @@
       <i class="fas fa-exclamation-triangle"></i> {{messageErrorevent}}
     </div>
     <form class="was-validated">
-      <label for="labelact">*Actividad</label>
+      <label for="labelact">*Etiqueta que llevará el evento en el calendario</label>
       <input id="labelact" type="text" #label placeholder="Breve descripción de la actividad" class="form-control" required>
       <br>
-      <label for="typeact">*Tipo</label>
+      <label for="typeact">*Tipo de evento</label>
       <select class="form-control" #type name="" required>
         <option value=""> </option>
         <option value="task">Ejercicios/Tarea</option>
         <option value="exam">Examen</option>
-        <option value="certificate">Liberacion de constancia</option>
+        <option value="certificate">Liberación de constancia</option>
         <option value="general">Otro</option>
       </select>
       <br>
-      <label for="begindate"><b>*Fecha de inicio:</b></label>
+      <label for="begindate"><b>*Fecha de inicio del evento:</b></label>
       <input class="form-control" type="date" name="begin" [min]="today" #begindate required>
       <br>
-      <label for="enddate"><b>*Fecha de fin:</b></label>
+      <label for="enddate"><b>*Fecha de fin del evento:</b></label>
       <input class="form-control" type="date" name="end" [min]="today" #enddate required>
       <br>
       <button type="button" class="btn btn-outline-success blockquote" (click)="setevent(label.value, type.value, begindate.value, enddate.value)">
-        <i class="fas fa-calendar-alt"></i> Agregar fecha
+        <i class="fas fa-calendar-alt"></i> Agregar evento
       </button>
     </form>
   </div>

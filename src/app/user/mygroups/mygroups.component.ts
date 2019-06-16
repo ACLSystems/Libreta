@@ -58,7 +58,6 @@ export class MygroupsComponent implements OnInit {
           }
         }
       });
-      console.log(this.cursosnext);
       this.messageNewUser = false;
       this.loading = false;
     }, error => {

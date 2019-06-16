@@ -19,7 +19,7 @@
         <div *ngIf="itemBlock.number==0">
           <ngb-panel>
             <ng-template ngbPanelTitle>
-              <span class="text-success"><b>{{itemBlock.title}}</b></span> <span *ngIf="itemBlock.beginDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de inicio: {{itemBlock.beginDate | date}}</span> <span *ngIf="itemBlock.endDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de término: {{itemBlock.endDate | date}}</span><span *ngIf="itemBlock.duration" class="text-right text-secondary"> | <i class="far fa-clock"></i> Duración:{{itemBlock.duration}}</span>
+              <span class="text-success"><b>{{itemBlock.section}} {{itemBlock.title}}</b></span> <span *ngIf="itemBlock.beginDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de inicio: {{itemBlock.beginDate | date}}</span> <span *ngIf="itemBlock.endDate" class="text-right text-secondary"> | <i class="far fa-calendar-alt"></i> Fecha de término: {{itemBlock.endDate | date}}</span><span *ngIf="itemBlock.duration" class="text-right text-secondary"> | <i class="far fa-clock"></i> Duración:{{itemBlock.duration}}</span>
             </ng-template>
             <ng-template ngbPanelContent>
 
@@ -27,7 +27,7 @@
               <div class="alert alert-success" role="alert">
                 <button type="button" class="btn btn-outline-success" (click)="getBlock(itemBlock.id)">
                   <h6>
-                    <i class="far fa-calendar-check"></i> {{itemBlock.section}}.{{itemBlock.title}}
+                    <i class="far fa-calendar-check"></i> {{itemBlock.section}}.0 {{itemBlock.title}}
                   </h6>
                 </button>
               </div>

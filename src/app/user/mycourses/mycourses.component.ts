@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CalendarComponent } from 'ng-fullcalendar';
 import { Comment } from './../../models/course/comment';
 import {
-  Component,
+	Component,
   DoCheck,
   OnInit,
   ViewChild
@@ -122,6 +122,9 @@ export class MycoursesComponent implements OnInit, DoCheck {
 
   public autofollow = false;
   loading = false;
+	dateCertificate: any;
+	approvalCertificate: boolean;
+	startCertificateDate: any;
 
   /*
   constructor de la clase
@@ -171,9 +174,25 @@ export class MycoursesComponent implements OnInit, DoCheck {
           title: idevent.label,
           start: this.datePipe.transform(idevent.beginDate, 'yyyy-MM-dd 00:00:01'),
           end: this.datePipe.transform(idevent.endDate, 'yyyy-MM-dd 23:59:00'),
-          color: this.colorevents(idevent.type)
+          color: this.colorevents(idevent.type),
+					textColor: this.textColorEvents(idevent.type),
+					type: idevent.type
         });
       }
+
+			this.dateCertificate = this.dataevents.find(dateEvent => dateEvent.type === 'certificate');
+
+			if(this.dateCertificate != null) {
+				const today = new Date();
+				this.startCertificateDate = new Date(this.dateCertificate.start);
+				this.approvalCertificate = this.startCertificateDate < today;
+				console.log(this.approvalCertificate);
+				this.startCertificateDate = this.datePipe.transform(this.startCertificateDate.toDateString(), 'yyyy-MMM-dd');
+				console.log(this.startCertificateDate);
+			} else {
+				this.approvalCertificate = true;
+			}
+
 
       this.calendarOptions = {
         locale: 'es',
@@ -181,10 +200,20 @@ export class MycoursesComponent implements OnInit, DoCheck {
         editable: true,
         eventLimit: false,
         header: {
-          left: 'prev,next',
+          //left: 'month,week,day,list',
+					left: 'month,list',
           center: 'title',
-          right: ''
+          right: 'prev,today,next'
         },
+				buttonText: {
+					today: 'Hoy',
+					month: 'Mes',
+					week: 'Semana',
+					day: 'Día',
+					list: 'Lista'
+				},
+				noEventsMessage: 'No hay eventos para esta fecha',
+				allDayText: 'todo el día',
         selectable: true,
         events: this.dataevents
       };
@@ -215,21 +244,32 @@ export class MycoursesComponent implements OnInit, DoCheck {
 
   public colorevents(type: string): string {
     let color: any;
+
     if (type === 'task') {
-      color = '#FF7133';
+      color = '#87CEEB';
     }
     if (type === 'exam') {
-      color = '#90FF33';
+      color = '#DC143C';
     }
     if (type === 'general') {
-      color = '#33ACFF';
+      color = '#FAEBD7';
     }
     if (type === 'certificate') {
-      color = '#E3FF33';
+      color = '#20B2AA';
     }
     return color;
   }
 
+	public textColorEvents(type: string): string {
+		let textColor: string = '#000000';
+    if (type === 'exam') {
+			textColor = '#FFFFFF';
+    }
+    if (type === 'certificate') {
+			textColor = '#FFFFFF';
+    }
+    return textColor;
+	}
   /*
 
   */
@@ -404,6 +444,7 @@ export class MycoursesComponent implements OnInit, DoCheck {
   public percentTrack() {
     this.cursosService.getCourses(this.token).subscribe(data => {
       const res = data.message;
+
       for (const curso of res.groups) {
         if (curso.courseid === this.courseid) {
           this.trackPercent = curso.track;

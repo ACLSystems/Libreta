@@ -7,11 +7,11 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
+			<li *ngIf="groupsUser > 0" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/schedule']"><i class="fas fa-calendar"></i> Calendario de cursos</a>
+      </li>
       <li *ngIf="groupsUser > 0" class="nav-item" routerLinkActive="active" >
         <a class="nav-link" [routerLink]="['/mygroups']"><i class="fas fa-graduation-cap"></i> Mis cursos</a>
-      </li>
-      <li *ngIf="groupsUser > 0" class="nav-item" routerLinkActive="active">
-        <a class="nav-link" [routerLink]="['/schedule']"><i class="fas fa-calendar"></i> Calendario de actividades</a>
       </li>
       <li *ngIf="identiti && rolSup" class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/searchconsole']"><i class="fas fa-search-plus"></i> Consultas</a>
@@ -69,8 +69,8 @@
       <div ngbDropdown placement="bottom-right" class="d-inline-block">
         <button class="btn btn-outline-success" id="userOptions" ngbDropdownToggle><i class="fas fa-user-circle"></i> {{identiti.person.name}}</button>
         <div ngbDropdownMenu aria-labelledby="userOptions">
-          <button class="dropdown-item text-success" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesion</button>
-          <button class="dropdown-item text-success" [routerLink]="['/userprofile']" ><i class="fas fa-user-alt"></i> Mi perfíl</button>
+          <button class="dropdown-item text-success" [routerLink]="['/userprofile']" ><i class="fas fa-user-alt"></i> Mi perfil</button>
+					<button class="dropdown-item text-success" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesion</button>
         </div>
       </div>
     </form>

@@ -42,7 +42,7 @@ export class RecoverpasswordComponent implements OnInit {
         this.messageError = 'El usuario no existe, favor de validar el correo electronico';
       } else {
         this.sharedservices.recoverPassword(username).subscribe( () => {
-          this.messageSuccess = 'Se enviò un mensaje a tu correo electrónico con instrucciones para recuperar tu contraseña.';
+          this.messageSuccess = 'Se envió un mensaje a tu correo electrónico con instrucciones para recuperar tu contraseña.';
         })
       }
     });

@@ -143,9 +143,9 @@ export class NewblockComponent implements OnInit {
     this.newblock.code = this.newblock.code.toUpperCase();
     if(type ==='text'){
       this.newblock = new NewBlock(this.newblock.coursecode, this.newblock.code, this.newblock.title, this.newblock.type,0,0,0,this.newblock.content);
-      console.log(this.newblock);
+      //console.log(this.newblock);
       this.serviceorg.setNewBlock(this.newblock).subscribe(data=>{
-        console.log(data);
+        //console.log(data);
         this.messageSuccess = "Se agregó correctamente el bloque: "+code.toUpperCase();
       },error=>{
         console.log(error)
