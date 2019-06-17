@@ -27,9 +27,10 @@
         </ng-template>
         <ng-template ngbPanelContent>
             <div class="card-deck">
-              <div class="card" *ngFor="let crs of cursoslist | paginate: { itemsPerPage: 4, currentPage: p }">
-                <img class="card-img-top imagenesCurso mx-auto d-block" [src]="crs.imagen" alt="Card image cap">
-                <!-- <div class="card-title text-center">
+              <div class="card w-300" *ngFor="let crs of cursoslist | paginate: { itemsPerPage: 4, currentPage: p }" style="max-width:400px;">
+                <!-- <img class="card-img-top imagenesCurso mx-auto d-block" [src]="crs.imagen" alt="Card image cap"> -->
+								<img class="card-img-top" [src]="crs.imagen" alt="Card image cap">
+								<!-- <div class="card-title text-center">
                   <h5><i class="fas fa-users"></i> Grupo:<span class="text-success">{{crs.curso.name}}</span> <br>
 										<small>
 											Código de grupo: <span class="text-success">{{crs.curso.code}}</span>
@@ -38,7 +39,13 @@
 										 </small></h5>
                 </div> -->
                 <div class="card-body">
-									<table class="table table-sm">
+									<div class="container">
+										<div class="row"><h6 class="card-title">{{crs.curso.course}} ({{crs.curso.courseCode}})</h6></div>
+										<small class="text-justify">
+										<div class="row"><span class="card-subtitle text-success"><i class="fas fa-users"></i> {{crs.curso.name}} ({{crs.curso.code}})</span></div>
+										<div class="row"><span class="card-text"><i class="fas fa-user-tie"></i> {{crs.curso.instructor}}</span></div></small>
+									</div>
+									<!-- <table class="table table-sm">
 										<tr>
 											<th><i class="fas fa-users"></i> </th><th>Grupo:</th>
 											<td><span class="text-success">{{crs.curso.name}}</span></td>
@@ -59,11 +66,11 @@
 											<th><i class="fas fa-barcode"></i>  </th><th>Código del curso: </th>
 											<td><span class="text-success">{{crs.curso.courseCode}}</span></td>
 										</tr>
-									</table>
+									</table> -->
                 </div>
                 <div class="card-footer">
                   <button type="button" class="btn btn-success blockquote" (click)="getMycourse(crs.curso.course, crs.curso.groupid, crs.curso.courseid, crs.curso.lastSeenBlock, crs.curso.firstBlock)">
-                    <i class="far fa-arrow-alt-circle-right"></i> Ir al curso
+                    <i class="far fa-arrow-alt-circle-right"></i> Ir a mi curso
                   </button>
                 </div>
               </div>

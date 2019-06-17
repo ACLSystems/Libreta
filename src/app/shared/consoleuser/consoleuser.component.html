@@ -1,7 +1,6 @@
 <app-loading *ngIf="loading"></app-loading>
 <div *ngIf="!loading && userlms.admin.isActive" class="container">
-  <hr>
-  <h2 class="text-center"><i class="fas fa-book"></i> Catalogo de cursos</h2>
+  <h2 class="text-center"><i class="fas fa-book"></i> Catálogo de cursos</h2>
   <div class="form-group">
     <div class="row">
       <div class="col-10">
@@ -16,11 +15,13 @@
   </div>
   <div *ngIf="!loading && !isFindOk && !messageNotFound" class="container animated fast fadeIn">
     <div class="card-columns">
-      <div *ngFor="let crs of datacourses, let id=index" class="card">
+      <div *ngFor="let crs of datacourses, let id=index" class="card w-300" style="max-width:400px;">
         <img class="card-img-top" [src]="crs.image" alt="Card image cap">
         <div class="card-body">
-          <h5 class="card-title">{{crs.title}}</h5>
-          <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+          <div class="container">
+						<h5 class="card-title">{{crs.title}}</h5>
+						<h6 class="card-subtitle">{{crs.code}}</h6>
+          <!-- <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
             <ngb-panel>
               <ng-template ngbPanelTitle>
                 <span class="text-success text-center"><i class="fas fa-search-plus"></i> Ver mas</span>
@@ -40,8 +41,14 @@
                 </button>
               </ng-template>
             </ngb-panel>
-          </ngb-accordion>
+          </ngb-accordion> -->
+					</div>
         </div>
+				<div class="card-footer">
+					<button type="button" class="btn btn-success blockquote" (click)="verCurso(crs.id)">
+						<i class="far fa-arrow-alt-circle-right"></i> Ver detalles
+					</button>
+				</div>
       </div>
     </div>
   </div>
