@@ -11,6 +11,7 @@ export class RecoverpasswordComponent implements OnInit {
   messageSuccess: string;
   messageError: string;
   dataIsOk = false;
+	pushed = false;
   emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
   constructor(private sharedservices: SharedService, private userService: UserService) {
 
@@ -43,6 +44,7 @@ export class RecoverpasswordComponent implements OnInit {
       } else {
         this.sharedservices.recoverPassword(username).subscribe( () => {
           this.messageSuccess = 'Se envió un mensaje a tu correo electrónico con instrucciones para recuperar tu contraseña.';
+					this.pushed = true;
         })
       }
     });
