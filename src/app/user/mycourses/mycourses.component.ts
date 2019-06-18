@@ -214,6 +214,7 @@ export class MycoursesComponent implements OnInit, DoCheck {
 				},
 				noEventsMessage: 'No hay eventos para esta fecha',
 				allDayText: 'todo el día',
+				displayEventTime: false,
         selectable: true,
         events: this.dataevents
       };

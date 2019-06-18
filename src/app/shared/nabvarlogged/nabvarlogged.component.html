@@ -8,7 +8,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
 			<li *ngIf="groupsUser > 0" class="nav-item" routerLinkActive="active">
-        <a class="nav-link" [routerLink]="['/schedule']"><i class="fas fa-calendar"></i> Calendario de cursos</a>
+        <a class="nav-link" [routerLink]="['/schedule']"><i class="fas fa-calendar"></i> Calendario</a>
       </li>
       <li *ngIf="groupsUser > 0" class="nav-item" routerLinkActive="active" >
         <a class="nav-link" [routerLink]="['/mygroups']"><i class="fas fa-graduation-cap"></i> Mis cursos</a>
@@ -28,12 +28,12 @@
       <li *ngIf="identiti && rolInstructor" class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/tutorial']"><i class="fab fa-black-tie"></i> Tutorías</a>
       </li>
-      <li *ngIf="identiti && rolAdmin" class="nav-item" routerLinkActive="active">
+      <!-- <li *ngIf="identiti && rolAdmin" class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/admin']"><i class="fas fa-sitemap"></i> Administrador</a>
       </li>
       <li *ngIf="identiti && rolOrg" class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/resetpass']"><i class="fas fa-key"></i> Reseteo de Contraseña</a>
-      </li>
+      </li> -->
 
     </ul>
     <hr>
