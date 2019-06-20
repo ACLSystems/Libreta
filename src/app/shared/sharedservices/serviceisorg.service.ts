@@ -191,6 +191,14 @@ export class ServiceisorgService {
     return this._http.get(this.url+'api/v1/instructor/group/listroster?code='+groupcode);
   }
 
+	/*
+  Obtener el listado de los alumnos con el detalle de cada uno
+	Este lo pusimos por la duda de que otro componente usara este servicio
+  */
+  public getlistrostersuper(groupcode):Observable<any>{
+    return this._http.get(this.url+'api/v1/supervisor/group/listroster?code='+groupcode);
+  }
+
   /*
   Obtener el listado de los grupos asignados por tutor
   */

@@ -89,7 +89,7 @@ export class SearchconsoleComponent implements OnInit {
   */
   public findgroup(value){
     this.isFindGroupOk = false;
-    this.serviceorg.getlistroster(value).subscribe(
+    this.serviceorg.getlistrostersuper(value).subscribe(
       data=>{
         this.groupmanager = data.message;
         console.log(this.groupmanager)
