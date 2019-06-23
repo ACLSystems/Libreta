@@ -34,87 +34,138 @@
 		<h5>Lección <small class="text-success">{{tasksStudents.blockSection}}.{{tasksStudents.blockNumber}}</small></h5>
   </div> -->
 
-  <div *ngFor="let itemTask of tasksStudents.tasks, let idTask = index">
+  <div *ngFor="let itemTask of tasksStudents.tasks, let idTask = index"
+		class="container-fluid border-top border-right rounded pt-1"
+		>
     <div [ngSwitch]="itemTask.type">
       <!--tareas tipo texto-->
       <div *ngSwitchCase="'text'">
-        <div *ngIf="messageSuccess" class="alert alert-success" role="alert">
-          {{messageSuccess}}
-        </div>
-        <h5><i class="fas fa-thumbtack"></i> Tarea: <span class="text-success">{{itemTask.label}}</span></h5>
-        <div [innerHTML]="itemTask.taskText">
-
-        </div>
-        <div class="alert alert-secondary" role="alert">
-          <h6>Respuesta: </h6>
-          {{itemTask.content}}
-        </div>
-        <div class="row">
-          <div class="col-sm">
-            <i class="far fa-calendar-alt"></i> Fecha de envio:<br>
-						<span class="text-success">{{itemTask.date | date:'yyyy-MM-dd'}}</span>
-          </div>
-          <div class="col-sm">
-            <i class="far fa-folder"></i> Calificación Actual: <br>
-						<span class="text-success">{{itemTask.grade}}</span>
-          </div>
-          <div class="col-sm">
-
-            <form class="form-inline">
-              <div class="form-group">
-                <label >Calificación (0-100) :</label><br>
-                <input type="text" class="form-control col-lg-3" #grade (blur)="setGrade(itemTask.taskId, grade.value, itemTask.label, idTask)" required>
-                <span *ngIf="!isGradeOk" class="text-danger"> El valor no puede ser mayor a 100</span>
-              </div>
-            </form>
-
-          </div>
-
-        </div>
+				<div class="row">
+					<div class="col-sm-3">
+	          <div class="row">
+	            <div class="col-sm"><small>
+								<i class="far fa-calendar-alt"></i> Fecha
+								<span class="text-success">
+									{{itemTask.date | date:'yyyy-MM-dd'}}
+								</span>
+							</small></div>
+	          </div>
+		          <div class="row">
+								<div class="col-sm">
+									<small>
+					          <i class="far fa-folder"></i> Cal. actual
+										<span class="text-success">
+											{{itemTask.grade}}
+										</span>
+									</small>
+								</div>
+		          </div>
+	          <div class="row">
+	            <div class="col-sm">
+								<form><div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm">0-100</span>
+									</div>
+									<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" #grade (blur)="setGrade(itemTask.taskId, grade.value, itemTask.label, idTask)" required>
+									<span *ngIf="!isGradeOk" class="text-danger"> El valor no puede ser mayor a 100</span>
+								</div></form>
+								<!-- <form class="input-group input-group-sm mb-3">
+		              <div class="form-group">
+		                <small><label>Calificación (0-100) :</label>
+			                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" #grade (blur)="setGrade(itemTask.taskId, grade.value, itemTask.label, idTask)" required>
+			                <span *ngIf="!isGradeOk" class="text-danger"> El valor no puede ser mayor a 100</span>
+										</small>
+								  </div>
+		            </form> -->
+							</div>
+	          </div>
+					</div>
+					<div class="col-sm">
+						<!-- <div *ngIf="messageSuccess" class="alert alert-success" role="alert">
+		          {{messageSuccess}}
+		        </div> -->
+		        <h5><i class="fas fa-thumbtack"></i> Tarea: <span class="text-success">{{itemTask.label}}</span></h5>
+						<div>Texto de la tarea: </div>
+						<div [innerHTML]="itemTask.taskText" class="alert alert-info"  role="alert"></div>
+						<div>Respuesta del alumno: </div>
+						<div class="alert alert-secondary" role="alert">
+		          {{itemTask.content}}
+		        </div>
+					</div>
+				</div>
       </div>
       <!--cierra tareas tipo texto-->
 
       <!--tareas tipo archivo-->
-      <div *ngSwitchCase="'file'">
-
-        <h5><i class="fas fa-thumbtack"></i> Tarea: <span class="text-success">{{itemTask.label}}</span></h5>
-
-        <div [innerHTML]="itemTask.taskText">
-
-        </div>
-
-        <a class="btn btn-success" role="button" href="{{file}}">
+			<div *ngSwitchCase="'file'">
+				<div class="row">
+					<div class="col-sm-3">
+						<div class="row">
+	            <div class="col-sm">
+								<small>
+									<i class="far fa-calendar-alt"></i> Fecha
+									<span class="text-success">{{itemTask.date | date:'yyyy-MM-dd'}}</span>
+								</small>
+							</div>
+	          </div>
+	          <div class="row">
+	            <div class="col-sm">
+								<small>
+									<i class="far fa-folder"></i> Cal. actual
+									<span class="text-success">{{itemTask.grade}}</span>
+								</small>
+							</div>
+	          </div>
+	          <div class="row">
+							<div class="col-sm">
+								<form><div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm">0-100</span>
+									</div>
+									<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" #grade (blur)="setGrade(itemTask.taskId, grade.value, itemTask.label, idTask)" required>
+									<span *ngIf="!isGradeOk" class="text-danger"> El valor no puede ser mayor a 100</span>
+								</div></form>
+							</div>
+	          </div>
+					</div>
+					<div class="col-sm">
+						<h5><i class="fas fa-thumbtack"></i> Tarea: <span class="text-success">{{itemTask.label}}</span></h5>
+						<div class="col-sm">Texto de la tarea: </div>
+						<div [innerHTML]="itemTask.taskText" class="alert alert-info"  role="alert"></div>
+						<div class="row pb-2">
+							<div *ngIf="fileDetails && !currentFileDownload && fileDetails.originalName !== 'No hay archivo'"  class="col-sm text-center pr-1">
+								<button class="btn btn-info btn-sm" (click)="getFile(fileDetails.fileid)">
+									<i class="fas fa-cloud-download-alt"></i> {{fileDetails.originalName}}
+									<small class="text-dark" >({{fileDetails.sizeH}}) </small>
+								</button>
+							</div>
+							<div *ngIf="fileDetails.originalName === 'No hay archivo'" class="col-sm text-center pr-1">
+									<i class="fas fa-exclamation-triangle"></i> {{fileDetails.originalName}} <br>
+									<small class="text-danger">Existe el registro de entrega de la tarea por parte del participante.<br>
+										Sin embargo hubo un probable error durante la carga del archivo y este no se encuentra en el sistema.<br>
+										Solicitar al participante que cargue el archivo nuevamente.</small>
+							</div>
+							<div *ngIf="currentFileDownload" class="col-sm">
+								<div class="progress">
+									<div class="progress-bar bg-success progress-bar-info" role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+									aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width:progress.percentage+'%'}">
+									{{progress.percentage}}%
+									</div>
+								</div>
+								<div class="alert {{progress.statusAlert}} text-center">
+									<i class={{progress.icon}}></i> {{progress.status}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        <!-- <a class="btn btn-success" role="button" href="{{file}}">
           <i class="fas fa-cloud-download-alt"></i> Descargar tarea
-        </a>
-
-        <div class="row">
-
-          <div class="col-sm">
-            <i class="far fa-calendar-alt"></i> Fecha de envio:<br>
-						<span class="text-success">{{itemTask.date | date:'yyyy-MM-dd'}}</span>
-          </div>
-
-          <div class="col-sm">
-            <i class="far fa-folder"></i> Calificación Actual: <br>
-						<span class="text-success">{{itemTask.grade}}</span>
-          </div>
-
-          <div class="col-sm">
-            <form class="form-inline">
-              <div class="form-group">
-                <label >Calificación (0-100) :</label>
-                <input type="text" class="form-control col-lg-3" #grade (blur)="setGrade(itemTask.taskId, grade.value, itemTask.label, idTask)" required>
-                <span *ngIf="!isGradeOk" class="text-danger"> El valor no puede ser mayor a 100</span>
-              </div>
-            </form>
-          </div>
-
-        </div>
-
-      </div>
+        </a> -->
       <!--cierra tareas tipo archivo-->
     </div>
-    <hr>
+    <!-- <hr> -->
   </div>
   <div class="row">
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sendGradesTask">

@@ -34,7 +34,7 @@ export class CourseService {
     // });
 		const req = new HttpRequest('POST', this.url+'api/v1/file/upload?dir1=' + dir1 + '&dir2=' + dir2, formData, {
 			reportProgress: true,
-			responseType: 'text'
+			responseType: 'json'
 		});
     return this.http.request(req);
   }

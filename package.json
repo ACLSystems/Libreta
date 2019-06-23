@@ -4,7 +4,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -28,6 +27,7 @@
     "angular2-csv": "0.2.9",
     "chart.js": "^2.7.3",
     "core-js": "^2.5.4",
+    "file-saver": "^2.0.2",
     "fullcalendar": "3.6.1",
     "jspdf": "^1.5.3",
     "ng-connection-service": "^1.0.4",

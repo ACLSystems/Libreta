@@ -44,6 +44,7 @@ export class SearchconsoleComponent implements OnInit {
   searchUser(wordcode){
     this.loading = true;
     this.userAccount = [];
+		this.messageError = 'Buscando usuario...';
     this.serviceorg.getUserAccount(wordcode).subscribe(data=>{
       if(data.message!='User not found'){
         if(data.message.groups){

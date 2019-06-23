@@ -2,6 +2,7 @@
 # Si se quiere instalar, correr estos dos comandos:
 # npm install --save --save-exact
 # npm install --save-dev --save-exact
+Dockerfile
 node_modules/*
 dist/*
 local_scripts/*

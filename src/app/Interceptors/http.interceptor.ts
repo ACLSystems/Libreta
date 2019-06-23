@@ -33,9 +33,9 @@ export class HttpConfigInterceptor implements HttpInterceptor{
 					error.error.message === 'Error 200: Missing token' || // Con estatus 401
 					error.error.message === 'Error 204: Token expired' // Con estatus 403
 			) {
-					localStorage.removeItem('identiti');
-			    localStorage.removeItem('token');
-			    localStorage.clear();
+					//localStorage.removeItem('identiti');
+			    //localStorage.removeItem('token');
+			    //localStorage.clear();
 					this.router.navigate(['/home']);
 				} else {
 	        console.log(error.error);

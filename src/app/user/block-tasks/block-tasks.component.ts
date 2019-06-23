@@ -4,9 +4,10 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Task } from './../../models/temp/task';
 import { TaskEntry } from './../../models/course/task';
 import { UserService } from './../../shared/sharedservices/user.service';
+import { HttpResponse, HttpEventType } from '@angular/common/http';
 
 
-declare var $: any ;
+//declare var $: any ;
 
 @Component({
   selector: 'app-block-tasks',
@@ -24,8 +25,20 @@ export class BlockTasksComponent implements OnInit {
   isSendTask = false;
   isAttachmen = false;
 
-  messageUserSucces: any;
-  messageUserError: any;
+  //messageUserSuccess: any;
+  //messageUserError: any;
+	currentFileUpload: File;
+	progress: {
+		percentage: number,
+		status: string,
+		statusAlert: string,
+		icon: string
+	} = {
+		percentage: 0,
+		status: 'Cargando...',
+		statusAlert: 'alert-info',
+		icon: 'fas fa-info-circle'
+	};
 
   closemodal: NgbModalRef;
 
@@ -58,29 +71,79 @@ export class BlockTasksComponent implements OnInit {
   /*
   subir archivos de las tareas
   */
-  public uploadFile($event: any, idtask: any, label: number) {
+  // public uploadFile($event: any, idtask: any, label: number) {
+	// 	const maxSize = 1048576;
+	// 	this.messageUserSucces = null;
+  //   this.messageUserError = null;
+  //   this.isAttachmen = false;
+	// 	var sizeOf = function (bytes) {
+	// 		if(bytes == 0) { return '0.00 B'; }
+	// 		var e = Math.floor(Math.log(bytes) / Math.log(1024));
+	// 		return (bytes/Math.pow(1024, e)).toFixed(2)+' '+ ' KMGTP'.charAt(e)+'B';
+	// 	}
+  //   if ($event.target.files.length === 1 && $event.target.files[0].size <= maxSize) {
+	// 		// var that = this;
+  //     this.courseService.setAttachment(
+  //       $event.target.files[0],
+  //       this.block.data.courseCode,
+  //       this.block.data.groupCode).subscribe(data => {
+	//       this.messageUserSucces = 'Se cargo el archivo correctamente';
+	// 			console.log(data.body);
+	//       this.setTask(data.fileId, 'file', idtask, label);
+  //     }, error => {
+  //       console.log(error);
+  //     });
+  //   } else {
+  //     this.messageUserError = 'Archivo mide: '+ sizeOf($event.target.files[0].size) +' El archivo no puede ser mayor a ' + sizeOf(maxSize);
+  //   }
+  // }
+	public uploadFile(event: any, idtask: any, label: number) {
 		const maxSize = 1048576;
-		this.messageUserSucces = null;
-    this.messageUserError = null;
+		//this.messageUserSuccess = null;
+    //this.messageUserError = null;
     this.isAttachmen = false;
-		var sizeOf = function (bytes) {
+		this.progress.status = 'Cargando...';
+		this.progress.statusAlert = 'alert-info';
+		this.progress.icon = 'fas fa-info-circle';
+		this.currentFileUpload = event.target.files[0];
+		var sizeOf = function (bytes:number) {
 			if(bytes == 0) { return '0.00 B'; }
 			var e = Math.floor(Math.log(bytes) / Math.log(1024));
 			return (bytes/Math.pow(1024, e)).toFixed(2)+' '+ ' KMGTP'.charAt(e)+'B';
 		}
-    if ($event.target.files.length === 1 && $event.target.files[0].size <= maxSize) {
+    if (event.target.files.length === 1 && this.currentFileUpload.size <= maxSize) {
 			// var that = this;
+			this.progress.percentage = 0;
       this.courseService.setAttachment(
-        $event.target.files[0],
+        this.currentFileUpload,
         this.block.data.courseCode,
-        this.block.data.groupCode).subscribe(data => {
-	      this.messageUserSucces = 'Se cargo el archivo correctamente';
-	      this.setTask(data.fileId, 'file', idtask, label);
+        this.block.data.groupCode).subscribe(event => {
+					if(event.type === HttpEventType.UploadProgress) {
+						this.progress.percentage = Math.round(100 * event.loaded / event.total);
+						if(this.progress.percentage === 100) {
+							this.progress.status = 'Procesando...';
+							this.progress.statusAlert = 'alert-info';
+							this.progress.icon = 'fas fa-info-circle';
+						}
+					} else if(event instanceof HttpResponse) {
+						this.progress.status = 'Archivo cargado correctamente';
+						this.progress.statusAlert = 'alert-success';
+						this.progress.icon = 'fas fa-check';
+						//this.messageUserSuccess = 'Se cargo el archivo correctamente';
+						console.log(event.body.fileId);
+						this.setTask(event.body.fileId, 'file', idtask, label);
+					}
       }, error => {
+				this.progress.status = 'Error en la carga';
+				this.progress.statusAlert = 'alert-danger';
+				this.progress.icon = 'fas fa-exclamation-triangle';
         console.log(error);
       });
     } else {
-      this.messageUserError = 'Archivo mide: '+ sizeOf($event.target.files[0].size) +' El archivo no puede ser mayor a ' + sizeOf(maxSize);
+			this.progress.status = 'Archivo mide '+ sizeOf(this.currentFileUpload.size) +' y no puede ser mayor a ' + sizeOf(maxSize);
+			this.progress.statusAlert = 'alert-warning';
+			this.progress.icon = 'fas fa-exclamation-triangle';
+      //this.messageUserError = 'Archivo mide: '+ sizeOf(this.currentFileUpload.size) +' El archivo no puede ser mayor a ' + sizeOf(maxSize);
     }
   }
 
@@ -89,6 +152,7 @@ export class BlockTasksComponent implements OnInit {
   Metodo para setear las tareas del usuario
   */
   public setTask(content: any, type: any, idtask: any, label: number) {
+		console.log(content);
     if (this.taskStudent.find(id => id.idtask === idtask) ) {
       const indexRepeat = this.taskStudent.indexOf(this.taskStudent.find(id => id.label === label));
       this.taskStudent.splice(indexRepeat, 1);

@@ -1,26 +1,35 @@
-<div *ngIf="messageUserSucces" class="alert alert-warning" role="alert">
-  <h5><i class="fas fa-bullhorn"></i> {{messageUserSucces}}</h5>
-</div>
+<!-- <div *ngIf="messageUserSuccess" class="alert alert-success" role="alert">
+  <h5><i class="fas fa-bullhorn"></i> {{messageUserSuccess}}</h5>
+</div> -->
 
-<div *ngIf="messageUserError" class="alert alert-warning" role="alert">
+<!-- <div *ngIf="messageUserError" class="alert alert-warning" role="alert">
   <h5><i class="fas fa-bullhorn"></i> {{messageUserError}}</h5>
-</div>
+</div> -->
 
 <div *ngFor="let itemTask of block.data.tasks">
   <hr>
   <span class="text-success" style="margin-bottom:15px;"><i class="fas fa-thumbtack"></i> {{itemTask.label}}</span>
-  <div [innerHTML]="itemTask.text">
-
-  </div>
-  <div *ngIf="itemTask.type == 'textarea'">
-    <textarea class="form-control" rows="3" draggable="false" #answerTaskTA (blur)="setTask(answerTaskTA.value, 'text',itemTask.id,itemTask.label)"></textarea>
-  </div>
-  <div *ngIf="itemTask.type == 'text'">
-    <input type="text" class="form-control" #answerTaskTxt (blur)="setTask(answerTaskTxt.value, 'text',itemTask.id, itemTask.label)">
-  </div>
-  <div *ngIf="itemTask.type == 'file'">
-		<input type="file" (change)="uploadFile($event,itemTask.id,itemTask.label)">
-  </div>
+  <div [innerHTML]="itemTask.text"></div>
+	<div *ngIf="itemTask.type == 'textarea'">
+		<textarea class="form-control" rows="3" draggable="false" #answerTaskTA (blur)="setTask(answerTaskTA.value, 'text',itemTask.id,itemTask.label)"></textarea>
+	</div>
+	<div *ngIf="itemTask.type == 'text'">
+		<input type="text" class="form-control" #answerTaskTxt (blur)="setTask(answerTaskTxt.value, 'text',itemTask.id, itemTask.label)">
+	</div>
+	<div *ngIf="itemTask.type == 'file'" class="row">
+		<div class="col-sm-6">
+			<input type="file" (change)="uploadFile($event,itemTask.id,itemTask.label)">
+		</div>
+		<div *ngIf="currentFileUpload" class="col-sm-6">
+			<div class="progress">
+				<div class="progress-bar bg-success progress-bar-info" role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+				aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width:progress.percentage+'%'}">
+				{{progress.percentage}}%
+				</div>
+			</div>
+			<div class="alert {{progress.statusAlert}} text-center"><i class={{progress.icon}}></i> {{progress.status}}</div>
+		</div>
+	</div>
 </div>
 <hr>
 <div *ngIf="isSendTask" class="alert alert-success" role="alert">

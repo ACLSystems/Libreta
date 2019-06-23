@@ -8,8 +8,8 @@ import { Objects } from './../../user/models/Objects';
 import { ServiceisorgService } from './../../shared/sharedservices/serviceisorg.service';
 import { TaskGrade } from './../../models/course/taskgrade';
 import { UserService } from './../../shared/sharedservices/user.service';
-
-
+import { HttpResponse,  HttpEventType } from '@angular/common/http';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-tasksview',
@@ -29,7 +29,6 @@ export class TasksviewComponent implements OnInit {
   studentid: string;
   blockid: any;
   roosterid: any;
-  messageSuccess: any;
   messageTasks: any[] = [];
 
   taskGrade: TaskGrade;
@@ -42,7 +41,28 @@ export class TasksviewComponent implements OnInit {
   objectGroup: Objects;
   objectTutor: Objects;
   objects: Objects[] = [];
-  file: any;
+  file: object;
+	fileDetails: {
+		name: string
+		originalName: string
+		size: number
+		url: string
+		sizeH: string
+		mimetype: string
+		fileid: string
+	};
+	currentFileDownload: boolean;
+	progress: {
+		percentage: number,
+		status: string,
+		statusAlert: string,
+		icon: string
+	} = {
+		percentage: 0,
+		status: 'Descargando...',
+		statusAlert: 'alert-info',
+		icon: 'fas fa-info-circle'
+	};
 
 // tslint:disable-next-line: variable-name
   constructor(private _router: Router,
@@ -84,7 +104,19 @@ export class TasksviewComponent implements OnInit {
       this.tasksStudents = data.message;
       for (const id of this.tasksStudents.tasks) {
         if (id.type === 'file') {
-          this.downloadTask(id.content);
+					if(id.content){
+          	this.downloadTask(id.content);
+					} else {
+						this.fileDetails = {
+							name: '',
+							originalName: 'No hay archivo',
+							size: 0,
+							url: '',
+							sizeH: '0.0B',
+							mimetype: '',
+							fileid: ''
+					}
+					}
         }
       }
       this.loading = false;
@@ -159,12 +191,63 @@ export class TasksviewComponent implements OnInit {
   /*
 
   */
-  downloadTask(idTask: any) {
-    this.serviceisorg.downloadFile(idTask).subscribe(
-      (res) => {
-        this.file = res.file.url;
-      });
-  }
+  // downloadTask(idTask: any) {
+  //   this.serviceisorg.downloadFile(idTask).subscribe(
+  //     (res) => {
+  //       this.file = res.file.url;
+  //     });
+  // }
+
+	downloadTask(idTask: string) {
+		this.serviceisorg.downloadFileDetails(idTask).subscribe((res:any) => {
+			this.fileDetails = res.file;
+			this.fileDetails.fileid = idTask;
+			let e = Math.floor(Math.log(this.fileDetails.size) / Math.log(1024));
+			this.fileDetails.sizeH = (this.fileDetails.size/Math.pow(1024, e)).toFixed(2)+' '+ ' KMGTP'.charAt(e)+'B';
+		});
+	}
+
+	getFile(id: string) {
+		this.serviceisorg.downloadFile(id).subscribe(event => {
+			if(event.type === HttpEventType.Sent) {
+				this.currentFileDownload = true;
+				this.progress.status = 'Preparando archivo...';
+				this.progress.statusAlert = 'alert-info';
+				this.progress.icon = 'fas fa-info-circle';
+			} else if(event.type === HttpEventType.DownloadProgress) {
+				this.progress.percentage = Math.round(100 * event.loaded / event.total);
+				if(this.progress.percentage === 100) {
+					this.progress.status = 'Procesando, espera...';
+					this.progress.statusAlert = 'alert-info';
+					this.progress.icon = 'fas fa-info-circle';
+				}
+			} else if(event instanceof HttpResponse) {
+				let status = event.status;
+				if(status === 200){
+					this.progress.status = 'Archivo '+ this.fileDetails.originalName +' descargado';
+					this.progress.statusAlert = 'alert-success';
+					this.progress.icon = 'fas fa-check';
+					const blob = new Blob([event.body], { type: this.fileDetails.mimetype });
+					let fileDetails = this.fileDetails;
+					let fileName = fileDetails.originalName;
+					saveAs(blob, fileName);
+				} else if(status > 399 || status < 500) {
+					this.progress.status = 'Archivo no localizado';
+					this.progress.statusAlert = 'alert-warning';
+					this.progress.icon = 'fas fa-exclamation-triangle';
+				} else if(status > 499) {
+					this.progress.status = 'Error en la descarga';
+					this.progress.statusAlert = 'alert-danger';
+					this.progress.icon = 'fas fa-exclamation-triangle';
+				}
+			}
+		}, error => {
+			this.progress.status = 'Error en la descarga';
+			this.progress.statusAlert = 'alert-danger';
+			this.progress.icon = 'fas fa-exclamation-triangle';
+			console.log(error);
+		});
+	}
 
   /*
   metodo para regresar a la vista de tareas del tutor
