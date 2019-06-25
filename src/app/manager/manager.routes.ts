@@ -8,7 +8,7 @@ import { CheckrequestComponent } from './checkrequest/checkrequest.component';
 
 
 const manageroutingModule : Routes = [
-  {path:'solicitudes',component:GruposComponent},
+  {path:'',component:GruposComponent},
   {path:'newrequest/:id/:numberrequest/:labelrequest',component:NewgroupComponent},
   {path:'viewrequest/:numberrequest',component:ViewrequestComponent},
   {path:'addusers/:idrequest/:numberrequest/:labelrequest/:idgroup/:codegroup/:orgUnit',component:AddusersComponent},

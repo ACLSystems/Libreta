@@ -23,6 +23,7 @@ export class ConsolereportsComponent implements OnInit {
     this.loading = true;
     this.orgservice.getOrgTree().subscribe(data=>{
       this.orgTree = data.tree
+			console.log(this.orgTree)
       this.loading = false;
     },error=>{
       console.log(error);
@@ -39,10 +40,10 @@ export class ConsolereportsComponent implements OnInit {
 
   public getPercentil(query:any[], ouType:string){
     if(ouType=='campus' ||  ouType=='cast'){
-      this.router.navigate(['/charts',query, ouType])
+      this.router.navigate(['/reports/charts',query, ouType])
     }else{
       var queryString = Object.keys(query).map(key => key + '=' + query[key]).join('&');
-      this.router.navigate(['/charts',queryString, ouType])
+      this.router.navigate(['/reports/charts',queryString, ouType])
     }
   }
 
@@ -50,7 +51,7 @@ export class ConsolereportsComponent implements OnInit {
   Metodo para obtener las calificaciones por grupo
   */
   getGradesforgroup(idgroup:any, query:any, ouType:any){
-    this.router.navigate(['/gradesbygroup',idgroup, query, ouType]);
+    this.router.navigate(['/reports/gradesbygroup',idgroup, query, ouType]);
   }
 
 }

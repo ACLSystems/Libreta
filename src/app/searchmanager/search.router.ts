@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { SearchconsoleComponent } from './searchconsole/searchconsole.component';
-import { SearchstudentComponent } from './searchstudent/searchstudent.component';
+//import { SearchstudentComponent } from './searchstudent/searchstudent.component';
 
 const searchroutingModule : Routes =[
-  {path:'searchconsole',component:SearchconsoleComponent},
-  {path:'searchstudent',component:SearchstudentComponent}
+  {path:'',component:SearchconsoleComponent},
+//  {path:'searchstudent',component:SearchstudentComponent}
 ]
 
 @NgModule({

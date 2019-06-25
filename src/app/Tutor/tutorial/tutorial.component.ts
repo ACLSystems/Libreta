@@ -55,6 +55,6 @@ export class TutorialComponent implements OnInit {
   Metodo para ir al listado de alumnos del grupo
   */
   public getTasksReview(groupCode){
-    this.router.navigate(['/taskreview',groupCode]);
+    this.router.navigate(['/tutor/taskreview',groupCode]);
   }
 }

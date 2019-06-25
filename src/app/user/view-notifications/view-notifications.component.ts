@@ -45,19 +45,19 @@ export class ViewNotificationsComponent implements OnInit {
 
   constructor(private courseservice:CourseService, private userservice:UserService, private activatedroute:ActivatedRoute) {
     this.activatedroute.params.subscribe( params =>{
-      if(params['courseid']!=null){
+      if(params['courseid']!=null && params['courseid']!=''){
         this.courseid = params['courseid'];
       }
-      if(params['groupid']!=null){
+      if(params['groupid']!=null && params['groupid']!=''){
         this.groupid = params['groupid'];
       }
-      if(params['id']!=null){
+      if(params['id']!=null && params['id']!=''){
         this.itemid = params['id'];
       }
-      if(params['type']!=null){
+      if(params['type']!=null && params['type']!=''){
         this.type = params['type'];
       }
-      if(params['studentid']!=null){
+      if(params['studentid']!=null && params['studentid']!=''){
         this.studentid = params['studentid'];
       }
     });
@@ -69,6 +69,7 @@ export class ViewNotificationsComponent implements OnInit {
 
   getView(){
     this.loading = true;
+		console.log(this.type)
     switch(this.type){
       case 'instructor':
         this.courseservice.getBlock(this.groupid, this.courseid, this.itemid).subscribe(data=>{

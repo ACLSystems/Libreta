@@ -141,7 +141,7 @@ export class NabvarloggedComponent implements OnInit, DoCheck {
     }
 
     if (type === 'system') {
-      this.router.navigate(['/mycourses', this.coursetitle, this.groupid, this.courseid, this.itemid]);
+      this.router.navigate(['/user/mycourses', this.coursetitle, this.groupid, this.courseid, this.itemid]);
       this.notificationid = new NotificationClose(notificationid);
       this.closeNotification(this.notificationid);
     } else {

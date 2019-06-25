@@ -253,6 +253,6 @@ export class TasksviewComponent implements OnInit {
   metodo para regresar a la vista de tareas del tutor
   */
   returnTaskReview() {
-    this._router.navigate(['/taskreview', this.groupCode]);
+    this._router.navigate(['/tutor/taskreview', this.groupCode]);
   }
 }

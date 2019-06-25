@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AdminComponent } from './admin/admin.component';
+import { MonitorComponent } from './monitor/monitor.component';
 
 import { AdminroutingModule } from './admin.routes';
 
@@ -11,7 +11,7 @@ import { AdminroutingModule } from './admin.routes';
     AdminroutingModule
   ],
   declarations: [
-    AdminComponent
+    MonitorComponent
   ]
 })
 export class AdminconsoleModule { }

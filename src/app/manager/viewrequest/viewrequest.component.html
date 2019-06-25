@@ -13,7 +13,7 @@
 <div *ngIf="!loading" class="container">
   <div class="row">
     <div class="col-4">
-      <button type="button" class="btn blockquote btn-success" [routerLink]="['/solicitudes']">
+      <button type="button" class="btn blockquote btn-success" [routerLink]="['/requests']">
         <i class="fas fa-reply"></i> Buscar otra solicitud
       </button>
     </div>
@@ -75,7 +75,7 @@
             </button>
           </td>
           <td class="text-center">
-            <button type="button" class="btn btn-success" [routerLink]="['/addusers', request._id, numberrequest , request.label,item.item._id, item.item.code, item.item.orgUnit.name]" [disabled]="request.status=='payment'">
+            <button type="button" class="btn btn-success" [routerLink]="['/requests/addusers', request._id, numberrequest , request.label,item.item._id, item.item.code, item.item.orgUnit.name]" [disabled]="request.status=='payment'">
               <i class="fas fa-user-cog"></i>
             </button>
           </td>

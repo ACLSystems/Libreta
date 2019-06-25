@@ -156,7 +156,7 @@ export class GradesbygroupComponent implements OnInit {
   }
 
   returnCharts(){
-    this._router.navigate(['/charts', this.query, this.ouType]);
+    this._router.navigate(['/reports/charts', this.query, this.ouType]);
   }
 
   /*

@@ -20,21 +20,21 @@ export class EditmanagerComponent implements OnInit {
   metodo para redireccionar a la vista de edicion de cursos
   */
   getEditCourses(){
-    this._router.navigate(['/editcourses']);
+    this._router.navigate(['/editor/editcourses']);
   }
 
   /*
   metodo para redireccionar a la vista de edicion de cursos
   */
   getnewCourses(){
-    this._router.navigate(['/newcourse']);
+    this._router.navigate(['/editor/newcourse']);
   }
 
   /*
   metodo para redireccionar a la vista de edicion de cursos
   */
   getnewBlocks(){
-    this._router.navigate(['/newblock']);
+    this._router.navigate(['/editor/newblock']);
   }
 
 }

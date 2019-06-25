@@ -74,9 +74,9 @@ export class MygroupsComponent implements OnInit {
   */
   public getMycourse(course: string, groupid: string, courseid: string, lastSeenBlock: string, firstBlock: string) {
     if (!lastSeenBlock) {
-      this.router.navigate(['/mycourses', course, groupid, courseid, firstBlock]);
+      this.router.navigate(['/user/mycourses', course, groupid, courseid, firstBlock]);
     } else {
-      this.router.navigate(['/mycourses', course, groupid, courseid, lastSeenBlock]);
+      this.router.navigate(['/user/mycourses', course, groupid, courseid, lastSeenBlock]);
     }
   }
 }

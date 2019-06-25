@@ -429,14 +429,14 @@ export class MycoursesComponent implements OnInit, DoCheck {
   Metodo para ir al curso desde la pestaña de mi progreso actual
   */
   getLesson() {
-    this.router.navigate(['/block', this.curso, this.groupid, this.courseid, this.blockid]);
+    this.router.navigate(['/user/block', this.curso, this.groupid, this.courseid, this.blockid]);
   }
 
   /*
   Metodo para ir a la leccion desde el temario
   */
   getBlock(id: string) {
-    this.router.navigate(['/block', this.curso, this.groupid, this.courseid, id]);
+    this.router.navigate(['/user/block', this.curso, this.groupid, this.courseid, id]);
   }
 
   /*

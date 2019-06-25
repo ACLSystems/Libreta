@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-4">
-      <button type="button" class="btn btn-success blockquote" [routerLink]="['/viewrequest',numberrequest]">
+      <button type="button" class="btn btn-success blockquote" [routerLink]="['/requests/viewrequest',numberrequest]">
         <i class="fas fa-undo"></i> Regresar
       </button>
     </div>
@@ -362,12 +362,12 @@
         <hr>
         <div class="row">
           <div class="col-4">
-            <button type="button" class="btn blockquote btn-secondary" [routerLink]="['/newrequest',idrequest,numberrequest,labelrequest]">
+            <button type="button" class="btn blockquote btn-secondary" [routerLink]="['/requests/newrequest',idrequest,numberrequest,labelrequest]">
               <i class="fas fa-users"></i> Agregar nuevo grupo
             </button>
           </div>
           <div class="col-4">
-            <button type="button" class="btn blockquote btn-light" [routerLink]="['/viewrequest',numberrequest]">
+            <button type="button" class="btn blockquote btn-light" [routerLink]="['/requests/viewrequest',numberrequest]">
               <i class="fas fa-reply"></i> Regresar al detalle de la solicitud
             </button>
           </div>

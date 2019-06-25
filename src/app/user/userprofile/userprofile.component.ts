@@ -63,9 +63,9 @@ export class UserprofileComponent implements OnInit {
   */
   public getMycourse(course:string, groupid:string, courseid:string, lastSeenBlock:string, firstBlock:string){
     if(!lastSeenBlock){
-      this.router.navigate(['/mycourses',course,groupid,courseid,firstBlock]);
+      this.router.navigate(['/user/mycourses',course,groupid,courseid,firstBlock]);
     }else{
-      this.router.navigate(['/mycourses',course,groupid,courseid,lastSeenBlock]);
+      this.router.navigate(['/user/mycourses',course,groupid,courseid,lastSeenBlock]);
     }
   }
 
@@ -82,6 +82,7 @@ export class UserprofileComponent implements OnInit {
         }
       }
       this.loading = false;
+			console.log(this.notification)
     },error=>{
       console.log(error);
       this.loading = false;
@@ -93,22 +94,24 @@ export class UserprofileComponent implements OnInit {
   */
   public getviewnotification(objects:any[], sourceRole:any, notificationid:any, studentid:any){
     this.studentid = studentid;
+		console.log(objects)
     this.reloadConst();
     for(let idObject of objects){
-      if(idObject.kind === "courses"){
+      if(idObject.kind === "courses" && idObject.item){
         this.courseid = idObject.item._id;
       }
-      if(idObject.kind === "groups"){
+      if(idObject.kind === "groups" && idObject.item){
         this.groupid = idObject.item._id;
       }
-      if(idObject.kind === "blocks"){
+      if(idObject.kind === "blocks" && idObject.item){
         this.itemid = idObject.item._id;
       }
-      if(idObject.kind === "discussions"){
+      if(idObject.kind === "discussions" && idObject.item){
         this.itemid = idObject.item._id;
       }
     }
-    this.router.navigate(['viewNotification', this.courseid, this.groupid, this.itemid, sourceRole, this.studentid]);
+
+    this.router.navigate(['/user/viewNotification', this.courseid, this.groupid, this.itemid, sourceRole, this.studentid]);
   }
 
   /*

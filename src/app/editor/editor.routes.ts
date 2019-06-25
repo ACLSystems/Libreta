@@ -11,7 +11,7 @@ import { TesteditComponent } from './testedit/testedit.component';
 
 
 const editorroutingModule : Routes = [
-  {path:'courseedit/:courseid/:blockid', component:CourseeditComponent},
+  {path: 'courseedit/:courseid/:blockid', component:CourseeditComponent},
   {path: 'courselessons/:id', component:CourselessonsComponent},
   {path: 'editmanager', component:EditmanagerComponent},
   {path: 'editcourses', component:EditcoursesComponent},

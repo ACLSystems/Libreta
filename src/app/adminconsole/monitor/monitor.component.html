@@ -1,0 +1,58 @@
+<div *ngIf="identiti" class="container">
+	<div *ngIf="loading">
+    <div class="row text-center animated fadeIn">
+      <div class="col ">
+        <i class="fas fa-sync fa-spin fa-5x"></i>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col">
+        <h1>Cargando componentes ... </h1>
+      </div>
+    </div>
+  </div>
+	<div *ngIf="!loading">
+		<div class="row">
+			<div class="col-sm-2"></div>
+			<div class="col-sm">
+				<div class="row border border-success rounded">
+					<div class="col-sm-6">
+						<h4><i class="fas fa-user"></i> Usuarios conectados</h4>
+					</div>
+					<div class="col-sm text-right">
+						<h4 class="text-success">{{numUsers}}</h4>
+					</div>
+				</div> <!-- row -->
+				<div *ngFor="let ou of ous" class="row">
+					<div class="col-sm-2"></div>
+					<div class="col-sm-4">
+						<i class="fas fa-university"></i> {{ou.ou}}
+					</div>
+					<div class="col-sm-4">
+						<span class="text-success">{{ou.number}}</span>
+					</div>
+					<div class="col-sm-2"></div>
+				</div> <!-- row -->
+				<div class="row">
+					<div class="col">
+						<div *ngFor="let user of users" class="row border border-dark rounded">
+							<div class="col-sm-1">
+								<small><i class="fas fa-envelope"></i></small>
+							</div>
+							<div class="col-sm-5">
+								<small>{{user.email}}</small>
+							</div>
+							<div class="col-sm-1">
+								<small><i class="fas fa-university"></i></small>
+							</div>
+							<div class="col-sm-5">
+								<small>{{user.ou}}</small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2"></div>
+		</div>
+	</div>
+</div>

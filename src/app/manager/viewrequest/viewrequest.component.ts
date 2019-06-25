@@ -81,7 +81,7 @@ export class ViewrequestComponent implements OnInit {
   metodo para redireccionar al usuario y pueda agregar un nuevo grupo a la solicitud
   */
   addnewGroup() {
-    this.router.navigate(['/newrequest', this.request._id, this.request.reqNumber, this.request.label]);
+    this.router.navigate(['/requests/newrequest', this.request._id, this.request.reqNumber, this.request.label]);
   }
 
   /*
@@ -152,7 +152,7 @@ export class ViewrequestComponent implements OnInit {
       statusReason: reason
     };
     this.managerServices.deletedRequest(requestDeleted).subscribe(data => {
-      this.router.navigate(['/solicitudes']);
+      this.router.navigate(['/requests']);
       this.closeModal();
     }, error => {
       console.log(error);

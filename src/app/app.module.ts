@@ -1,9 +1,9 @@
-import { AdminconsoleModule } from './adminconsole/adminconsole.module';
+//import { AdminconsoleModule } from './adminconsole/adminconsole.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { ChartsModule } from 'ng2-charts';
-import { EditorModule } from './editor/editor.module';
+//import { EditorModule } from './editor/editor.module';
 import { environment } from '../environments/environment';
 import { ErrorModule } from './error/error.module';
 import { ErrorService } from './error/error.service';
@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { HomeModule } from './home/home.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpConfigInterceptor } from './Interceptors/http.interceptor';
-import { ManagerModule } from './manager/manager.module';
+//import { ManagerModule } from './manager/manager.module';
 import { metaReducers, reducers } from './reducers';
 import { NabvarComponent } from './shared/nabvar/nabvar.component';
 import { NabvarloggedComponent } from './shared/nabvarlogged/nabvarlogged.component';
@@ -20,16 +20,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { NgxEditorModule } from 'ngx-editor';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { ReportsModule } from './Reports/reports.module';
-import { ScheduleModule } from './schedule/schedule.module';
-import { SearchModule } from './searchmanager/search.module';
+//import { ReportsModule } from './Reports/reports.module';
+//import { ScheduleModule } from './schedule/schedule.module';
+//import { SearchModule } from './searchmanager/search.module';
 import { SharedModule } from './shared/shared.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { SupportsuperatemexicoModule } from './supportsuperatemexico/supportsuperatemexico.module';
-import { TutorModule } from './Tutor/tutor.module';
-import { UserModule } from './user/user.module';
+//import { TutorModule } from './Tutor/tutor.module';
+//import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [
@@ -43,19 +43,19 @@ import { UserModule } from './user/user.module';
     AppRoutingModule,
     HomeModule,
     HttpClientModule,
-    UserModule,
+//    UserModule,
     SharedModule,
     SupportsuperatemexicoModule,
-    AdminconsoleModule,
-    ReportsModule,
-    EditorModule,
+//    AdminconsoleModule,
+//    ReportsModule,
+//    EditorModule,
     ErrorModule,
-    TutorModule,
-    SearchModule,
+//    TutorModule,
+//    SearchModule,
     FormsModule,
-    ManagerModule,
+//    ManagerModule,
     NgxEditorModule,
-    ScheduleModule,
+//    ScheduleModule,
     NgbModule,
     NgxPaginationModule,
     ChartsModule,

@@ -33,10 +33,11 @@ export class EventService {
     const urltmp =  `${this.url}api/v1/user/mygroups`
     const httpOptionsToken = {headers: new HttpHeaders({'x-access-token':this.user.getToken()})}
     return this.http.get<any[]>(urltmp, httpOptionsToken).pipe(
-      tap(data=>
-        console.log(data)
-      ),
-      catchError(this.handleError('getClusters', []))
+      tap(
+				// data=>
+        // console.log(data)
+      )
+      ,catchError(this.handleError('getClusters', []))
     );
   }
 

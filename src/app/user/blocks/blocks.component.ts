@@ -150,7 +150,7 @@ export class BlocksComponent implements OnInit{
   Funcion para retornar al curso en seguimiento
   */
   public returnCourse(){
-    this._router.navigate(['/mycourses',this.block,this.groupid,this.courseid,this.blockid]);
+    this._router.navigate(['/user/mycourses',this.block,this.groupid,this.courseid,this.blockid]);
   }
 
   /*

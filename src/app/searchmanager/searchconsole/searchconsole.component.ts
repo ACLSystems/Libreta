@@ -93,7 +93,7 @@ export class SearchconsoleComponent implements OnInit {
     this.serviceorg.getlistrostersuper(value).subscribe(
       data=>{
         this.groupmanager = data.message;
-        console.log(this.groupmanager)
+        //console.log(this.groupmanager)
         this.isFindGroupOk = true;
       },error=>{
         this.isFindGroupOk = false;
@@ -143,8 +143,9 @@ export class SearchconsoleComponent implements OnInit {
         "password":password
       }
       this.serviceorg.resetpassBySupervisor(bodypass).subscribe(
-        data=>{
-          console.log(data);
+        //(data)=>{
+				()=>{
+          //console.log(data);
           this.messageSuccessProcess = "Se reseteó la contraseña correctamente"
         },error=>{
           console.log(error);
@@ -156,12 +157,13 @@ export class SearchconsoleComponent implements OnInit {
         "username":this.username
       }
       this.serviceorg.resetpassBySupervisor(bodypass).subscribe(
-        data=>{
-          console.log(data);
+        //data=>{
+				()=>{
+          //console.log(data);
           this.messageSuccessProcess = "Se reseteo la contraseña correctamente"
         },error=>{
           console.log(error);
-          this.messageErrorProcess = "Ocurrio un erro en la operacióm";
+          this.messageErrorProcess = "Ocurrio un erro en la operación";
         }
       );
     }

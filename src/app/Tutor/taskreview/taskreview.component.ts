@@ -201,7 +201,7 @@ export class TaskreviewComponent implements OnInit {
   Metodo para enviar a la vista de tareas
   */
   setTaskReview(grupo: any, courseid: any, groupid: any, blockid: any) {
-    this.router.navigate(['/tasksview', grupo, courseid, groupid, this.studentid, blockid]);
+    this.router.navigate(['/tutor/tasksview', grupo, courseid, groupid, this.studentid, blockid]);
     this.closeModal();
   }
 

@@ -67,7 +67,7 @@ export class GruposComponent implements OnInit {
       data.request.id;
       data.request.number;
       data.request.label;
-      this.router.navigate(["/newrequest",data.request.id,data.request.number,data.request.label]);
+      this.router.navigate(["/requests/newrequest",data.request.id,data.request.number,data.request.label]);
       this.closeModal();
     },error=>{
       console.log(error);
@@ -78,7 +78,7 @@ export class GruposComponent implements OnInit {
   metodo para redireccionar a la vista de una solicitud en especifico
   */
   getRequestView(reqNumber){
-    this.router.navigate(["/viewrequest",reqNumber]);
+    this.router.navigate(["/requests/viewrequest",reqNumber]);
   }
 
   /*

@@ -43,14 +43,14 @@ public getListBlock(){
 Metodo para mostrar el contenido de la lección que selecciona el autor
 */
 public getBlock(id){
-  this.router.navigate(['/courseedit',this.courseid,id]);
+  this.router.navigate(['/editor/courseedit',this.courseid,id]);
 }
 
 /*
 Metodo para regresar a la vista de cursos al autor
 */
 public returnCourses(){
-  this.router.navigate(['/editcourses']);
+  this.router.navigate(['/editor/editcourses']);
 }
 
 }

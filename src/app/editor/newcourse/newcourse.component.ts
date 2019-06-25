@@ -81,6 +81,6 @@ export class NewcourseComponent implements OnInit {
   regreso a la vista del edit mananger
   */
   returnManagerEdit(){
-    this.router.navigate(['/editmanager']);
+    this.router.navigate(['/editor/editmanager']);
   }
 }

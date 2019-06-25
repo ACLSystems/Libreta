@@ -527,7 +527,7 @@ export class ChartsComponent implements OnInit {
   Metodo para obtener las calificaciones por grupo
   */
   getGradesforgroup(idgroup:any){
-    this.activatedRoute.navigate(['/gradesbygroup',idgroup, this.query, this.ouType]);
+    this.activatedRoute.navigate(['/reports/gradesbygroup',idgroup, this.query, this.ouType]);
   }
 
   /*

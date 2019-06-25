@@ -388,6 +388,6 @@ export class CourseeditComponent implements OnInit {
   Metodo para regresar al temario del curso
   */
   returnCourse(){
-    this.router.navigate(['/courselessons',this.courseid]);
+    this.router.navigate(['/editor/courselessons',this.courseid]);
   }
 }

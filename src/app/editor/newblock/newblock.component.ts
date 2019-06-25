@@ -99,7 +99,7 @@ export class NewblockComponent implements OnInit {
   metodo para regresar al edit manager
   */
   returnManagerEdit(){
-    this.router.navigate(['/editmanager']);
+    this.router.navigate(['/editor/editmanager']);
   }
 
   /*

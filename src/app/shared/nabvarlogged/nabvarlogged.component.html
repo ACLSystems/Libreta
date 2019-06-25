@@ -7,27 +7,121 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-			<li *ngIf="groupsUser > 0" class="nav-item" routerLinkActive="active">
-        <a class="nav-link" [routerLink]="['/schedule']"><i class="fas fa-calendar"></i> Calendario</a>
+			<li *ngIf="groupsUser > 0" class="nav-item dropdown">
+				<a
+				href="#"
+				class="nav-link dropdown-toggle"
+				id="navbarDropdownUser"
+				role="button"
+				data-toggle="dropdown"
+				aria-haspopup="true"
+				aria-expanded="false">
+				Mis cursos
+				</a>
+				<div class="dropdown-menu" alia-labelledby="navbarDropdownUser">
+					<a class="dropdown-item" [routerLink]="['schedule']"><i class="fas fa-calendar"></i> Calendario</a>
+					<a class="dropdown-item" [routerLink]="['/user/mygroups']"><i class="fas fa-graduation-cap"></i> Mis cursos</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" [routerLink]="['/consoleuser']"><i class="fas fa-book"></i> Catálogo de cursos</a>
+				</div>
+			</li>
+			<li *ngIf="identiti && rolSup" class="nav-item dropdown">
+				<a
+				href="#"
+				class="nav-link dropdown-toggle"
+				id="navbarDropdownUser"
+				role="button"
+				data-toggle="dropdown"
+				aria-haspopup="true"
+				aria-expanded="false">
+				Consultas
+				</a>
+				<div class="dropdown-menu" alia-labelledby="navbarDropdownUser">
+					<a class="dropdown-item" [routerLink]="['/searchconsole']"><i class="fas fa-search-plus"></i> Consultas</a>
+					<a class="dropdown-item" [routerLink]="['/reports/consolereports']"><i class="far fa-chart-bar"></i> Reportes</a>
+				</div>
+			</li>
+			<li *ngIf="identiti && rolRequester" class="nav-item dropdown">
+				<a
+				href="#"
+				class="nav-link dropdown-toggle"
+				id="navbarDropdownUser"
+				role="button"
+				data-toggle="dropdown"
+				aria-haspopup="true"
+				aria-expanded="false">
+				Solicitudes
+				</a>
+				<div class="dropdown-menu" alia-labelledby="navbarDropdownUser">
+					<a class="dropdown-item" [routerLink]="['/requests']"><i class="fas fa-folder-plus"></i> Solicitudes</a>
+				</div>
+			</li>
+			<li *ngIf="identiti && rolAutho" class="nav-item dropdown">
+				<a
+				href="#"
+				class="nav-link dropdown-toggle"
+				id="navbarDropdownUser"
+				role="button"
+				data-toggle="dropdown"
+				aria-haspopup="true"
+				aria-expanded="false">
+				Editor
+				</a>
+				<div class="dropdown-menu" alia-labelledby="navbarDropdownUser">
+					<a class="dropdown-item" [routerLink]="['/editor/editmanager']"><i class="fas fa-pencil-alt"></i> Editar Cursos</a>
+				</div>
+			</li>
+			<li *ngIf="identiti && rolInstructor" class="nav-item dropdown">
+				<a
+				href="#"
+				class="nav-link dropdown-toggle"
+				id="navbarDropdownUser"
+				role="button"
+				data-toggle="dropdown"
+				aria-haspopup="true"
+				aria-expanded="false">
+				Tutor
+				</a>
+				<div class="dropdown-menu" alia-labelledby="navbarDropdownUser">
+					<a class="dropdown-item" [routerLink]="['/tutor/tutorial']"><i class="fab fa-black-tie"></i> Tutorías</a>
+				</div>
+			</li>
+			<li *ngIf="identiti && rolAdmin" class="nav-item dropdown">
+				<a
+				href="#"
+				class="nav-link dropdown-toggle"
+				id="navbarDropdownUser"
+				role="button"
+				data-toggle="dropdown"
+				aria-haspopup="true"
+				aria-expanded="false">
+				Admin
+				</a>
+				<div class="dropdown-menu" alia-labelledby="navbarDropdownUser">
+					<a class="dropdown-item" [routerLink]="['/admin/monitor']"><i class="fas fa-sitemap"></i> Monitor</a>
+				</div>
+			</li>
+			<!-- <li >
+        <a class="nav-link" [routerLink]="['/user/schedule']"><i class="fas fa-calendar"></i> Calendario</a>
       </li>
       <li *ngIf="groupsUser > 0" class="nav-item" routerLinkActive="active" >
-        <a class="nav-link" [routerLink]="['/mygroups']"><i class="fas fa-graduation-cap"></i> Mis cursos</a>
-      </li>
-      <li *ngIf="identiti && rolSup" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/user/mygroups']"><i class="fas fa-graduation-cap"></i> Mis cursos</a>
+      </li> -->
+      <!-- <li *ngIf="identiti && rolSup" class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/searchconsole']"><i class="fas fa-search-plus"></i> Consultas</a>
       </li>
       <li *ngIf="identiti && rolSup" class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/consolereports']"><i class="far fa-chart-bar"></i> Reportes</a>
-      </li>
-      <li *ngIf="identiti && rolRequester" class="nav-item" routerLinkActive="active">
-        <a class="nav-link" [routerLink]="['/solicitudes']"><i class="fas fa-folder-plus"></i> Solicitudes</a>
-      </li>
-      <li *ngIf="identiti && rolAutho" class="nav-item" routerLinkActive="active">
+      </li> -->
+      <!-- <li *ngIf="identiti && rolRequester" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/requests']"><i class="fas fa-folder-plus"></i> Solicitudes</a>
+      </li> -->
+      <!-- <li *ngIf="identiti && rolAutho" class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/editmanager']"><i class="fas fa-pencil-alt"></i> Editar Cursos</a>
-      </li>
-      <li *ngIf="identiti && rolInstructor" class="nav-item" routerLinkActive="active">
-        <a class="nav-link" [routerLink]="['/tutorial']"><i class="fab fa-black-tie"></i> Tutorías</a>
-      </li>
+      </li> -->
+      <!-- <li *ngIf="identiti && rolInstructor" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/tutor/tutorial']"><i class="fab fa-black-tie"></i> Tutorías</a>
+      </li> -->
       <!-- <li *ngIf="identiti && rolAdmin" class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/admin']"><i class="fas fa-sitemap"></i> Administrador</a>
       </li>
@@ -69,7 +163,7 @@
       <div ngbDropdown placement="bottom-right" class="d-inline-block">
         <button class="btn btn-outline-success" id="userOptions" ngbDropdownToggle><i class="fas fa-user-circle"></i> {{identiti.person.name}}</button>
         <div ngbDropdownMenu aria-labelledby="userOptions">
-          <button class="dropdown-item text-success" [routerLink]="['/userprofile']" ><i class="fas fa-user-alt"></i> Mi perfil</button>
+          <button class="dropdown-item text-success" [routerLink]="['/user/userprofile']" ><i class="fas fa-user-alt"></i> Mi perfil</button>
 					<button class="dropdown-item text-success" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesion</button>
         </div>
       </div>

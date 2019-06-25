@@ -47,7 +47,15 @@
               <div *ngFor="let item of notification" class="row" style="margin-top:10px">
                 <div class="col-12">
                   <!--div *ngIf="item.object.item.blockExists"-->
-                  <button [ngClass]="{ 'btn-outline-secondary' : item.read , 'btn-outline-success' : !item.read}" type="button" class="btn btn-outline-secondary float-right" placement="bottom" ngbTooltip="ver" (click)="getviewnotification(item.objects, item.sourceRole, item.notificationid, item.destination.item._id)" ><!-- (click)="getviewnotificationblock(item.object.item.block, item.object.item._id, item.object.item.type)"-->
+                  <button
+									[ngClass]="{ 'btn-outline-secondary' : item.read , 'btn-outline-success' : !item.read}"
+									type="button"
+									class="btn btn-outline-secondary
+									float-right"
+									placement="bottom" 
+									ngbTooltip="ver"
+									(click)="getviewnotification(item.objects, item.sourceRole, item.notificationid, item.destination.item._id)" >
+									<!-- (click)="getviewnotificationblock(item.object.item.block, item.object.item._id, item.object.item.type)"-->
                     <i class="fas fa-eye"></i>
                   </button>
                   <h6 class="text-success"> <i [ngClass]="{ 'fa-chalkboard-teacher' : item.sourceRole == 'instructor' , 'fa-user-circle' : item.sourceRole == 'user'}" class="fas "></i> {{item.destination.item.person.name}} {{item.destination.item.person.fatherName}} {{item.destination.item.person.motherName}} :</h6>

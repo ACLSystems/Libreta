@@ -252,7 +252,7 @@ export class NewgroupComponent implements OnInit{
       "statusReason":reason
     }
     this.managerServices.deletedRequest(requestDeleted).subscribe(data=>{
-      this.router.navigate(["/solicitudes"]);
+      this.router.navigate(["/requests"]);
       this.closeModal();
     },error=>{
       console.log(error);
@@ -434,7 +434,7 @@ export class NewgroupComponent implements OnInit{
                 }
                 this.managerServices.updateRequestManager(requestUpdate).subscribe(
                   data=>{
-                    this.router.navigate(["/addusers",this.idrequest,this.numberRequest,this.labelrequest,res.id,res.code,this.orgName]);
+                    this.router.navigate(["/requests/addusers",this.idrequest,this.numberRequest,this.labelrequest,res.id,res.code,this.orgName]);
                     this.loadingprocess = false;
                   },error=>{
                     console.log(error);
