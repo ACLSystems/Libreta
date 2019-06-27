@@ -506,7 +506,7 @@ export class ChartsComponent implements OnInit {
   */
   public getArrayQuery():string[]{
     var queryString:string[]=[]
-    if(this.ouType=='campus' || this.ouType=='statal' || this.ouType=='cast'){
+    if(this.ouType=='campus' || this.ouType=='statal' || this.ouType=='cast' || this.ouType=='institute'){
       queryString.push(this.query);
     }else{
       var array = this.query.split('&')

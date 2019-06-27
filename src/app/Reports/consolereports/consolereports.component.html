@@ -12,115 +12,217 @@
 </div>
 
 <div *ngIf="!loading" class="container-fluid">
-  <div *ngIf="orgTree.ouType=='org'" class="container-fluid">
-    <div class="card">
-      <div class="card-header">
-        <button type="button" class="btn btn-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(orgTree.query, orgTree.ouType)">
-          <i class="fas fa-chart-pie"></i>
-        </button>
-        <span class="text-success">
-          <h5><i class="fas fa-location-arrow"></i> CONALEP</h5>
-        </span>
-      </div>
-    </div>
-    <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
-      <div *ngFor="let item of orgTree.ous">
-        <ngb-panel>
-          <ng-template ngbPanelTitle>
-            <span class="text-success">
-              <h5><i class="fas fa-location-arrow"></i> Estado: <span class="text-secondary">{{item.ouLongName}}</span></h5>
-            </span>
-          </ng-template>
-          <ng-template ngbPanelContent>
-            <div class="card-header">
-              <button type="button" class="btn btn-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(item.query, item.ouType)">
-                <i class="fas fa-chart-pie"></i>
-              </button>
-              <span class="text-success">
-                <h6><i class="far fa-building"></i> <span class="text-secondary">{{item.ouLongName}}</span></h6>
-              </span>
-            </div>
-            <div class="card" *ngFor="let itemPlantel of item.ous">
-              <div class="card-header">
-                <button type="button" class="btn btn-outline-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(itemPlantel.query, itemPlantel.ouType)">
-                  <i class="fas fa-chart-pie"></i>
-                </button>
-                <span class="text-success">
-                  <h6><i class="far fa-building"></i> Plantel: <span class="text-secondary">{{itemPlantel.ouLongName}}</span> <i class="fas fa-hashtag"></i> Clave: <span class="text-secondary">{{itemPlantel.ouName}}</span></h6>
-                </span>
-              </div>
-            </div>
-          </ng-template>
-        </ngb-panel>
-      </div>
-    </ngb-accordion>
-  </div>
-  <!---->
-  <!---->
-  <div *ngIf="orgTree.ouType=='state'">
-    <div class="row">
-      <div class="col-6">
-        <h3 class="text-success"><i class="fas fa-location-arrow"></i> Estado: <span class="text-secondary">{{orgTree.ouLongName}}</span></h3>
-      </div>
-      <div class="col-6">
-        <button type="button" class="btn btn-success" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(orgTree.query, orgTree.ouType)">
-          <i class="fas fa-chart-pie"></i>
-        </button>
-      </div>
-    </div>
+	<div class="row">
+		<div class="container-fluid text-center">
+			<h2><i class="fas fa-chart-bar"></i> Reportes</h2>
+			<hr>
+		</div>
+		<!-- <div class="col-sm bg-light">hola</div>
+		<div class="col-sm"></div>
+		<div class="col-sm bg-light"></div>
+		<div class="col-sm"></div>
+		<div class="col-sm bg-light"></div>
+		<div class="col-sm"></div>
+		<div class="col-sm bg-light"></div>
+		<div class="col-sm"></div>
+		<div class="col-sm bg-light"></div>
+		<div class="col-sm"></div>
+		<div class="col-sm bg-light"></div>
+		<div class="col-sm"></div> -->
+	</div>
+	<div class="row">
+		<div class="col-sm-1"></div>
+		<div class="col-sm bg-light">
+			<form>
+				<div class="form-row align-items-center">
+					<div class="col-auto my-1">
+						<label for="inlineFormProject" class="mr-sm-2 sr-only">Projecto</label>
+						<select id="inlineFormProject" class="custom-select custom-select-sm mr-sm-2">
+							<option *ngFor="let project of projects">
+								{{project}}
+							</option>
+						</select>
+					</div>
+					<div class="col-auto my-1">
+						<div class="custom-control custom-checkbox mr-sm-2">
+							<input type="checkbox" class="custom-control-input" id="customControlAutosizing">
+							<label for="customControlAutosizing" class="custom-control-label">
+								<small>Recordar mi proyecto</small>
+							</label>
+						</div>
+					</div>
+					<div class="col-auto my-1">
+						<button class="btn btn-primary btn-sm">Enviar</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-sm bg-light align-bottom text-right">
+				<small class="text-info">Ultima actualización: </small>
+				<small class="text-dark">	{{updateTime | date: "medium" }}</small><br>
+				<small class="text-danger">Esta página se actualiza automáticamente cada 10 minutos</small>
+		</div>
+		<div class="col-sm-1"></div>
+	</div>
+	<div *ngIf="!loadingData" class="row">
+		<div class="col-sm-1"></div>
+		<div class="col-sm rounded border border-success">
+			<div class="row border-bottom bg-success">
+				<div class="col text-center text-white">
+					<h4>{{orgTree.ouLongName}} <small>({{orgTree.ouName}})</small></h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-5">
+					<div class="row">
+						<div class="col text-center">
+							Proyecto <b>{{projects[0]}}</b>
+						</div>
+					</div>
+					<div class="row">
+						<table class="table table-sm table-striped">
+							<thead>
+								<tr>
+									<td><small><b>Evaluación</b></small></td>
+									<td class="text-center"><small><b>Presentadas</b></small></td>
+								</tr>
+							<tbody>
+								<tr *ngFor="let eval of evals">
+									<td>
+										<small>{{eval._id}}</small>
+									</td>
+									<td class="text-center">
+										<small>{{eval.total}}</small>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="col-sm-1"></div>
+				<div class="col-sm">
+						<table class="table table-sm">
+						<tbody>
+							<tr>
+								<td><i class="fas fa-users"></i></td>
+								<td>Grupos</td>
+								<th class="text-right">{{orgTree.groups.length}}</th>
+								<td style="width:40%;"></td>
+							</tr>
+							<tr>
+								<td><i class="fas fa-user"></i></td>
+								<td>Total alumnos</td>
+								<th class="text-right">{{percentil.totalUsers}}</th>
+								<td class="text-right"></td>
+							</tr>
+							<tr>
+								<td class="text-info"><i class="fas fa-forward"></i></td>
+								<td class="text-info">Alumnos con avance</td>
+								<th class="text-info text-right">{{percentil.usersOnTrack}}</th>
+								<td class="align-middle">
+									<div class="progress">
+										<div class="progress-bar progress-bar-striped bg-info"
+											role="progressbar"
+											attr.aria-valuenow="{{progressTrack | number : '.1'}}"
+											aria-valuemin="0"
+											aria-valuemax="100"
+											[ngStyle]="{width:progressTrack+'%'}">
+											{{progressTrack | number : '.1'}}%
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td class="text-danger"><i class="fas fa-stop-circle"></i></td>
+								<td class="text-danger">Alumnos sin avance</td>
+								<th class="text-danger text-right">{{percentil.totalUsers - percentil.usersOnTrack}}</th>
+								<td class="align-middle">
+									<div class="progress">
+										<div class="progress-bar progress-bar-striped bg-danger"
+											role="progressbar"
+											attr.aria-valuenow="{{progressUnTrack | number : '.1'}}"
+											aria-valuemin="0"
+											aria-valuemax="100"
+											[ngStyle]="{width:progressUnTrack+'%'}">
+											{{progressUnTrack| number : '.1'}}%
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td class="text-success"><i class="fas fa-award"></i></td>
+								<td class="text-success">Alumnos aprobados:</td>
+								<th class="text-success text-right">{{percentil.usersPassed}}</th>
+								<td class="align-middle">
+									<div class="progress">
+										<div class="progress-bar progress-bar-striped bg-success"
+											role="progressbar"
+											attr.aria-valuenow="{{progressPass | number : '.1'}}"
+											aria-valuemin="0"
+											aria-valuemax="100"
+											[ngStyle]="{width:progressPass+'%'}">
+											{{progressPass| number : '.1'}}%
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col text-center text-white bg-success">
+					<h5>Listado de grupos</h5>
+				</div>
+			</div>
+			<div class="row">
+				<table class="table table-sm table-striped">
+					<thead>
+						<tr>
+							<th scope="col"><i class="fas fa-list-ol"></i></th>
+							<th scope="col">Código</th>
+							<th scope="col">Grupo</th>
+							<th scope="col" class="text-right"><i class="fas fa-user"></i></th>
+							<th scope="col" class="text-info text-right"><i class="fas fa-forward"></i></th>
+							<th scope="col" class="text-danger text-right"><i class="fas fa-stop-circle"></i></th>
+							<th scope="col" class="text-success text-right"><i class="fas fa-award"></i></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let grupo of orgTree.groups; let i=index;" class="">
+							<th scope="row"><small class="text-success">{{i+1}}</small></th>
+							<td><small>{{grupo.groupCode}}</small></td>
+							<td><small>{{grupo.groupName}}</small></td>
+							<td *ngIf="grupo.totalUsers == grupo.usersPassed" class="text-success text-right"><small>{{grupo.totalUsers}}</small></td>
+							<td *ngIf="grupo.totalUsers > grupo.usersPassed" class="text-right"><small>{{grupo.totalUsers}}</small></td>
+							<td *ngIf="grupo.usersOnTrack == '0'" class="text-right"><small class="text-danger">{{grupo.usersOnTrack}}</small></td>
+							<td *ngIf="grupo.usersOnTrack != '0'" class="text-right"><small class="text-info">{{grupo.usersOnTrack}}</small></td>
+							<td *ngIf="(grupo.totalUsers - grupo.usersOnTrack) > 0" class="text-right"><small class="text-danger">{{grupo.totalUsers - grupo.usersOnTrack}}</small></td>
+							<td *ngIf="(grupo.totalUsers - grupo.usersOnTrack) < 1" class="text-right"><small class="text-dark">{{grupo.totalUsers - grupo.usersOnTrack}}</small></td>
+							<td *ngIf="grupo.usersPassed == '0'" class="text-right"><small class="text-danger">{{grupo.usersPassed}}</small></td>
+							<td *ngIf="grupo.usersPassed != '0'" class="text-right"><small class="text-success">{{grupo.usersPassed}}</small></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="col-sm-1"></div>
+	</div>
+	<div *ngIf="loadingData" class="row">
+		<div class="col-sm-1"></div>
+		<div class="col-sm alert alert-primary text-center">
+			<div class="row text-center animated fadeIn">
+		    <div class="col">
+		      <i class="fas fa-sync fa-spin fa-2x"></i>
+		    </div>
+		  </div>
+		  <div class="row text-center">
+		    <div class="col">
+		      <h4>{{processMessage}} Un momento, por favor ... </h4>
+		    </div>
+		  </div>
+		</div>
+		<div class="col-sm-1"></div>
+	</div>
 
-    <div *ngFor="let item of orgTree.ous">
-      <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
-        <ngb-panel>
-          <ng-template ngbPanelTitle>
-            <span class="text-success">
-              <h6><i class="far fa-building"></i> Plantel: <span class="text-secondary">{{item.ouLongName}}</span> <i class="fas fa-hashtag"></i> Clave: <span class="text-secondary">{{item.ouName}}</span></h6>
-            </span>
-          </ng-template>
-          <ng-template ngbPanelContent>
-            <div class="alert alert-success" role="alert">
-              <button type="button" class="btn btn-outline-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(item.query, item.ouType)">
-                <i class="fas fa-chart-pie"></i>
-              </button>
-              <span class="text-success">
-                <h6><i class="far fa-building"></i> Plantel: <span class="text-secondary">{{item.ouLongName}}</span> <i class="fas fa-hashtag"></i> Clave: <span class="text-secondary">{{item.ouName}}</span></h6>
-              </span>
-            </div>
-            <div *ngFor="let itemGrupo of item.groups">
-              <div class="alert alert-success" role="alert">
-                <button type="button" class="btn btn-outline-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getGradesforgroup(itemGrupo.groupId,item.query, item.ouType)">
-                  <i class="fas fa-chart-pie"></i>
-                </button>
-                <i class="fas fa-book-alt"></i> Curso: {{itemGrupo.groupName}} <i class="fas fa-users"></i> Grupo: <span class="text-secondary">{{itemGrupo.groupCode}}</span>
-              </div>
-            </div>
-          </ng-template>
-        </ngb-panel>
-      </ngb-accordion>
-    </div>
-  </div>
-  <!---->
-  <!---->
-  <div *ngIf="orgTree.ouType=='campus'" class="container-fluid">
-    <div class="row">
-      <div class="col-6">
-        <h5><i class="far fa-building"></i> Plantel: <span class="text-secondary">{{orgTree.ouLongName}}</span> <i class="fas fa-hashtag"></i> Clave: <span class="text-secondary">{{orgTree.ouName}}</span></h5>
-      </div>
-      <div class="col-4">
-        <button type="button" class="btn btn-outline-success" placement="bottom" ngbTooltip="ver detalle" (click)="getPercentil(orgTree.query, orgTree.ouType)">
-          <i class="fas fa-chart-pie"></i>
-        </button>
-      </div>
-    </div>
-    <hr>
-    <div *ngFor="let item of orgTree.groups">
-      <div class="alert alert-success" role="alert">
-        <button type="button" class="btn btn-outline-success float-right" placement="bottom" ngbTooltip="ver detalle" (click)="getGradesforgroup(item.groupId, orgTree.query, orgTree.ouType)">
-          <i class="fas fa-chart-pie"></i>
-        </button>
-        <i class="fas fa-book-alt"></i> Curso: {{item.groupName}} <i class="fas fa-users"></i> Grupo: <span class="text-secondary">{{item.groupCode}}</span>
-      </div>
-    </div>
-  </div>
-  <!---->
 </div>

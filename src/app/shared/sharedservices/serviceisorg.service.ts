@@ -75,11 +75,21 @@ export class ServiceisorgService {
   Metodo para los reportes estadisticos
   */
   public getCharts(query):Observable<any>{
-    let queryJson = JSON.stringify(query);
-    let headers = new HttpHeaders({
-      'x-access-token':this.token
-    });
-    return this.http.get(this.url+'api/v1/supervisor/report/percentil?ou='+queryJson,{headers:headers});
+    let queryJson = '';
+		if(typeof query != 'string'){
+			queryJson = JSON.stringify(query);
+		} else {
+			queryJson = query;
+		}
+    // let headers = new HttpHeaders({
+    //   'x-access-token':this.token
+    // });
+    // return this.http.get(this.url+'api/v1/supervisor/report/percentil?ou='+queryJson,{headers:headers});
+		return this.http.get(this.url+'api/v1/supervisor/report/percentil?ou='+queryJson);
+  }
+
+	public getEval(ou:string,project:string):Observable<any>{
+		return this.http.get(this.url+'ap1/v1/supervisor/report/eval?ou='+ou+'&project='+project);
   }
 
   /*
@@ -236,9 +246,17 @@ export class ServiceisorgService {
   /*
   api para obtener el arbol de organizaciones para los reportes
   */
-  public getOrgTree():Observable<any>{
-    return this.http.get(this.url+'api/v1/supervisor/report/orgtree');
+  public getOrgTree(project:string):Observable<any>{
+		if(project) {
+			return this.http.get(this.url+'api/v1/supervisor/report/orgtree?project='+project);
+		} else {
+			return this.http.get(this.url+'api/v1/supervisor/report/orgtree');
+		}
   }
+
+	public projects():Observable<any>{
+		return this.http.get(this.url+'api/v1/supervisor/projects');
+	}
 
   public getUserAccount(username):Observable<any>{
     return this.http.get(this.url+'api/v1/supervisor/user/getgroups?username='+username);
