@@ -47,6 +47,8 @@ export class BlockTasksComponent implements OnInit {
   }
 
   ngOnInit() {
+		console.log(this.block.data)
+		//console.log(this.block.data.tasks)
   }
 
   /*
@@ -152,7 +154,6 @@ export class BlockTasksComponent implements OnInit {
   Metodo para setear las tareas del usuario
   */
   public setTask(content: any, type: any, idtask: any, label: number) {
-		console.log(content);
     if (this.taskStudent.find(id => id.idtask === idtask) ) {
       const indexRepeat = this.taskStudent.indexOf(this.taskStudent.find(id => id.label === label));
       this.taskStudent.splice(indexRepeat, 1);
@@ -162,6 +163,7 @@ export class BlockTasksComponent implements OnInit {
       this.taskStudent.push({idtask, content, type, label});
       this.isAttachmen = true;
     }
+		console.log(this.taskStudent)
   }
 
   /*

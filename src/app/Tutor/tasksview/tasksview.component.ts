@@ -100,8 +100,11 @@ export class TasksviewComponent implements OnInit {
   */
   public getTask() {
     this.loading = true;
+		let emptyArray = [];
+		this.messageTasks = Array.from(emptyArray);
     this.serviceisorg.getTask(this.groupid, this.studentid, this.blockid).subscribe(data => {
       this.tasksStudents = data.message;
+			//console.log(this.tasksStudents)
       for (const id of this.tasksStudents.tasks) {
         if (id.type === 'file') {
 					if(id.content){
@@ -126,6 +129,7 @@ export class TasksviewComponent implements OnInit {
   metodo para guardar las calificaciones que captura el tutor
   */
   setGrade(id: any, grade: number, label: any, indexTask: any) {
+		//console.log(id)
     if (grade <= 100) {
       this.isGradeOk = true;
       this.taskGrade = new TaskGrade(this.tasksStudents.rosterid, this.blockid, id, grade, indexTask);
@@ -148,6 +152,7 @@ export class TasksviewComponent implements OnInit {
     } else {
       this.isGradeOk = false;
     }
+		//console.log(this.tasks)
   }
   /*
   metodo para enviar las calificaciones al api
@@ -156,15 +161,16 @@ export class TasksviewComponent implements OnInit {
     this.objects = [];
     this.serviceisorg.setgradeTaskconcatMap(this.tasks).subscribe(data => {
       const message = 'Se guardó la calificación correctamente';
+			//console.log(data)
       this.messageTasks.push({Mensaje: message, id: data.taskid});
     }, error => {
-      const er = error;
+			const er = error;
       this.messageTasks.push({Mensaje: error});
     });
 
-    if (comment) {
+    if(comment) {
       this.comment = new Doubt(this.courseid, this.groupid, 'root', 'Mensaje del tutor', comment, 'tutor', this.blockid, this.studentid);
-      this.courseservice.setDiscusion(this.comment).subscribe(data => {
+      this.courseservice.setDiscusion(this.comment).subscribe(() => {
         this.objectCourse = new Objects('courses', this.courseid);
         this.objects.push(this.objectCourse);
         this.objectGroup = new Objects('groups', this.groupid);

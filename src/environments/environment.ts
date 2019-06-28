@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
-  url: 'https://alumno-test.superatemexico.com/',
+  url: 'https://alumno-test.sloppy.zone/',
   urlconalep: 'https://conalepvirtual-test.superatemexico.com/',
-  idTutor: '5ab47313007ce400a8ef4248'
+  idTutor: '5ab47313007ce400a8ef4248',
+	versionCheckURL: 'version.json'
 };
 
 /*

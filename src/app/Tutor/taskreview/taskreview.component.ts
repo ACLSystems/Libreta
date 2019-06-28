@@ -128,7 +128,7 @@ export class TaskreviewComponent implements OnInit {
     this.labelGradesList = [];
     this.tutorservice.getlistroster(this.groupCode).subscribe(data => {
       this.listRooster = data.message;
-      console.log(this.listRooster);
+      //console.log(this.listRooster);
       this.courseid = data.message.courseid;
       this.groupid = data.message.groupid;
       for (const item of data.message.students) {
@@ -414,7 +414,7 @@ export class TaskreviewComponent implements OnInit {
     });
 
     this.user.setNotification(this.notification).subscribe( data => {
-      console.log(data);
+      //console.log(data);
     });
   }
 

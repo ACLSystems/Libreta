@@ -139,7 +139,7 @@
 									<small class="text-dark" >({{fileDetails.sizeH}}) </small>
 								</button>
 							</div>
-							<div *ngIf="fileDetails.originalName === 'No hay archivo'" class="col-sm text-center pr-1">
+							<div *ngIf="fileDetails && fileDetails.originalName === 'No hay archivo'" class="col-sm text-center pr-1">
 									<i class="fas fa-exclamation-triangle"></i> {{fileDetails.originalName}} <br>
 									<small class="text-danger">Existe el registro de entrega de la tarea por parte del participante.<br>
 										Sin embargo hubo un probable error durante la carga del archivo y este no se encuentra en el sistema.<br>
@@ -217,8 +217,8 @@
                 <i class="far fa-comment-alt"></i> Agregar un comentario
               </button>
             </div>
-            <div class="collapse container-fluid m-3" id="collapseComment">
-              <textarea rows="8" cols="80" #comment></textarea>
+            <div class="collapse container-fluid mt-3" id="collapseComment">
+              <textarea rows="8" class="form-control" #comment></textarea>
             </div>
           </div><!--cierre container-fluid del modal-->
         </div><!--Cierre modal-body -->
@@ -231,7 +231,7 @@
             <i class="fas fa-check"></i> Aceptar
           </button>
           <button type="button" class="btn btn-success" data-dismiss="modal" (click)="getTask()">
-            <i class="fas fa-times"></i> Cancelar
+            <i class="fas fa-times"></i> Cerrar
           </button>
         </div><!-- cierre footer-modal-->
 
