@@ -32,7 +32,7 @@
 	</div>
 	<div class="row">
 		<div class="col-sm-1"></div>
-		<div class="col-sm bg-light">
+		<div *ngIf="projects.length > 0" class="col-sm bg-light">
 			<form>
 				<div class="form-row align-items-center">
 					<div class="col-auto my-1">
@@ -73,7 +73,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-5">
+				<div *ngIf="displayEvals" class="col-sm-5">
 					<div class="row">
 						<div class="col text-center">
 							Proyecto <b>{{projects[0]}}</b>
@@ -190,17 +190,55 @@
 					</thead>
 					<tbody>
 						<tr *ngFor="let grupo of orgTree.groups; let i=index;" class="">
-							<th scope="row"><small class="text-success">{{i+1}}</small></th>
-							<td><small>{{grupo.groupCode}}</small></td>
-							<td><small>{{grupo.groupName}}</small></td>
-							<td *ngIf="grupo.totalUsers == grupo.usersPassed" class="text-success text-right"><small>{{grupo.totalUsers}}</small></td>
-							<td *ngIf="grupo.totalUsers > grupo.usersPassed" class="text-right"><small>{{grupo.totalUsers}}</small></td>
-							<td *ngIf="grupo.usersOnTrack == '0'" class="text-right"><small class="text-danger">{{grupo.usersOnTrack}}</small></td>
-							<td *ngIf="grupo.usersOnTrack != '0'" class="text-right"><small class="text-info">{{grupo.usersOnTrack}}</small></td>
-							<td *ngIf="(grupo.totalUsers - grupo.usersOnTrack) > 0" class="text-right"><small class="text-danger">{{grupo.totalUsers - grupo.usersOnTrack}}</small></td>
-							<td *ngIf="(grupo.totalUsers - grupo.usersOnTrack) < 1" class="text-right"><small class="text-dark">{{grupo.totalUsers - grupo.usersOnTrack}}</small></td>
-							<td *ngIf="grupo.usersPassed == '0'" class="text-right"><small class="text-danger">{{grupo.usersPassed}}</small></td>
-							<td *ngIf="grupo.usersPassed != '0'" class="text-right"><small class="text-success">{{grupo.usersPassed}}</small></td>
+							<th scope="row">
+								<small>{{i+1}}</small>
+							</th>
+							<td>
+								<small>
+									<a [routerLink]=""
+										(click)="getGradesforgroup(grupo.groupId,query,ouType)"
+										class="text-success">{{grupo.groupCode}}</a>
+								</small>
+							</td>
+							<td>
+								<small>
+									<a [routerLink]=""
+										(click)="getGradesforgroup(grupo.groupId,query,ouType)"
+										class="text-success">{{grupo.groupName}}</a>
+								</small>
+							</td>
+							<td *ngIf="grupo.totalUsers == grupo.usersPassed"
+								class="text-success text-right">
+								<small>{{grupo.totalUsers}}</small>
+							</td>
+							<td *ngIf="grupo.totalUsers > grupo.usersPassed"
+								class="text-right">
+								<small>{{grupo.totalUsers}}</small>
+							</td>
+							<td *ngIf="grupo.usersOnTrack == '0'"
+								class="text-right">
+								<small class="text-danger">{{grupo.usersOnTrack}}</small>
+							</td>
+							<td *ngIf="grupo.usersOnTrack != '0'"
+								class="text-right">
+								<small class="text-info">{{grupo.usersOnTrack}}</small>
+							</td>
+							<td *ngIf="(grupo.totalUsers - grupo.usersOnTrack) > 0"
+								class="text-right">
+								<small class="text-danger">{{grupo.totalUsers - grupo.usersOnTrack}}</small>
+							</td>
+							<td *ngIf="(grupo.totalUsers - grupo.usersOnTrack) < 1"
+								class="text-right">
+								<small class="text-dark">{{grupo.totalUsers - grupo.usersOnTrack}}</small>
+							</td>
+							<td *ngIf="grupo.usersPassed == '0'"
+								class="text-right">
+								<small class="text-danger">{{grupo.usersPassed}}</small>
+							</td>
+							<td *ngIf="grupo.usersPassed != '0'"
+								class="text-right">
+								<small class="text-success">{{grupo.usersPassed}}</small>
+							</td>
 						</tr>
 					</tbody>
 				</table>

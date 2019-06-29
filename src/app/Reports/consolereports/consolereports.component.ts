@@ -31,6 +31,7 @@ export class ConsolereportsComponent implements OnInit {
 	progressPass: number;
 	level: number;
 	updateTime: Date;
+	displayEvals: boolean;
 	private updateSubscription: Subscription;
   constructor(public orgservice:ServiceisorgService, public router:Router) {
 
@@ -60,14 +61,14 @@ export class ConsolereportsComponent implements OnInit {
     return this.userRol
   }
 
-  public getPercentil(query:any[], ouType:string){
-    if(ouType=='campus' ||  ouType=='cast' || ouType=='institute'){
-      this.router.navigate(['/reports/charts',query, ouType])
-    }else{
-      var queryString = Object.keys(query).map(key => key + '=' + query[key]).join('&');
-      this.router.navigate(['/reports/charts',queryString, ouType])
-    }
-  }
+  // public getPercentil(query:any[], ouType:string){
+  //   if(ouType=='campus' ||  ouType=='cast' || ouType=='institute'){
+  //     this.router.navigate(['/reports/charts',query, ouType])
+  //   }else{
+  //     var queryString = Object.keys(query).map(key => key + '=' + query[key]).join('&');
+  //     this.router.navigate(['/reports/charts',queryString, ouType])
+  //   }
+  // }
 
 	public launchLevel1() {
 		this.loadingData = true;
@@ -91,77 +92,107 @@ export class ConsolereportsComponent implements OnInit {
 			}
 			this.loading = false;
 			let project = this.projectid || null;
-			this.orgservice.getOrgTree(project).subscribe(data=>{
-	      this.orgTree = data.tree;
-				//console.log(this.orgTree);
-				let query  = this.orgTree.ouId ;
-				if(this.projectid){
-					query += '&project=' + this.projectid;
-				}
-				//console.log(query);
-				this.orgservice.getCharts(query).subscribe(data => {
-					this.percentil = data;
-					this.progressTrack = this.percentil.usersOnTrack / this.percentil.totalUsers * 100;
-					this.progressUnTrack = (this.percentil.totalUsers - this.percentil.usersOnTrack) / this.percentil.totalUsers * 100;
-					this.progressPass = this.percentil.usersPassed / this.percentil.totalUsers * 100;
-					let results = this.percentil.results;
-					//console.log(this.percentil.results);
-					if(Array.isArray(results) && results.length > 0) {
-						let findOU = results.findIndex(ou => ou.ouId === this.orgTree.ouId);
-						this.ous = Array.from(results[findOU].ous);
-						//console.log(this.ous);
-						this.orgTree.groups.forEach(grp => {
-							let findGrp = this.ous.findIndex(per => grp.groupId === per.groupId);
-							if(findGrp > -1) {
-								grp.totalUsers 		= this.ous[findGrp].totalUsers;
-								grp.usersOnTrack 	= this.ous[findGrp].usersOnTrack;
-								grp.usersPassed 	= this.ous[findGrp].usersPassed;
-								if(this.ous[findGrp].totalUsers == 0 || !this.ous[findGrp].totalUsers) {
-									grp.totalUsers = '0';
-									//console.log('cero en total')
-								}
-								if(this.ous[findGrp].usersOnTrack == 0 || !this.ous[findGrp].usersOnTrack) {
-									grp.usersOnTrack = '0';
-									//console.log('cero en track')
-								}
-								if(this.ous[findGrp].usersPassed == 0 || !this.ous[findGrp].usersPassed) {
-									grp.usersPassed = '0';
-									//console.log('cero en aprobados')
-								}
-							}
-						});
-						this.orgservice.getEval(this.orgTree.ouId,this.projectid)
-							.subscribe(data => {
-								this.evals = Array.from(data.message);
-								console.log(this.evals);
-								this.loadingData = false;
-							}, error => {
-								console.log(error);
-					      this.loading = false;
-								this.loadingData = false;
-							});
-						this.processingData = false;
-						this.processMessage = 'Actualizando información.';
-					}
-				}, error => {
-					console.log(error);
-		      this.loading = false;
-					this.loadingData = false;
+			this.getOrgTree(project);
+		}, error => { // No hay proyectos
+			//console.log('Este es el error')
+			//console.log(error.error.message)
+			if(error.error.message == 'No tengo proyectos') {
+				this.getOrgTree(null);
+			} else {
+				//console.log(error);
+	      this.loading = false;
+				this.loadingData = false;
+			}
+		});
+	}
+
+	getOrgTree(project: any) {
+		this.orgservice.getOrgTree(project).subscribe(data=>{
+			this.orgTree = data.tree;
+			this.displayEvals = data.displayEvals || false;
+			//console.log(this.displayEvals);
+			//console.log(this.orgTree);
+			if(this.orgTree.groups && Array.isArray(this.orgTree.groups) && this.orgTree.groups.length > 0) {
+				this.orgTree.groups.forEach((group: any) => {
+					group.totalUsers = group.totalUsers || 0;
+					group.usersOnTrack = group.usersOnTrack || 0;
+					group.usersPassed = group.usersPassed || 0;
 				});
-	    },error=>{
-	      console.log(error);
-	    });
+			}
+			let query  = this.orgTree.ouId ;
+			if(this.projectid){
+				query += '&project=' + this.projectid;
+			}
+			//console.log(query);
+			this.getPercentil(query);
+		},error=>{
+			console.log(error);
+			this.loading = false;
+			this.loadingData = false;
+		}); // Obtener orgTree
+	}
+
+	getPercentil(query: any){
+		this.orgservice.getCharts(query).subscribe(data => {
+			this.percentil = data;
+			this.progressTrack = this.percentil.usersOnTrack / this.percentil.totalUsers * 100;
+			this.progressUnTrack = (this.percentil.totalUsers - this.percentil.usersOnTrack) / this.percentil.totalUsers * 100;
+			this.progressPass = this.percentil.usersPassed / this.percentil.totalUsers * 100;
+			let results = this.percentil.results;
+			//console.log(this.percentil.results);
+			if(Array.isArray(results) && results.length > 0) {
+				let findOU = results.findIndex(ou => ou.ouId === this.orgTree.ouId);
+				this.ous = Array.from(results[findOU].ous);
+				//console.log(this.ous);
+				this.orgTree.groups.forEach(grp => {
+					let findGrp = this.ous.findIndex(per => grp.groupId === per.groupId);
+					if(findGrp > -1) {
+						grp.totalUsers 		= this.ous[findGrp].totalUsers || 0;
+						grp.usersOnTrack 	= this.ous[findGrp].usersOnTrack || 0;
+						grp.usersPassed 	= this.ous[findGrp].usersPassed || 0;
+					}
+				});
+				if(this.displayEvals) {
+					this.processMessage = 'Actualizando información.';
+					this.getEvals();
+				} else {
+					this.processingData = false;
+					this.loading = false;
+					this.loadingData = false;
+				}
+
+			}
 		}, error => {
 			console.log(error);
-      this.loading = false;
+			this.loading = false;
+			this.loadingData = false;
 		});
+	}
+
+	getEvals() {
+		this.orgservice.getEval(this.orgTree.ouId,this.projectid)
+			.subscribe(data => {
+				this.evals = Array.from(data.message);
+				//console.log(this.evals);
+				this.loadingData = false;
+				this.processingData = false;
+			}, error => {
+				console.log(error);
+				this.processingData = false;
+				this.loading = false;
+				this.loadingData = false;
+			});
 	}
 
   /*
   Metodo para obtener las calificaciones por grupo
   */
-  getGradesforgroup(idgroup:any, query:any, ouType:any){
-    this.router.navigate(['/reports/gradesbygroup',idgroup, query, ouType]);
-  }
+  // getGradesforgroup(idgroup:any, query:any, ouType:any){
+  //   this.router.navigate(['/reports/gradesbygroup',idgroup, query, ouType]);
+  // }
+	getGradesforgroup(idgroup:string) {
+		//console.log(idgroup);
+		this.router.navigate(['/reports/gradesbygroup', idgroup]);
+	}
 
 }

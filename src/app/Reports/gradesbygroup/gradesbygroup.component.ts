@@ -23,6 +23,12 @@ export class GradesbygroupComponent implements OnInit {
   public query:any;
   public ouType:any;
   public group:string;
+	public groupData:{
+		beginDateSpa: string,
+		endDateSpa: string,
+		code: string
+	}
+	public titles:any[]=[];
   public roosterstudents:any[]=[];
   public data:AOA = [ [1, 2], [3, 4] ];
   public data2:AOA = []=[];
@@ -43,12 +49,12 @@ export class GradesbygroupComponent implements OnInit {
       if(params['idgroup']!=null){
         this.idgroup = params['idgroup'];
       }
-      if(params['query']!=null){
-        this.query = params['query'];
-      }
-      if(params['ouType']!=null){
-        this.ouType = params['ouType'];
-      }
+      // if(params['query']!=null){
+      //   this.query = params['query'];
+      // }
+      // if(params['ouType']!=null){
+      //   this.ouType = params['ouType'];
+      // }
 
     });
   }
@@ -65,7 +71,19 @@ export class GradesbygroupComponent implements OnInit {
     this.data2.push(this.headersXlsx);
     this._srvirg.getGradesforgroup(this.idgroup).subscribe(data=>{
       this.group = data.group;
+			this.groupData = {
+				beginDateSpa: data.beginDateSpa,
+				endDateSpa: data.endDateSpa,
+				code: data.groupCode
+			};
       this.roosterstudents = data.roster;
+			let firstStudent = this.roosterstudents[0];
+			if(firstStudent.grades && Array.isArray(firstStudent.grades) && firstStudent.grades.length > 0) {
+				firstStudent.grades.forEach((grade:any) => {
+					this.titles.push(grade.blockTitle);
+				});
+			}
+			console.log(this.titles);
       this.course = data.course;
       this.duration = data.courseDuration;
       this.durationunit = data.courseDurUnits;
@@ -156,7 +174,7 @@ export class GradesbygroupComponent implements OnInit {
   }
 
   returnCharts(){
-    this._router.navigate(['/reports/charts', this.query, this.ouType]);
+    this._router.navigate(['/reports/consolereports']);
   }
 
   /*

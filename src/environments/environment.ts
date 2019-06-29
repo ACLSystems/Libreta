@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: 'https://alumno-test.sloppy.zone/',
+  url: 'https://apiadmin.sloppy.zone/',
   urlconalep: 'https://conalepvirtual-test.superatemexico.com/',
   idTutor: '5ab47313007ce400a8ef4248',
 	versionCheckURL: 'version.json'

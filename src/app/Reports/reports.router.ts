@@ -8,7 +8,8 @@ import { ConsolereportsComponent } from './consolereports/consolereports.compone
 const reportsroutingModule : Routes =[
   {path:'consolereports',component:ConsolereportsComponent},
   {path:'charts/:query/:ouType',component:ChartsComponent},
-  {path:'gradesbygroup/:idgroup/:query/:ouType',component:GradesbygroupComponent}
+  //{path:'gradesbygroup/:idgroup/:query/:ouType',component:GradesbygroupComponent}
+	{path:'gradesbygroup/:idgroup',component:GradesbygroupComponent}
 ]
 
 @NgModule({
