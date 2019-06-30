@@ -58,11 +58,32 @@
 			</form>
 		</div>
 		<div class="col-sm bg-light align-bottom text-right">
-				<small class="text-info">Ultima actualización: </small>
+				<small class="text-info">Última actualización: </small>
 				<small class="text-dark">	{{updateTime | date: "medium" }}</small><br>
 				<small class="text-danger">Esta página se actualiza automáticamente cada 10 minutos</small>
 		</div>
+		<div class="col-sm-1 bg-light align-bottom text-right">
+			<button *ngIf="updateDisable"
+				type="button"
+				placement="bottom" ngbTooltip="Espera un momento"
+				class="btn btn-danger btn-sm">
+				<i class="fas fa-hand-paper"></i>
+			</button>
+			<button *ngIf="!updateDisable"
+				type="button"
+				placement="bottom" ngbTooltip="Actualizar información"
+				class="btn btn-primary btn-sm" (click)="refresh()">
+				<i class="fas fa-redo-alt"></i>
+			</button>
+		</div>
 		<div class="col-sm-1"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm">
+			<div class="container-fluid bg-white text-white">
+				Aquí no dice nada
+			</div>
+		</div>
 	</div>
 	<div *ngIf="!loadingData" class="row">
 		<div class="col-sm-1"></div>
@@ -75,16 +96,17 @@
 			<div class="row">
 				<div *ngIf="displayEvals" class="col-sm-5">
 					<div class="row">
-						<div class="col text-center">
+						<div *ngIf="projects.length > 0" class="col text-center">
 							Proyecto <b>{{projects[0]}}</b>
 						</div>
 					</div>
-					<div class="row">
+					<div *ngIf="!processingEvals" class="row">
 						<table class="table table-sm table-striped">
 							<thead>
 								<tr>
 									<td><small><b>Evaluación</b></small></td>
 									<td class="text-center"><small><b>Presentadas</b></small></td>
+									<td style="width:10%;"></td>
 								</tr>
 							<tbody>
 								<tr *ngFor="let eval of evals">
@@ -94,9 +116,27 @@
 									<td class="text-center">
 										<small>{{eval.total}}</small>
 									</td>
+									<td class="align-middle">
+										<div class="progress">
+											<div class="progress-bar progress-bar-striped bg-info"
+												role="progressbar"
+												attr.aria-valuenow="{{eval.percentage | number : '.1'}}"
+												aria-valuemin="0"
+												aria-valuemax="100"
+												[ngStyle]="{width:eval.percentage+'%'}">
+												{{eval.percentage | number : '.1'}}%
+											</div>
+										</div>
+									</td>
 								</tr>
 							</tbody>
 						</table>
+					</div>
+					<div *ngIf="processingEvals" class="row">
+						<div class="col alert alert-info text-center">
+							<i class="fas fa-sync fa-spin fa-2x"></i><br>
+							<h4>Preparando estadística</h4>
+						</div>
 					</div>
 				</div>
 				<div class="col-sm-1"></div>
@@ -169,6 +209,85 @@
 						</tbody>
 					</table>
 				</div>
+			</div>
+			<div class="row">
+				<div class="col text-center text-white bg-success">
+					<h5>Estadística por cursos</h5>
+				</div>
+			</div>
+			<div class="row">
+				<table class="table table-sm table-striped">
+					<thead>
+						<tr>
+							<th scope="col"><i class="fas fa-list-ol"></i></th>
+							<th scope="col">Curso</th>
+							<th></th>
+							<th style="width:15%;"></th>
+							<th scope="col" class="text-right"><i class="fas fa-user"></i></th>
+							<th scope="col" class="text-info text-right"><i class="fas fa-forward"></i></th>
+							<th scope="col" class="text-danger text-right"><i class="fas fa-stop-circle"></i></th>
+							<th scope="col" class="text-success text-right"><i class="fas fa-award"></i></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let curso of courses; let i=index;" class="">
+							<th scope="row">
+								<small>{{i+1}}</small>
+							</th>
+							<td>
+								<small>
+									{{curso.title}} <span class="text-dark">({{curso.code}})</span>
+								</small>
+							</td>
+							<td>
+								<small>{{curso.percentage| number : '.1'}}%</small>
+							</td>
+							<td class="align-middle">
+								<div class="progress">
+									<div class="progress-bar progress-bar-striped bg-success"
+										role="progressbar"
+										attr.aria-valuenow="{{curso.percentage | number : '.1'}}"
+										aria-valuemin="0"
+										aria-valuemax="100"
+										[ngStyle]="{width:curso.percentage+'%'}">
+									</div>
+								</div>
+							</td>
+							<td *ngIf="curso.totalUsers == curso.usersPassed"
+								class="text-success text-right">
+								<small>{{curso.totalUsers}}</small>
+							</td>
+							<td *ngIf="curso.totalUsers > curso.usersPassed"
+								class="text-right">
+								<small>{{curso.totalUsers}}</small>
+							</td>
+							<td *ngIf="curso.usersOnTrack == '0'"
+								class="text-right">
+								<small class="text-danger">{{curso.usersOnTrack}}</small>
+							</td>
+							<td *ngIf="curso.usersOnTrack != '0'"
+								class="text-right">
+								<small class="text-info">{{curso.usersOnTrack}}</small>
+							</td>
+							<td *ngIf="(curso.totalUsers - curso.usersOnTrack) > 0"
+								class="text-right">
+								<small class="text-danger">{{curso.totalUsers - curso.usersOnTrack}}</small>
+							</td>
+							<td *ngIf="(curso.totalUsers - curso.usersOnTrack) < 1"
+								class="text-right">
+								<small class="text-dark">{{curso.totalUsers - curso.usersOnTrack}}</small>
+							</td>
+							<td *ngIf="curso.usersPassed == '0'"
+								class="text-right">
+								<small class="text-danger">{{curso.usersPassed}}</small>
+							</td>
+							<td *ngIf="curso.usersPassed != '0'"
+								class="text-right">
+								<small class="text-success">{{curso.usersPassed}}</small>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 			<div class="row">
 				<div class="col text-center text-white bg-success">
