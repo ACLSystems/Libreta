@@ -270,6 +270,11 @@ export class ServiceisorgService {
     return this.http.get(this.url + 'api/v1/supervisor/user/getdetails?username=' + username);
   }
 
+	public modifyUser(bodypass): Observable<any> {
+		const params = JSON.stringify(bodypass);
+    return this.http.put(this.url + 'api/v1/admin/user/modify',params);
+  }
+
   public resetpassBySupervisor(bodypass): Observable<any> {
     const params = JSON.stringify(bodypass);
     const headers = new HttpHeaders({

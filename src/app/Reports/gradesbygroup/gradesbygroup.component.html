@@ -66,7 +66,7 @@
       <button type="button"
 				class="btn btn-outline-success btn-sm"
 				placement="bottom"
-				ngbTooltip="Exportar a Excel"
+				ngbTooltip="Impresión masiva de constancias"
 				(click)="printCertificatedMass()">
 				<i class="fas fa-window-restore"></i> Impresión masiva
 			</button>
@@ -79,6 +79,7 @@
 		  <table class="table table-responsive-sm">
 		    <thead class="thead-light">
 					<tr>
+						<th *ngIf="displayRFC"><small class="font-weight-bold">RFC</small></th>
 			      <th><small class="font-weight-bold">Nombre completo</small></th>
 			      <th><small class="font-weight-bold">Correo electrónico</small></th>
 			      <th class="text-center"><small class="font-weight-bold">Avance del curso</small></th>
@@ -89,6 +90,7 @@
 		    </thead>
 		    <tbody>
 		      <tr *ngFor="let item of roosterstudents;let idrooster=index">
+						<td *ngIf="displayRFC"><small>{{item.RFC}}</small></td>
 		        <td><small>{{item.name}} {{item.fatherName}} {{item.motherName}}</small></td>
 		        <td><small>{{item.email}}</small></td>
 		        <td class="text-center"><small>{{item.track}}</small></td>
