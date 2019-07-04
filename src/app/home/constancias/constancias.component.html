@@ -1,0 +1,82 @@
+
+<div class="row">
+	<div class="col-sm-1"></div>
+		<div class="col-sm">
+			<h3 class="text-center"><i class="fas fa-certificate"></i> Validador de constancias</h3>
+			<hr>
+			<div class="row">
+				<div class="col-sm">
+					<div class="row">
+						<div class="col-sm-1"></div>
+						<div class="col-sm">
+							<!-- <div class="input-group input-group-sm mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text text-success" id="folio-text">Folio</span>
+								</div>
+								<input type="text" class="form-control" [placeholder]="contentblock.blockTitle" [(ngModel)]="folio">
+							</div> -->
+							<div class="input-group mb-3">
+			          <input type="text" class="form-control" #folio  placeholder="Folio de la constancia">
+			          <div class="input-group-append">
+			            <button *ngIf="updateDisable"
+										class="btn btn-secondary"
+										type="button" disabled>
+			              <i [ngClass]=" { 'fa-search':!buscando, 'fa-sync fa-spin':buscando }" class="fa"></i>
+			              Espera {{segundos}} segundos
+			            </button>
+									<button *ngIf="!updateDisable" class="btn btn-success" type="button" (click)="searchCertificate(folio.value)">
+			              <i [ngClass]=" { 'fa-search':!buscando, 'fa-sync fa-spin':buscando }" class="fa"></i>
+			              <span *ngIf="!buscando">Buscar</span>
+			              <span *ngIf="buscando">Buscando</span>
+			            </button>
+			          </div>
+			        </div>
+						</div>
+						<div class="col-sm-1"></div>
+					</div>
+					<div *ngIf="certificateFound" class="row">
+						<div class="col-sm">
+							<div class="row">
+								<div class="col-sm-1"></div>
+								<div class="col-sm">
+									<div class="card" style="width: 26rem;">
+										<img src="{{certificate.courseImage}}" alt="Curso" class="card-img-top">
+										<div class="card-body">
+											<h5 class="card-title">{{certificate.courseName}}</h5>
+											<h6 class="text-success">{{certificate.studentName}}</h6>
+											<p>{{certificate.passDate | date: 'MMMM dd, yyyy' | titlecase  }}</p>
+											<p>Folio: <span class="text-success">{{certificate.certificateNumber}}</span></p>
+										</div>
+										<div class="card-footer text-muted">
+											Constancia generada <b class="text-danger">{{certificate.passDate | timeAgo }}</b>
+										</div>
+									</div>
+								</div>
+								</div>
+						</div>
+					</div>
+					<div *ngIf="!certificateFound && busqueda" class="row">
+						<div class="col-sm">
+							<div class="row">
+								<div class="col-sm-1"></div>
+								<div class="col-sm">
+									<div class="alert alert-info">
+										{{messageError}}
+									</div>
+								</div>
+								<div class="col-sm-1"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm">
+					<p class="text-justify">Sabemos que los documentos pueden falsificarse y en Conalep Virtual hemos tomado medidas para evitar la falsificación de documentos generados por este sistema.</p>
+					<p class="text-justify">Cada constancia que generamos tiene un número de folio. Este número de folio puedes consultarlo aquí para validar su procedencia.</p>
+					<p class="text-justify">Solo ingresa el número de folio de la constancia expedida y te diremos a quién pertenece.</p>
+					<hr>
+					<div class=" alert alert-info text-justify"><span class="font-weight-bolder">Nota:</span> Los folios son generados a partir de la recolecta de la constancia. Es decir, que si el participante recolecta la constancia un año después de haber terminado el curso, le tocará un folio posterior al de algunos participantes que tomaron el mismo curso, aunque la fecha de término se despliega y se imprime en la constancia.</div>
+				</div>
+			</div>
+		</div>
+	<div class="col-sm-1"></div>
+</div>

@@ -16,6 +16,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { QuotationComponent } from './quotation/quotation.component';
 import { RecoverpasswordComponent } from './../shared/recoverpassword/recoverpassword.component';
 import { SigninComponent } from './signin/signin.component';
+import { ConstanciasComponent } from './constancias/constancias.component';
+import { TimeAgoPipe } from 'time-ago-pipe';
 
 @NgModule({
   imports: [
@@ -36,7 +38,9 @@ import { SigninComponent } from './signin/signin.component';
     ContrasenaPipe,
     HomeComponent,
     QuotationComponent,
-    CourseshopComponent
+    CourseshopComponent,
+    ConstanciasComponent,
+		TimeAgoPipe
   ],
   providers: [
     HomeService

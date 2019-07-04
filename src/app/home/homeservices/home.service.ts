@@ -101,4 +101,8 @@ export class HomeService {
     return this.http.get(this.url+'api/term/list?org='+org+"&query="+json+"&limit=50",{observe:'response'})//.map(res=>res.json());
   }
 
+	getCertificate(folio:number) {
+		return this.http.get(this.url+'api/cert/get?certificate='+folio);
+	}
+
 }
