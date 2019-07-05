@@ -108,7 +108,8 @@ export class ServiceisorgService {
   public setSection(coursecode): Observable<any> {
     const params = JSON.stringify(coursecode);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+			'x-access-token':this.token
     });
     return this.http.put(this.url + 'api/v1/author/course/newsection' , params , {headers:headers});
   }
@@ -119,7 +120,8 @@ export class ServiceisorgService {
   public setNewBlock(block): Observable<any> {
     const params = JSON.stringify(block);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+			'x-access-token':this.token
     });
     return this.http.post(this.url +'api/v1/author/course/createblock' , params , {headers:headers});
 
@@ -130,7 +132,8 @@ export class ServiceisorgService {
   public setNewCourse(course): Observable<any> {
     const params = JSON.stringify(course);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+			'x-access-token':this.token
     });
     return this.http.post(this.url + 'api/v1/author/course/create', params , {headers:headers});
   }
@@ -163,7 +166,8 @@ export class ServiceisorgService {
   public updateContent(block: any): Observable<any> {
     const params = JSON.stringify(block);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+			'x-access-token':this.token
     });
     return this.http.put(this.url + 'api/v1/author/course/modifyblock', params , {headers:headers});
   }
@@ -171,21 +175,30 @@ export class ServiceisorgService {
   Metodo para traer el contenido del curso que editara el autor
   */
   public getContent(id):Observable<any>{
-    return this.http.get(this.url + 'api/v1/author/course/getblock?id=' + id);
+		const headers = new HttpHeaders({
+			'x-access-token':this.token
+    });
+    return this.http.get(this.url + 'api/v1/author/course/getblock?id=' + id, {headers:headers});
   }
 
   /*
   metodo para obtener el temario por cada curso y mostrarlo al autor
   */
   public getlistBlock(courseid):Observable<any>{
-    return this.http.get(this.url+'api/v1/author/course/getblocklist?id=' + courseid + '&section1=0&section2=500');
+		const headers = new HttpHeaders({
+			'x-access-token':this.token
+    });
+    return this.http.get(this.url+'api/v1/author/course/getblocklist?id=' + courseid + '&section1=0&section2=500', {headers:headers});
   }
 
   /*
   metodo para obtener el listado de cursos y mostrarlos al autor
   */
   public getCoursesAuth():Observable<any>{
-    return this.http.get(this.url+'api/v1/course/listcourses');
+		const headers = new HttpHeaders({
+			'x-access-token':this.token
+    });
+    return this.http.get(this.url+'api/v1/course/listcourses',{headers:headers});
   }
 
   /*
