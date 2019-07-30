@@ -410,7 +410,8 @@ export class MycoursesComponent implements OnInit, DoCheck {
         this.data.finalGrade,
         this.data.duration,
         this.data.durationUnits,
-        this.data.passDateSpa
+        this.data.passDateSpa,
+				null
       );
     } else {
       this.generateDocs.printdocassistance(
@@ -420,7 +421,8 @@ export class MycoursesComponent implements OnInit, DoCheck {
         this.data.course,
         this.data.duration,
         this.data.durationUnits,
-        this.data.passDateSpa
+        this.data.passDateSpa,
+				null
       );
     }
   }

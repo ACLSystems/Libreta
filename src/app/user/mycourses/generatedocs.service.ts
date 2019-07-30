@@ -10,7 +10,7 @@ export class GeneratedocsService {
 
   }
 
-  printdocumentcredit(document:any, certificateNumber:any, nameStudent:any, course:string, finalGrade:any, time:any, units:any, passDate:any){
+  printdocumentcredit(document:any, certificateNumber:any, nameStudent:any, course:string, finalGrade:any, time:any, units:any, passDate:any, docName: string){
 
     let grade = this.decimal.transform(finalGrade,'.0-2');
     var doc = new jsPDF();
@@ -57,11 +57,12 @@ export class GeneratedocsService {
     doc.setFontSize(11);
     doc.text(110,201,passDate,null,null);
 
-    doc.save(nameStudent+"-"+course+".PDF");
+		let docSave = docName || nameStudent;
+    doc.save(docSave+"-"+course+".pdf");
 
   }
 
-  printdocassistance(document:any, certificateNumber:any, nameStudent:any, course:any, time:any, units:any, passDate:any){
+  printdocassistance(document:any, certificateNumber:any, nameStudent:any, course:any, time:any, units:any, passDate:any, docName: string){
     var doc = new jsPDF();
     doc.addImage(document,'jpg',0,0,210,300);
 
@@ -99,7 +100,8 @@ export class GeneratedocsService {
     doc.setFontSize(11);
     doc.text(125,202,passDate,null,null,'center');
 
-    doc.save(nameStudent+"-"+course+".PDF");
+		let docSave = docName || nameStudent;
+    doc.save(docSave+"-"+course+".pdf");
   }
 
 }

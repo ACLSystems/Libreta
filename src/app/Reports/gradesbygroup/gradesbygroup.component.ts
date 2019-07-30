@@ -202,9 +202,9 @@ export class GradesbygroupComponent implements OnInit {
     for(let id of this.roosterstudents){
       if(id.pass && id.passDate){
         if(id.finalGrade >= 60){
-          this.genedocs.printdocumentcredit(constancias.constancia_acreditacion, id.certificateNumber, id.name, this.course, id.finalGrade, this.duration, this.durationunit, id.passDateSpa);
+          this.genedocs.printdocumentcredit(constancias.constancia_acreditacion, id.certificateNumber, id.name, this.course, id.finalGrade, this.duration, this.durationunit, id.passDateSpa, id.RFC || null);
         } else {
-          this.genedocs.printdocassistance(constancias.constancia_participacion, id.certificateNumber, id.name,this.course, this.duration, this.durationunit, id.passDateSpa);
+          this.genedocs.printdocassistance(constancias.constancia_participacion, id.certificateNumber, id.name,this.course, this.duration, this.durationunit, id.passDateSpa, id.RFC || null);
         }
       }
     }
@@ -219,9 +219,9 @@ export class GradesbygroupComponent implements OnInit {
       let nombreCompleto = name+" "+fatherName+" "+motherName;
       if(finalGrade >= 60){
 				console.log(passDate);
-        this.genedocs.printdocumentcredit(constancias.constancia_acreditacion, certificateNumber, nombreCompleto, this.course, finalGrade, this.duration, this.durationunit, passDate);
+        this.genedocs.printdocumentcredit(constancias.constancia_acreditacion, certificateNumber, nombreCompleto, this.course, finalGrade, this.duration, this.durationunit, passDate, null);
       }else{
-        this.genedocs.printdocassistance(constancias.constancia_participacion, certificateNumber, nombreCompleto,this.course, this.duration, this.durationunit, passDate);
+        this.genedocs.printdocassistance(constancias.constancia_participacion, certificateNumber, nombreCompleto,this.course, this.duration, this.durationunit, passDate, null);
       }
       this.loading = false;
   }
