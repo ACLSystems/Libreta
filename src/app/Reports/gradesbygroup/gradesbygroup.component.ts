@@ -61,6 +61,7 @@ export class GradesbygroupComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+		localStorage.setItem('massCertChunk', String(0));
     this._srvirg.getGradesforgroup(this.idgroup).subscribe(data=>{
 			this.data = data;
 			this.roosterstudents = data.roster;
@@ -198,17 +199,25 @@ export class GradesbygroupComponent implements OnInit {
   Metodo para la impresion masiva de los cursos
   */
   public printCertificatedMass(){
-    this.loading = true;
-    for(let id of this.roosterstudents){
-      if(id.pass && id.passDate){
-        if(id.finalGrade >= 60){
-          this.genedocs.printdocumentcredit(constancias.constancia_acreditacion, id.certificateNumber, id.name, this.course, id.finalGrade, this.duration, this.durationunit, id.passDateSpa, id.RFC || null);
-        } else {
-          this.genedocs.printdocassistance(constancias.constancia_participacion, id.certificateNumber, id.name,this.course, this.duration, this.durationunit, id.passDateSpa, id.RFC || null);
-        }
-      }
-    }
-    this.loading = false;
+    //this.loading = true;
+		let chunk = parseInt(localStorage.getItem('massCertChunk')) || 0;
+		if((chunk * 10 ) < this.roosterstudents.length){
+			let init = chunk * 10;
+			let finish = (chunk + 1) * 10;
+			finish = finish > this.roosterstudents.length ? this.roosterstudents.length : finish;
+	    for(var i=init; i < finish; i++){
+				let id = this.roosterstudents[i];
+	      if(id.pass && id.passDate){
+	        if(id.finalGrade >= 60){
+	          this.genedocs.printdocumentcredit(constancias.constancia_acreditacion, id.certificateNumber, `${id.name} ${id.fatherName} ${id.motherName}`, this.course, id.finalGrade, this.duration, this.durationunit, id.passDateSpa, id.RFC || null);
+	        } else {
+	          this.genedocs.printdocassistance(constancias.constancia_participacion, id.certificateNumber, `${id.name} ${id.fatherName} ${id.motherName}`,this.course, this.duration, this.durationunit, id.passDateSpa, id.RFC || null);
+	        }
+	      }
+	    }
+			localStorage.setItem('massCertChunk', String(chunk + 1));
+		}
+    //this.loading = false;
   }
 
   /*
