@@ -53,7 +53,6 @@ export class ConstanciasComponent implements OnInit {
 		let numero = 9; // veces + 1 que vamos a contar
 		const timer$ = timer(this.secondsDisable); // este va a servir para deshabilitar la suscripción secondsCounter
 		this.updateDisableSubscription = interval(this.secondsDisable).subscribe(() => {
-			//console.log('Activando búsqueda')
 			this.updateDisable = false;
 			this.updateDisableSubscription.unsubscribe();
 		})

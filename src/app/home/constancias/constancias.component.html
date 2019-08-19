@@ -24,9 +24,21 @@
 			              <i [ngClass]=" { 'fa-search':!buscando, 'fa-sync fa-spin':buscando }" class="fa"></i>
 			              Espera {{segundos}} segundos
 			            </button>
-									<button *ngIf="!updateDisable" class="btn btn-success" type="button" (click)="searchCertificate(folio.value)">
+									<button *ngIf="!updateDisable && folio.value"
+										class="btn btn-success"
+										type="button"
+										(click)="searchCertificate(folio.value)">
 			              <i [ngClass]=" { 'fa-search':!buscando, 'fa-sync fa-spin':buscando }" class="fa"></i>
 			              <span *ngIf="!buscando">Buscar</span>
+			              <span *ngIf="buscando">Buscando</span>
+			            </button>
+									<button *ngIf="!updateDisable && !folio.value"
+										class="btn btn-success"
+										placement="bottom" 
+										ngbTooltip="Ingresa el folio de la constancia antes de proceder"
+										type="button" disable>
+										<i [ngClass]=" { 'fa-search':!buscando, 'fa-sync fa-spin':buscando }" class="fa"></i>
+										<span *ngIf="!buscando">Buscar</span>
 			              <span *ngIf="buscando">Buscando</span>
 			            </button>
 			          </div>

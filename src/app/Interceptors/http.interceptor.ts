@@ -38,7 +38,7 @@ export class HttpConfigInterceptor implements HttpInterceptor{
 			    //localStorage.clear();
 					this.router.navigate(['/home']);
 				} else {
-	        console.log(error.error);
+	        console.log(error);
 	        return throwError(error);
 				}
       })
