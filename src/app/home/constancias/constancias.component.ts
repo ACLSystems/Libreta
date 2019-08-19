@@ -22,6 +22,9 @@ export class ConstanciasComponent implements OnInit {
 	updateDisable: boolean;
 	secondsDisable: number;
 	segundos: number;
+	captchaSiteKey: string;
+	captchaPrivateKey: string;
+	captchaValidated: boolean;
 	certificate: {
 		courseName: string,
 		courseImage: string,
@@ -44,6 +47,9 @@ export class ConstanciasComponent implements OnInit {
 		this.certificateFound = false;
 		this.busqueda = false;
 		this.updateDisable = false;
+		this.captchaSiteKey = '6LdAzbMUAAAAACI4-83Cak-Q3B_RYQnrVFPLsFcA';
+		this.captchaPrivateKey = '6LdAzbMUAAAAAHvftyvcAeOv4DuLMX4isu-Ttz8e';
+		this.captchaValidated = false;
   }
 
 	searchCertificate(folio:number) {
@@ -90,6 +96,10 @@ export class ConstanciasComponent implements OnInit {
 		}, error => {
 			console.log(error);
 		});
+	}
+
+	resolved(captchaResponse: string) {
+		console.log(`Resolved captcha with response ${captchaResponse}`);
 	}
 
 }

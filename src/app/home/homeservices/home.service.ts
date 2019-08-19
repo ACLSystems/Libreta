@@ -105,4 +105,5 @@ export class HomeService {
 		return this.http.get(this.url+'api/cert/get?certificate='+folio);
 	}
 
+
 }

@@ -18,6 +18,7 @@ import { RecoverpasswordComponent } from './../shared/recoverpassword/recoverpas
 import { SigninComponent } from './signin/signin.component';
 import { ConstanciasComponent } from './constancias/constancias.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { TimeAgoPipe } from 'time-ago-pipe';
     NgxPaginationModule,
     NgbModule,
     FormsModule,
-    ArchwizardModule
+    ArchwizardModule,
+		RecaptchaModule.forRoot()
   ],
   declarations: [
     CursosComponent,
