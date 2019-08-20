@@ -15,6 +15,9 @@
 								</div>
 								<input type="text" class="form-control" [placeholder]="contentblock.blockTitle" [(ngModel)]="folio">
 							</div> -->
+							<div>
+								<re-captcha (resolved)="resolved($event)" siteKey="{{captchaSiteKey}}"></re-captcha>
+							</div>
 							<div class="input-group mb-3">
 			          <input type="text" class="form-control" #folio  placeholder="Folio de la constancia">
 			          <div class="input-group-append">
@@ -24,7 +27,7 @@
 			              <i [ngClass]=" { 'fa-search':!buscando, 'fa-sync fa-spin':buscando }" class="fa"></i>
 			              Espera {{segundos}} segundos
 			            </button>
-									<button *ngIf="!updateDisable && folio.value"
+									<button *ngIf="!updateDisable && folio.value && captchaValidated"
 										class="btn btn-success"
 										type="button"
 										(click)="searchCertificate(folio.value)">
@@ -41,10 +44,19 @@
 										<span *ngIf="!buscando">Buscar</span>
 			              <span *ngIf="buscando">Buscando</span>
 			            </button>
+									<button *ngIf="!updateDisable && folio.value && !captchaValidated"
+										class="btn btn-success"
+										placement="bottom"
+										ngbTooltip="Procede primero con el reCaptcha para validar que eres humano"
+										type="button" disable>
+										<i [ngClass]=" { 'fa-search':!buscando, 'fa-sync fa-spin':buscando }" class="fa"></i>
+										<span *ngIf="!buscando">Buscar</span>
+			              <span *ngIf="buscando">Buscando</span>
+			            </button>
 			          </div>
 			        </div>
-							<div>
-								<re-captcha (resolved)="resolved($event)" siteKey="6LdAzbMUAAAAACI4-83Cak-Q3B_RYQnrVFPLsFcA"></re-captcha>
+							<div *ngIf='captchaError' class="alert alert-danger">
+								{{captchaError}}
 							</div>
 						</div>
 						<div class="col-sm-1"></div>
@@ -87,7 +99,7 @@
 				<div class="col-sm">
 					<p class="text-justify">Sabemos que los documentos pueden falsificarse y en Conalep Virtual hemos tomado medidas para evitar la falsificación de documentos generados por este sistema.</p>
 					<p class="text-justify">Cada constancia que generamos tiene un número de folio. Este número de folio puedes consultarlo aquí para validar su procedencia.</p>
-					<p class="text-justify">Solo ingresa el número de folio de la constancia expedida y te diremos a quién pertenece.</p>
+					<p class="text-justify">Valida el reCaptcha antes de proceder y luego ingresa el número de folio de la constancia expedida y te diremos a quién pertenece.</p>
 					<hr>
 					<div class=" alert alert-info text-justify"><span class="font-weight-bolder">Nota:</span> Los folios son generados a partir de la recolecta de la constancia. Es decir, que si el participante recolecta la constancia un año después de haber terminado el curso, le tocará un folio posterior al de algunos participantes que tomaron el mismo curso, aunque la fecha de término se despliega y se imprime en la constancia.</div>
 				</div>

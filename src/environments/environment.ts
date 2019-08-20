@@ -7,7 +7,8 @@ export const environment = {
   url: 'http://localhost:3050/',
   urlconalep: 'http://localhost:4200/',
   idTutor: '5ab47313007ce400a8ef4248',
-	versionCheckURL: 'version.json'
+	versionCheckURL: 'version.json',
+	captchaSiteKey: '6LdAzbMUAAAAACI4-83Cak-Q3B_RYQnrVFPLsFcA'
 };
 
 /*

@@ -105,5 +105,11 @@ export class HomeService {
 		return this.http.get(this.url+'api/cert/get?certificate='+folio);
 	}
 
-
+	captcha(response:string) {
+		let body = {response};
+		let headers = {
+			'Content-Type': 'application/json'
+		}
+		return this.http.post(this.url+'api/user/captcha',body,{headers});
+	}
 }

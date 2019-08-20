@@ -3,6 +3,7 @@ import { HomeService } from '../homeservices/home.service';
 import { registerLocaleData } from '@angular/common';
 import { interval, Subscription, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from './../../../environments/environment';
 
 import localeMx from '@angular/common/locales/es-MX';
 
@@ -11,10 +12,11 @@ registerLocaleData(localeMx, 'es-Mx');
 @Component({
   selector: 'app-constancias',
   templateUrl: './constancias.component.html',
-  styleUrls: ['./constancias.component.css'],
 	providers: [ { provide: LOCALE_ID, useValue: 'es-Mx'}]
 })
 export class ConstanciasComponent implements OnInit {
+
+	public captchaSiteKey: string;
 
 	buscando: boolean;
 	messageError: string;
@@ -22,9 +24,9 @@ export class ConstanciasComponent implements OnInit {
 	updateDisable: boolean;
 	secondsDisable: number;
 	segundos: number;
-	captchaSiteKey: string;
-	captchaPrivateKey: string;
 	captchaValidated: boolean;
+	captchaError: boolean;
+	captchaErrorMessage: string;
 	certificate: {
 		courseName: string,
 		courseImage: string,
@@ -40,16 +42,18 @@ export class ConstanciasComponent implements OnInit {
 	certificateFound: boolean;
 	private updateDisableSubscription: Subscription;
 
-  constructor(private homeService: HomeService) { }
+  constructor(private homeService: HomeService) {
+		this.captchaSiteKey = environment.captchaSiteKey;
+	 }
 
   ngOnInit() {
 		this.buscando = false;
 		this.certificateFound = false;
 		this.busqueda = false;
 		this.updateDisable = false;
-		this.captchaSiteKey = '6LdAzbMUAAAAACI4-83Cak-Q3B_RYQnrVFPLsFcA';
-		this.captchaPrivateKey = '6LdAzbMUAAAAAHvftyvcAeOv4DuLMX4isu-Ttz8e';
 		this.captchaValidated = false;
+		this.captchaErrorMessage = '';
+		this.captchaError = false;
   }
 
 	searchCertificate(folio:number) {
@@ -99,7 +103,15 @@ export class ConstanciasComponent implements OnInit {
 	}
 
 	resolved(captchaResponse: string) {
-		console.log(`Resolved captcha with response ${captchaResponse}`);
+		//console.log(`Resolved captcha with response ${captchaResponse}`);
+		this.homeService.captcha(captchaResponse).subscribe((res:any) => {
+			if(res && res.success) {
+				this.captchaValidated = true;
+			} else {
+				this.captchaErrorMessage = 'Error con reCaptcha. Favor de intentar nuevamente';
+				this.captchaError = true;
+			}
+		});
 	}
 
 }
