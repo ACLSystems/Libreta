@@ -104,14 +104,18 @@ export class ConstanciasComponent implements OnInit {
 
 	resolved(captchaResponse: string) {
 		//console.log(`Resolved captcha with response ${captchaResponse}`);
-		this.homeService.captcha(captchaResponse).subscribe((res:any) => {
-			if(res && res.success) {
-				this.captchaValidated = true;
-			} else {
-				this.captchaErrorMessage = 'Error con reCaptcha. Favor de intentar nuevamente';
-				this.captchaError = true;
-			}
-		});
+		if(captchaResponse){
+			this.homeService.captcha(captchaResponse).subscribe((res:any) => {
+				if(res && res.success) {
+					this.captchaValidated = true;
+				} else {
+					this.captchaErrorMessage = 'Error con reCaptcha. Favor de intentar nuevamente';
+					this.captchaError = true;
+				}
+			});
+		} else {
+			this.captchaValidated = false;
+		}
 	}
 
 }
