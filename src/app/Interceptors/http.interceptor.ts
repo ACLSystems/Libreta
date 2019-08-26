@@ -31,12 +31,14 @@ export class HttpConfigInterceptor implements HttpInterceptor{
       catchError((error: HttpErrorResponse) => {
 				if(error.error.message === 'Error 205: User not authorized' || // Con estatus 403
 					error.error.message === 'Error 200: Missing token' || // Con estatus 401
-					error.error.message === 'Error 204: Token expired' // Con estatus 403
+					error.error.message === 'Error 204: Token expired' || // Con estatus 403
+					error.error.message === 'Token expirado. Favor de iniciar sesión' ||// Con estatus 401
+					error.status === 401
 			) {
 					//localStorage.removeItem('identiti');
 			    //localStorage.removeItem('token');
 			    //localStorage.clear();
-					this.router.navigate(['/home']);
+					this.router.navigate(['/login']);
 				} else {
 	        console.log(error);
 	        return throwError(error);
