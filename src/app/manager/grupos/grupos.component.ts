@@ -11,7 +11,7 @@ import { NgbModule, NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-boots
 })
 export class GruposComponent implements OnInit {
 
-  identiti:any
+  identity:any
   request:any;
 
   requestsManager:any[];
@@ -35,7 +35,7 @@ export class GruposComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.identiti = this.userservice.getIdentiti();
+    this.identity = this.userservice.getidentity();
     this.getRequests();
     this.getgroups();
   }
@@ -106,7 +106,7 @@ export class GruposComponent implements OnInit {
   public getgroups(){
     this.groupsmanager = [];
     this.loading = true;
-    this.managerService.getGroupsManager(this.identiti.ouid).subscribe(data=>{
+    this.managerService.getGroupsManager(this.identity.ouid).subscribe(data=>{
       if(data.message!='No groups found'){
         this.groupsmanager = data.message
       }

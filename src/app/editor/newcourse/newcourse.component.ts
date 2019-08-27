@@ -10,7 +10,7 @@ import { NewCourse } from './../../models/course/newCourse';
   providers:[UserService, ServiceisorgService]
 })
 export class NewcourseComponent implements OnInit {
-  identiti;
+  identity;
   newcourse:NewCourse;
   categories:string[]=[];
   keywords:string[]=[];
@@ -21,7 +21,7 @@ export class NewcourseComponent implements OnInit {
   messageSuccessNC:any;
 
   constructor(private user:UserService, private serviceorg:ServiceisorgService, private router:Router) {
-    this.identiti = this.user.getIdentiti();
+    this.identity = this.user.getidentity();
     this.newcourse = new NewCourse('','','',null,false,null,'','','','','',0,'','');
   }
 

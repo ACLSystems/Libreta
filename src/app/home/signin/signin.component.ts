@@ -42,7 +42,7 @@ export class SigninComponent implements OnInit, DoCheck {
   public messaerrstd: string;
   public usertype: string;
   public userorig: string;
-  public identiti: any;
+  public identity: any;
 
   public carrerasList: any[] = [];
   public areadata: any[] = [];
@@ -91,11 +91,11 @@ export class SigninComponent implements OnInit, DoCheck {
 
     this.signinService.registerUser(this.userlms).subscribe( () => {
       this.login = new Login (username, password);
-      this.signinService.singUp(this.login).subscribe(data => {
+      this.signinService.signIn(this.login).subscribe(data => {
         localStorage.setItem('token', data.token);
         this.signinService.getUser(this.login.username).subscribe(res => {
-          const identiti = res;
-          localStorage.setItem('identiti', JSON.stringify(identiti));
+          const identity = res;
+          localStorage.setItem('identity', JSON.stringify(identity));
           this.route.navigate(['/consoleuser']);
         });
       });

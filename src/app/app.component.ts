@@ -14,7 +14,7 @@ export class AppComponent implements OnInit{
   title = 'libreta';
   status = 'ONLINE'
   isConnect = true;
-  identiti: any;
+  identity: any;
   token: any;
 
 
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.identiti = this.userservice.getIdentiti();
+    this.identity = this.userservice.getidentity();
     this.token = this.userservice.getToken();
     this.checkconnection();
   }
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit{
   */
 // tslint:disable-next-line: use-life-cycle-interface
   ngDoCheck() {
-    this.identiti = this.userservice.getIdentiti();
+    this.identity = this.userservice.getidentity();
     this.token = this.userservice.getToken();
     this.checkconnection();
     this.checkSesion();
@@ -59,7 +59,7 @@ export class AppComponent implements OnInit{
       if (!this.isConnect) {
         this.route.navigate(['/error','Offline']);
       } else {
-        if (this.identiti != null) {
+        if (this.identity != null) {
           this.route.navigate(['/consoleuser']);
         } else {
           this.route.navigate(['/home']);

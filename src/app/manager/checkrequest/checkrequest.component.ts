@@ -19,7 +19,7 @@ export class CheckrequestComponent implements OnInit {
   detailsFactura:any;
   factura:boolean;
   check:any;
-  identiti:any;
+  identity:any;
 
   rfccoporates:any[]=[];
   emails:any[]=[];
@@ -69,7 +69,7 @@ export class CheckrequestComponent implements OnInit {
 
 
   constructor(private modalService:NgbModal, private managerservice:ManagerserviceService, private userservice:UserService, private activatedroute:ActivatedRoute) {
-    this.identiti = this.userservice.getIdentiti();
+    this.identity = this.userservice.getidentity();
     this.activatedroute.params.subscribe(params=>{
       if(params['numberrequest']!=null){
         this.numberrequest = params['numberrequest'];
@@ -241,7 +241,7 @@ export class CheckrequestComponent implements OnInit {
     this.closeModal();
     this.closerequestprocess = true;
     if(this.emails.length==0){
-      this.emails.push(this.identiti.name);
+      this.emails.push(this.identity.name);
     }
     this.fiscaldates = new fiscalticketdates(false);
     this.fiscalticketmodel = new fiscalticketmodel(this.numberrequest, this.fiscaldates, this.getItemsRequest());
@@ -314,7 +314,7 @@ export class CheckrequestComponent implements OnInit {
   addnewemails(newemail){
     this.addmails = true;
     if(this.emails.length==0){
-      this.emails.push(this.identiti.name);
+      this.emails.push(this.identity.name);
       this.emails.push(newemail);
       this.addmails = false;
     }else{

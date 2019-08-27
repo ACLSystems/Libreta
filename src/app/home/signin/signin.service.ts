@@ -14,7 +14,7 @@ export class SigninService{
   }
 
   //metodo para aplicar el login al usuario
-  singUp(usertologin):Observable<any>{
+  signIn(usertologin):Observable<any>{
     let json = JSON.stringify(usertologin);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ export class SigninService{
   metodo para obtener la informacion del usuario
   */
   getUser(username):Observable<any>{
-    
+
     return this.http.get(this.url+'api/v1/user/getdetails?name='+username)
   }
 
@@ -34,7 +34,7 @@ export class SigninService{
   registerUser(usertosave){
     let params = JSON.stringify(usertosave);
     let headers = new HttpHeaders({'Content-Type':'application/json'});
-    return this.http.post(this.url+'api/user/register', params, {headers:headers});
+    return this.http.post(this.url+'api/user', params, {headers:headers});
   }
 
   //funcion para obtener los estados de la republica

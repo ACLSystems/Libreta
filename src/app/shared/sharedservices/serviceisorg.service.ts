@@ -12,7 +12,7 @@ import { UserService } from './user.service';
 export class ServiceisorgService {
 
   public url:string;
-  public identiti;
+  public identity;
   public token;
 
   /*
@@ -28,7 +28,7 @@ export class ServiceisorgService {
   */
   public getUserConst(groupid):Observable<any>{
     let headers = new HttpHeaders({
-      'x-access-token':this.token
+      'Authorization':'Bearer ' + this.token
     });
     return this.http.get(this.url + 'api/v1/user/tookcert?groupid=' + groupid, {headers:headers});
   }
@@ -38,7 +38,7 @@ export class ServiceisorgService {
   */
   getGradesbyou():Observable<any>{
     let headers = new HttpHeaders({
-      'x-access-token':this.token
+      'Authorization':'Bearer ' + this.token
     });
     return this.http.get(this.url + 'api/v1/supervisor/report/rostersummary', {headers:headers});
   }
@@ -48,7 +48,7 @@ export class ServiceisorgService {
   */
   getGradesStudent(groupid, studentid):Observable<any>{
     let headers = new HttpHeaders({
-      'x-access-token':this.token
+      'Authorization':'Bearer ' + this.token
     });
     return this.http.get(this.url+'api/v1/instructor/group/studentgrades?groupid='+groupid+'&studentid='+studentid,{headers:headers});
   }
@@ -58,7 +58,7 @@ export class ServiceisorgService {
   */
   getGradesforgroup(idgroup:any):Observable<any>{
     let headers = new HttpHeaders({
-      'x-access-token':this.token
+      'Authorization':'Bearer ' + this.token
     });
     return this.http.get(this.url+'api/v1/supervisor/report/gradesbygroup?groupid='+idgroup,{headers:headers});
   }
@@ -67,7 +67,7 @@ export class ServiceisorgService {
   */
   getUserInactives():Observable<any>{
     let headers = new HttpHeaders({
-      'x-access-token':this.token
+      'Authorization':'Bearer ' + this.token
     });
     return this.http.get(this.url+'api/v1/supervisor/report/userswoactivity',{headers:headers});
   }
@@ -82,7 +82,7 @@ export class ServiceisorgService {
 			queryJson = query;
 		}
     // let headers = new HttpHeaders({
-    //   'x-access-token':this.token
+    //   'Authorization':'Bearer ' + this.token
     // });
     // return this.http.get(this.url+'api/v1/supervisor/report/percentil?ou='+queryJson,{headers:headers});
 		return this.http.get(this.url+'api/v1/supervisor/report/percentil?ou='+queryJson);
@@ -97,7 +97,7 @@ export class ServiceisorgService {
   */
   public resetpassisorg(emailuser:string):Observable<any>{
     let headers = new HttpHeaders({
-      'x-access-token':this.token
+      'Authorization':'Bearer ' + this.token
     });
     return this.http.get(this.url+'api/v1/orgadm/user/passwordreset?username='+emailuser,{headers:headers});
   }
@@ -109,7 +109,7 @@ export class ServiceisorgService {
     const params = JSON.stringify(coursecode);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-			'x-access-token':this.token
+			'Authorization':'Bearer ' + this.token
     });
     return this.http.put(this.url + 'api/v1/author/course/newsection' , params , {headers:headers});
   }
@@ -121,7 +121,7 @@ export class ServiceisorgService {
     const params = JSON.stringify(block);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-			'x-access-token':this.token
+			'Authorization':'Bearer ' + this.token
     });
     return this.http.post(this.url +'api/v1/author/course/createblock' , params , {headers:headers});
 
@@ -133,7 +133,7 @@ export class ServiceisorgService {
     const params = JSON.stringify(course);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-			'x-access-token':this.token
+			'Authorization':'Bearer ' + this.token
     });
     return this.http.post(this.url + 'api/v1/author/course/create', params , {headers:headers});
   }
@@ -167,7 +167,7 @@ export class ServiceisorgService {
     const params = JSON.stringify(block);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-			'x-access-token':this.token
+			'Authorization':'Bearer ' + this.token
     });
     return this.http.put(this.url + 'api/v1/author/course/modifyblock', params , {headers:headers});
   }
@@ -176,7 +176,7 @@ export class ServiceisorgService {
   */
   public getContent(id):Observable<any>{
 		const headers = new HttpHeaders({
-			'x-access-token':this.token
+			'Authorization':'Bearer ' + this.token
     });
     return this.http.get(this.url + 'api/v1/author/course/getblock?id=' + id, {headers:headers});
   }
@@ -186,7 +186,7 @@ export class ServiceisorgService {
   */
   public getlistBlock(courseid):Observable<any>{
 		const headers = new HttpHeaders({
-			'x-access-token':this.token
+			'Authorization':'Bearer ' + this.token
     });
     return this.http.get(this.url+'api/v1/author/course/getblocklist?id=' + courseid + '&section1=0&section2=500', {headers:headers});
   }
@@ -196,7 +196,7 @@ export class ServiceisorgService {
   */
   public getCoursesAuth():Observable<any>{
 		const headers = new HttpHeaders({
-			'x-access-token':this.token
+			'Authorization':'Bearer ' + this.token
     });
     return this.http.get(this.url+'api/v1/course/listcourses',{headers:headers});
   }
@@ -296,11 +296,11 @@ export class ServiceisorgService {
     return this.http.put(this.url +'api/v1/supervisor/user/passwordreset', params, {headers: headers});
   }
 
-  public updateuserBySupervisor(bodynewuser): Observable<any> {
+  public updateuserBySupervisor(bodynewuser:any): Observable<any> {
     let params = JSON.stringify(bodynewuser);
     let headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    return this.http.put(this.url + 'api/v1/supervisor/user/changeuser', params, {headers: headers});
+    return this.http.put(this.url + 'api/v1/admin/user/modify', params, {headers: headers});
   }
 }

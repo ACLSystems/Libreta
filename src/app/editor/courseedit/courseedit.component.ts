@@ -27,7 +27,7 @@ export class CourseeditComponent implements OnInit {
 
   blockid;
   courseid;
-  identiti;
+  identity;
 
   block:Block;
   blockcode:BlockCode;
@@ -101,7 +101,7 @@ export class CourseeditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.identiti = this.user.getIdentiti();
+    this.identity = this.user.getidentity();
     this.getBlock();
   }
 

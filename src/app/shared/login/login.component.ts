@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Login } from './login';
 import { Router } from '@angular/router';
 import { UserService } from './../sharedservices/user.service';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
   messageErroremail: string;
   login: Login;
   token: any;
-  identiti: any;
+  identity: any;
   show = false;
 
   constructor(private userService: UserService, private router: Router) {
@@ -28,7 +29,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.token = this.userService.getToken();
-    this.identiti = this.userService.getIdentiti();
+    this.identity = this.userService.getidentity();
   }
 
   getCredentials(){
@@ -49,19 +50,35 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.messageErrorUser = null;
     this.messageErrorAPI = null;
-    this.userService.singUp(this.login).subscribe(data => {
+    this.userService.signIn(this.login).subscribe(data => {
       this.token = data.token;
       localStorage.setItem('token', this.token);
-      this.userService.getUser(this.login.username).subscribe( resdata => {
-        const identiti = resdata;
-        localStorage.setItem('identiti', JSON.stringify(identiti));
-        this.router.navigate(['/consoleuser']);
-        this.loading = false;
-      }, error => {
-        this.messageErrorAPI = 'Ocurrió un erro interno de sistema, favor de reportarlo a la mesa de ayuda: ' + error.status;
-        this.loading = false;
-      });
+			let decodedToken = this.getDecodedAccessToken(this.token);
+			localStorage.setItem('identity', JSON.stringify({
+				admin: decodedToken.admin,
+				attachedToWShift: decodedToken.attachedToWShift,
+				name: decodedToken.sub,
+				org: decodedToken.org.name,
+				orgUnit: decodedToken.orgUnit.name,
+				orgid: decodedToken.org._id,
+				ouid: decodedToken.orgUnit._id,
+				person: decodedToken.person,
+				preferences: decodedToken.preferences,
+				userid: decodedToken.userid
+			}));
+			this.router.navigate(['/consoleuser']);
+      this.loading = false;
+      // this.userService.getUser(this.login.username).subscribe( resdata => {
+      //   const identity = resdata;
+      //   localStorage.setItem('identity', JSON.stringify(identity));
+      //   this.router.navigate(['/consoleuser']);
+      //   this.loading = false;
+      // }, error => {
+      //   this.messageErrorAPI = 'Ocurrió un errof interno de sistema, favor de reportarlo a la mesa de ayuda: ' + error.status;
+      //   this.loading = false;
+      // });
     }, error => {
+			console.log('hola')
       if ( error.status > 399 && error.status < 500) {
 // tslint:disable-next-line: max-line-length
         this.messageErrorUser = 'Usuario o contraseña invalidos, en caso de que no recuerdes tu contraseña selecciona la opción de Recuperar Contraseña';
@@ -80,4 +97,12 @@ export class LoginComponent implements OnInit {
       this.type = 'password';
     }
   }
+
+	getDecodedAccessToken(token: string): any {
+		try {
+			return jwt_decode(token);
+		} catch (err)  {
+			return null;
+		}
+	}
 }

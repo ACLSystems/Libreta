@@ -54,7 +54,8 @@ export class CourseService {
   */
   getResources(groupid:any, token:any):Observable<any>{
     let headers = new HttpHeaders({
-      'x-access-token': token
+      //'x-access-token': token
+			'Authorization': 'Bearer ' + token
     });
 
     return this.http.get(this.url + 'api/v1/user/getresource?groupid=' + groupid);
@@ -65,7 +66,8 @@ export class CourseService {
   */
   getReplysBlock(blockid):Observable<any>{
     let headers = new HttpHeaders({
-      'x-access-token':this.token
+      //'x-access-token':this.token
+			'Authorization': 'Bearer ' + this.token
     });
     return this.http.get(this.url+'api/v1/user/comment/get?query={"pubtype":"discussion","type":"reply","block":"'+blockid+'"}&order=1&skip=0&limit=500');
   }
@@ -75,7 +77,8 @@ export class CourseService {
   */
   getReplysCourses(courseid:any,groupid:any):Observable<any>{
     let headers = new HttpHeaders({
-      'x-access-token':this.token
+      //'x-access-token':this.token
+			'Authorization': 'Bearer ' + this.token
     });
     return this.http.get(this.url+'api/v1/user/comment/get?query={"course":"'+courseid+'","group":"'+groupid+'","pubtype":"discussion","type":"reply"}&order=1&skip=0&limit=500');
   }

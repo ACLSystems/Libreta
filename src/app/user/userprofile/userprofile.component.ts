@@ -12,7 +12,7 @@ import { CourseService } from './../../shared/sharedservices/course.service';
 })
 export class UserprofileComponent implements OnInit {
 
-  public identiti
+  public identity
   public token;
 
   user:any;
@@ -32,12 +32,12 @@ export class UserprofileComponent implements OnInit {
   loading:boolean=false;
 
   constructor(private userservice:UserService, public courseservice:CourseService, private router:Router) {
-    this.identiti = this.userservice.getIdentiti();
+    this.identity = this.userservice.getidentity();
     this.token = this.userservice.getToken();
   }
 
   ngOnInit() {
-    this.getPerson(this.identiti.name);
+    this.getPerson(this.identity.name);
     this.getCourses();
     this.getNotifications();
   }

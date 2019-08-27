@@ -7,6 +7,7 @@ import { RecoverpasswordComponent } from './../shared/recoverpassword/recoverpas
 import { RouterModule, Routes } from '@angular/router';
 import { SigninComponent } from './signin/signin.component';
 import { ConstanciasComponent } from './constancias/constancias.component';
+import { OfflineComponent } from './offline/offline.component';
 
 const homeroutingModule: Routes = [
   {path: 'cursos', component: CursosComponent},
@@ -15,7 +16,8 @@ const homeroutingModule: Routes = [
   {path: 'signin', component: SigninComponent},
   {path: 'login', component: LoginComponent},
   {path: 'recoverpassword', component: RecoverpasswordComponent},
-	{path: 'constancias', component: ConstanciasComponent}
+	{path: 'constancias', component: ConstanciasComponent},
+	{path: 'offline', component: OfflineComponent}
 ]
 
 @NgModule({

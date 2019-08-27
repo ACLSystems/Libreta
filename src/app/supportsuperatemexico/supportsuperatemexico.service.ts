@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map' ;
 export class SupportsuperatemexicoService {
 
   public url:string;
-  public identiti;
+  public identity;
   public token;
   public roles;
 

@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 export class UserService{
 
   public url: string;
-  public identiti: any;
+  public identity: any;
   public token: any;
   public roles: any;
 
@@ -22,7 +22,7 @@ export class UserService{
   }
 
   //metodo para aplicar el login al usuario
-  singUp(usertologin: any): Observable<any> {
+  signIn(usertologin: any): Observable<any> {
     const json = JSON.stringify(usertologin);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -36,7 +36,7 @@ export class UserService{
   getUser(username): Observable<any> {
     const headers = new HttpHeaders(
       {
-        'x-access-token': this.token
+        'Authorization': 'Bearer ' + this.token
       })
     return this.http.get(this.url + 'api/v1/user/getdetails?name=' + username);
   }
@@ -45,24 +45,24 @@ export class UserService{
   metodo para obtener la informacion del usuario cuando inicia por primera ves sesion
   */
   getUserDetails(username: any): Observable<any> {
-    const headers = new HttpHeaders(
-      {
-        'x-access-token': this.token
-      })
-    return this.http.get(this.url + 'api/user/getdetails?name=' + username);
+    // const headers = new HttpHeaders(
+    //   {
+    //     'Authorization': 'Bearer ' + this.token
+    //   })
+    return this.http.get(this.url + 'api/user/' + username);
   }
 
   /*
   metodo para traer los datos del usuario logueado
   */
-  getIdentiti() {
-    const identiti = JSON.parse(localStorage.getItem('identiti'));
-    if (identiti !== 'undefined') {
-      this.identiti = identiti;
+  getidentity() {
+    const identity = JSON.parse(localStorage.getItem('identity'));
+    if (identity !== 'undefined') {
+      this.identity = identity;
     } else {
-      this.identiti = null;
+      this.identity = null;
     }
-    return this.identiti;
+    return this.identity;
   }
 
   /*
@@ -84,7 +84,8 @@ export class UserService{
   getRoles():Observable<any>{
     let isOrg:any=[];
     let headers = new HttpHeaders({
-      'x-access-token':this.getToken()
+      //'x-access-token':this.getToken()
+			'Authorization': 'Bearer ' + this.getToken()
     });
     return this.http.get(this.url+'api/v1/user/myroles', );
   }
@@ -108,7 +109,7 @@ export class UserService{
       {
         'Content-Type':'application/json'
       });
-    return this.http.put(this.url+'api/user/confirm', params, {headers:headers});
+    return this.http.post(this.url+'api/user/confirm', params, {headers:headers});
   }
 
   /*
@@ -119,7 +120,7 @@ export class UserService{
     let headers = new HttpHeaders(
       {
         'Content-Type':'application/json',
-        'x-access-token':this.token
+        'Authorization': 'Bearer ' + this.token
       }
     );
     return this.http.put(this.url+'api/v1/user/passwordchange', params, {headers:headers});
@@ -130,12 +131,8 @@ export class UserService{
   */
   recoverPass(passwordrecover){
     let params = JSON.stringify(passwordrecover);
-    let headers = new HttpHeaders(
-      {
-        'Content-Type':'application/json',
-      }
-    );
-    return this.http.put(this.url+'api/user/passwordrecovery', params, {headers:headers});
+    let headers = new HttpHeaders({'Content-Type':'application/json'});
+    return this.http.post(this.url+'api/user/passwordrecovery', params, {headers:headers});
   }
 
   /*
@@ -145,7 +142,7 @@ export class UserService{
     let headers = new HttpHeaders(
       {
         'Content-Type':'application/json',
-        'x-access-token':this.token
+        'Authorization': 'Bearer ' + this.token
       }
     );
     return this.http.get(this.url+'api/v1/user/message/new', );
@@ -158,7 +155,7 @@ export class UserService{
     let headers = new HttpHeaders(
       {
         'Content-Type':'application/json',
-        'x-access-token':this.token
+        'Authorization': 'Bearer ' + this.token
       });
     return this.http.get(this.url+'api/v1/user/message/my?read=false');
   }
@@ -170,7 +167,7 @@ export class UserService{
     let headers = new HttpHeaders(
       {
         'Content-Type':'application/json',
-        'x-access-token':this.token
+        'Authorization': 'Bearer ' + this.token
       }
     );
     return this.http.get(this.url + 'api/v1/user/message/my');

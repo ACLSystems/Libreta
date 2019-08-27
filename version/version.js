@@ -1,6 +1,6 @@
-const version = '1.1.19';
+const version = '1.2.0';
 
-module.exports = {
+export const versionObj = {
 	app: 'libreta',
 	version: version,
 	year: '2019',

@@ -88,7 +88,7 @@ export class NewgroupComponent implements OnInit{
   public termnRegex = /^Semestre\s([I,II,III,IV,V,VI,VII])/
 
   public emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-  public identiti;
+  public identity;
   public parent:any;
   public state:any;
   statefinder:any;
@@ -112,8 +112,8 @@ export class NewgroupComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.identiti = this.userService.getIdentiti();
-    console.log(this.identiti);
+    this.identity = this.userService.getidentity();
+    console.log(this.identity);
     this.getOU();
     this.getCourses();
     this.getCarreras();
@@ -348,8 +348,8 @@ export class NewgroupComponent implements OnInit{
         }
       );
     }else{
-      this.identiti.orgunit
-      this.managerServices.getGroupsforParent(this.idCourse, this.identiti.orgUnit).subscribe(
+      this.identity.orgunit
+      this.managerServices.getGroupsforParent(this.idCourse, this.identity.orgUnit).subscribe(
         data=>{
           if(data.groups>0){
             let groupstmp = data.message.find(id => id.ouName == this.orgName);

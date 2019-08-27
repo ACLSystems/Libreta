@@ -16,7 +16,7 @@ import { UserService } from './../../shared/sharedservices/user.service';
   providers: [UserService,CourseService, DatePipe, EventService]
 })
 export class ScheduleComponent implements OnInit {
-	identiti: any;
+	identity: any;
 	token: any;
   loading: boolean;
   calendarOptions: Options;
@@ -26,11 +26,11 @@ export class ScheduleComponent implements OnInit {
 
   constructor(private userService: UserService, private datePipe: DatePipe, private eventService: EventService, private router: Router) {
 		this.token = this.userService.getToken();
-    this.identiti = this.userService.getIdentiti();
+    this.identity = this.userService.getidentity();
   }
 
   ngOnInit() {
-		if(this.token === null && this.identiti === null) {
+		if(this.token === null && this.identity === null) {
 			this.router.navigate(['/home']);
 		} else {
     	this.loadEvents();

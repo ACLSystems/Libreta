@@ -31,7 +31,7 @@ import { UserService } from './../../shared/sharedservices/user.service';
 })
 export class MycoursesComponent implements OnInit, DoCheck {
 
-  public identiti: any;
+  public identity: any;
   public token: any;
 
   calendarOptions: Options;
@@ -158,7 +158,7 @@ export class MycoursesComponent implements OnInit, DoCheck {
   Metodo init de la clase
   */
   ngOnInit() {
-    this.identiti = this.userService.getIdentiti();
+    this.identity = this.userService.getidentity();
     this.token = this.userService.getToken();
     this.informationCourse(this.courseid);
     this.getMyGrades();
@@ -231,7 +231,7 @@ export class MycoursesComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    this.identiti = this.userService.getIdentiti();
+    this.identity = this.userService.getidentity();
     this.token = this.userService.getToken();
   }
 

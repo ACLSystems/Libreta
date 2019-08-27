@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class HomeService {
   public url: string;
-  public identiti: any;
+  public identity: any;
   public token: any;
   public roles: any;
 
@@ -18,14 +18,14 @@ export class HomeService {
   /*
   metodo para traer los datos del usuario logueado
   */
-  getIdentiti() {
-    const identiti = JSON.parse(localStorage.getItem('identiti'));
-    if (identiti !== 'undefined') {
-      this.identiti = identiti;
+  getidentity() {
+    const identity = JSON.parse(localStorage.getItem('identity'));
+    if (identity !== 'undefined') {
+      this.identity = identity;
     } else {
-      this.identiti = null;
+      this.identity = null;
     }
-    return this.identiti;
+    return this.identity;
   }
 
   /*
@@ -58,7 +58,8 @@ export class HomeService {
   getRoles() {
     const httpaccess = {
       headers : new HttpHeaders({
-        'x-access-token': localStorage.getItem('token')
+        //'x-access-token': localStorage.getItem('token')
+				'Authorization': 'Bearer ' + localStorage.getItem('token')
       })
     };
     return this.http.get(this.url + 'api/v1/user/myroles', httpaccess);

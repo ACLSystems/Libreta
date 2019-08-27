@@ -79,7 +79,7 @@
 </div>
 
 <ng-template #modalUser let-c="close" let-d="dismiss" class="animation">
-  <div *ngIf="identiti==null">
+  <div *ngIf="identity==null">
     <div class="modal-header">
       <div class="modal-title"><i class="fas fa-info-circle"></i> Aviso importante</div>
       <button type="button" class="close" aria-label="Close" (click)="closeModal()">
@@ -108,7 +108,7 @@
     </div>
   </div>
 
-  <div *ngIf="identiti != null">
+  <div *ngIf="identity != null">
       <div class="modal-header">
         <div class="modal-title"><i class="fas fa-info-circle"></i> Selecciona la modalidad</div>
         <button type="button" class="close" aria-label="Close" (click)="closeModal()">

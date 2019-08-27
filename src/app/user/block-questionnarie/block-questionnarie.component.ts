@@ -18,7 +18,7 @@ export class BlockQuestionnarieComponent implements OnInit {
   @Input() block: any;
 
   attemp: Attemp;
-  identiti: any;
+  identity: any;
   dataQuestionnarie: any;
 
   answerStudentQues: Answers [] = [];
@@ -74,7 +74,7 @@ export class BlockQuestionnarieComponent implements OnInit {
 
   ngOnInit() {
     this.questions();
-    this.identiti = this.userService.getIdentiti();
+    this.identity = this.userService.getidentity();
   }
 
   /*

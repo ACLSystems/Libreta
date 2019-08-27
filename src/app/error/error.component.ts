@@ -21,7 +21,7 @@ export class ErrorComponent {
   }
 
   public logoutExpired() {
-    localStorage.removeItem('identiti');
+    localStorage.removeItem('identity');
     localStorage.removeItem('token');
     localStorage.clear();
     this.router.navigate(['/login']);

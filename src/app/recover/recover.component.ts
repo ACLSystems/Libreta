@@ -59,12 +59,12 @@ export class RecoverComponent implements OnInit {
       this.user.recoverPass(this.passwordRecover).subscribe( () => {
         this.messageSuccess = 'Se actualizo la contraseña correctamente';
         this.login = new Login(this.emailuser, this.password);
-        this.user.singUp(this.login).subscribe( data => {
+        this.user.signIn(this.login).subscribe( data => {
           this.token = data.token;
           localStorage.setItem('token', this.token);
           this.user.getUser(this.login.username).subscribe( resdata => {
-            const identiti = resdata;
-            localStorage.setItem('identiti', JSON.stringify(identiti));
+            const identity = resdata;
+            localStorage.setItem('identity', JSON.stringify(identity));
             this.router.navigate(['/consoleuser']);
           });
         });

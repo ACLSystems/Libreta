@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
   p:number = 1;
   public token;
-  public identiti;
+  public identity;
   public loading:boolean = false;
   public cursos:any;
   public environment: any;
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.environment = environment.production;
-    this.identiti = this.homeservice.getIdentiti();
+    this.identity = this.homeservice.getidentity();
     this.token = this.homeservice.getToken();
     if(this.token){
       this._router.navigate(['/consoleuser']);

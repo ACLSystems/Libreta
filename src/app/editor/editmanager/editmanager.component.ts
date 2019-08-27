@@ -8,9 +8,9 @@ import { UserService } from './../../shared/sharedservices/user.service';
   providers:[UserService]
 })
 export class EditmanagerComponent implements OnInit {
-  identiti;
+  identity;
   constructor(private user:UserService, private _router:Router) {
-    this.identiti = this.user.getIdentiti();
+    this.identity = this.user.getidentity();
   }
 
   ngOnInit() {

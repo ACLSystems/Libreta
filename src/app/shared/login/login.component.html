@@ -1,9 +1,8 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-3">
-    </div>
-    <div class="col-6">
-
+    <!-- <div class="col-3"></div> -->
+    <!-- <div class="col-6"> -->
+		<div class="col-lg-4 col-md-6 col-sm-6 ml-auto mr-auto">
       <div *ngIf="messageSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>{{messageSuccess}}</strong>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -19,37 +18,45 @@
       </div>
 
       <div class="card">
+				<h3 class="card-header text-success">Iniciar sesión</h3>
         <div class="card-body">
-          <h3>Iniciar sesión</h3>
           <form class="was-validated">
-            <label class="form-inline"><b>* Usuario : </b></label>
-            <input type="text" class="form-control"  #username="ngModel" name="username" [(ngModel)]="login.username" (blur)="getCredentials()" required><!-- (blur)="getCredentials(username.value, password.value)" required-->
-            <span *ngIf="messageErroremail" class="text-danger"><b>{{messageErroremail}}</b></span>
+            <!-- <label class="form-inline"><b>* Usuario : </b></label> -->
+            <input type="text" class="form-control"  #username="ngModel" placeholder="Usuario" name="username" [(ngModel)]="login.username" (blur)="getCredentials()" required><!-- (blur)="getCredentials(username.value, password.value)" required-->
+            <span *ngIf="messageErroremail" class="text-danger"><small>{{messageErroremail}}</small></span>
             <br>
-            <label class="form-inline"><b>*Contraseña : </b></label>
-            <input type="{{type}}" class="form-control"  #password="ngModel" name="password" [(ngModel)]="login.password" (blur)="getCredentials()" required><!-- (blur)="getCredentials(username.value, password.value)" required-->
+            <!-- <label class="form-inline"><b>*Contraseña : </b></label> -->
+            <input type="{{type}}" class="form-control"  #password="ngModel" placeholder="Password" name="password" [(ngModel)]="login.password" (blur)="getCredentials()" required><!-- (blur)="getCredentials(username.value, password.value)" required-->
             <br>
-            <span *ngIf="!dataIsOk" class="text-danger">Debes ingresar usuario y contraseña</span>
+            <span *ngIf="!dataIsOk" class="text-danger"><small>Debes ingresar usuario y contraseña</small></span>
           </form>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="validacion1" (change)="showPass()">
-            <label class="form-check-label" for="validacion1"> <i class="fas fa-eye"></i> Mostrar contraseña</label>
+            <label class="form-check-label" for="validacion1"> <small><i class="fas fa-eye"></i> Mostrar contraseña</small></label>
           </div>
           <hr>
-          <div class="form-group">
-            <button *ngIf="!dataIsOk" type="button" class="btn btn-success" disabled><i class="fas fa-sign-in-alt"></i> Iniciar sesión</button>
-            <button *ngIf="dataIsOk" type="button" class="btn btn-success" (click)="getlogin(username.value, password.value)">
-              <i [ngClass]=" { 'fa-key':!loading, 'fa-sync fa-spin':loading }" class="fa"></i>
-              <span *ngIf="!loading">Iniciar sesión</span>
-              <span *ngIf="loading">Procesando</span>
-            </button>
-            <button type="button" class="btn btn-success" [routerLink]="['/recoverpassword']"><i class="far fa-window-restore"></i> Recuperar contraseña</button>
-
-          </div>
+          <button *ngIf="!dataIsOk" type="button"
+						class="btn btn-success btn-block" disabled>
+						<i class="fas fa-sign-in-alt"></i> Entrar</button>
+          <button *ngIf="dataIsOk"
+						type="button" class="btn btn-success btn-block"
+						(click)="getlogin(username.value, password.value)">
+            <i [ngClass]=" { 'fa-key':!loading, 'fa-sync fa-spin':loading }" class="fa"></i>
+            <span *ngIf="!loading"> Entrar</span>
+            <span *ngIf="loading"> Procesando</span>
+          </button>
+					<button type="button"
+						class="btn btn-secondary btn-block"
+						disabled>
+						<i class="fas fa-unlock"></i> Acceso sin password (próximamente)
+					</button>
+          <button type="button"
+						class="btn btn-primary btn-block" 
+						[routerLink]="['/recoverpassword']">
+						<i class="far fa-window-restore"></i> Recuperar contraseña
+					</button>
         </div>
       </div>
-    </div>
-    <div class="col-3">
     </div>
   </div>
 </div>

@@ -31,7 +31,8 @@ export class EventService {
 
   getEventSchedule():Observable<any>{
     const urltmp =  `${this.url}api/v1/user/mygroups`
-    const httpOptionsToken = {headers: new HttpHeaders({'x-access-token':this.user.getToken()})}
+    //const httpOptionsToken = {headers: new HttpHeaders({'x-access-token':this.user.getToken()})}
+		const httpOptionsToken = {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.user.getToken()})}
     return this.http.get<any[]>(urltmp, httpOptionsToken).pipe(
       tap(
 				// data=>

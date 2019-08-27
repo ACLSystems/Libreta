@@ -30,7 +30,7 @@ import { UserService } from './../../shared/sharedservices/user.service';
 })
 export class NewblockComponent implements OnInit {
 
-  identiti;
+  identity;
   messageCode;
 
   coursecode:Coursecode;
@@ -82,7 +82,7 @@ export class NewblockComponent implements OnInit {
   };
 
   constructor(private user:UserService, private router:Router,private serviceorg:ServiceisorgService, private modalService:NgbModal) {
-    this.identiti = this.user.getIdentiti();
+    this.identity = this.user.getidentity();
     this.newblock = new NewBlock('','','','', 0, 0, 0,'',null);
     this.questionnarie = new Questionnarie(null,0,0,null);
     this.question = new Question( [], [],'','',1,'',[],'','');

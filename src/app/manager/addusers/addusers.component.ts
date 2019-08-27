@@ -79,7 +79,7 @@ export class AddusersComponent implements OnInit {
   termnRegex = /^Semestre\s([I,II,III,IV,V,VI,VII])/;
 
   emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-  identiti: any;
+  identity: any;
 
   personsingle: any;
   studentsingle: any;

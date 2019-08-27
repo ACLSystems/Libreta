@@ -12,7 +12,7 @@ import { UserService } from './../../shared/sharedservices/user.service';
 })
 export class MygroupsComponent implements OnInit {
 
-  identiti: any;
+  identity: any;
   token: any;
   cursoslist: any[] = [];
   cursosinactive: any[] = [];
@@ -21,13 +21,13 @@ export class MygroupsComponent implements OnInit {
   messageNewUser = false;
 
   constructor(private router: Router, private user: UserService, private course: CourseService) {
-    this.identiti = this.user.getIdentiti();
+    this.identity = this.user.getidentity();
     this.token = this.user.getToken();
   }
 
   ngOnInit() {
     this.loading = true;
-    this.identiti = this.user.getIdentiti();
+    this.identity = this.user.getidentity();
     this.getCourseUser();
   }
 

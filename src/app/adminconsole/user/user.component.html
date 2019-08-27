@@ -13,11 +13,16 @@
 <div *ngIf="!loading">
 	<div class="row">
 		<div class="col-sm-1"></div>
+		<div class="col-sm"><h2 class="text-center">Modificación de nombre de usuario</h2></div>
+		<div class="col-sm-1"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2"></div>
 		<div class="col-sm">
 			<div class="row">
-				<span class="text-success"><i class="fas fa-user"></i>  Consultar información del alumno</span>
+				<!-- <span class="text-success"><i class="fas fa-user"></i>  Consultar información del alumno</span> -->
 				<div class="input-group mb-3">
-          <input type="text" class="form-control" #wordcode  placeholder="Ingresa correo electrónico del alumno">
+          <input type="text" class="form-control" #wordcode placeholder="Ingresa correo electrónico del alumno">
           <div class="input-group-append">
             <button class="btn btn-outline-success" type="button" (click)="searchUser(wordcode.value)">
               <i [ngClass]=" { 'fa-search':!loading, 'fa-sync fa-spin':loading }" class="fa"></i>
@@ -34,22 +39,29 @@
 						<div class="form-row">
 							<div class="col">
 								<small>Nombre</small>
-								<input type="text" class="form-control" name="name" value="{{userAccount.person.name}}">
+								<input
+								type="text" class="form-control"
+								#name
+								value="{{userAccount.name}}"
+								>
 							</div>
 							<div class="col">
 								<small>Apellido Paterno</small>
-								<input type="text" class="form-control" name="fatherName" value="{{userAccount.person.fatherName}}">
+								<input type="text" class="form-control"
+								#fatherName
+								value="{{userAccount.fatherName}}"
+								>
 							</div>
 							<div class="col">
 								<small>Apellido Materno</small>
-								<input type="text" class="form-control" name="motherName" value="{{userAccount.person.motherName}}">
-							</div>
-							<div *ngIf="userAccount.admin.initialPassword" class="col">
-								<small>Password Inicial</small>
-								<input type="text" class="form-control" name="motherName" value="{{userAccount.admin.initialPassword}}">
+								<input type="text" class="form-control"
+								id="motherName"
+								#motherName
+								value="{{userAccount.motherName}}"
+								>
 							</div>
 						</div><br>
-						<button class="btn btn-outline-info" type="button" (click)="setUser()">
+						<button class="btn btn-outline-info" type="button" (click)="setUser(wordcode.value, name.value, fatherName.value, motherName.value)">
               <i [ngClass]=" { 'fa-search':!loading, 'fa-sync fa-spin':loading }" class="fa"></i>
               <span *ngIf="!loading">Guardar</span>
               <span *ngIf="loading">Guardando</span>
@@ -58,7 +70,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-1"></div>
+		<div class="col-sm-2"></div>
 	</div>
 	<div class="row">
 

@@ -15,7 +15,7 @@ import { UserService } from './../../shared/sharedservices/user.service';
 })
 export class NabvarloggedComponent implements OnInit, DoCheck {
 
-  identiti: any;
+  identity: any;
   token: any;
   sesionExpired = false;
   rolesUser: any[] = [];
@@ -44,21 +44,21 @@ export class NabvarloggedComponent implements OnInit, DoCheck {
 
   constructor(private userService: UserService, private router: Router, private course: CourseService) {
     this.token = this.userService.getToken();
-    this.identiti = this.userService.getIdentiti();
+    this.identity = this.userService.getidentity();
     this.production = environment.production;
     this.getRolesUser();
   }
 
   ngOnInit() {
     this.token = this.userService.getToken();
-    this.identiti = this.userService.getIdentiti();
+    this.identity = this.userService.getidentity();
     this.getNumberNotifications();
     this.getCourses();
     this.getRolesUser();
   }
 
   ngDoCheck() {
-    this.identiti = this.userService.getIdentiti();
+    this.identity = this.userService.getidentity();
   }
 
   getCourses() {
@@ -87,7 +87,7 @@ export class NabvarloggedComponent implements OnInit, DoCheck {
   funcion para el cierre de sesion del usuario
   */
   logout() {
-    localStorage.removeItem('identiti');
+    localStorage.removeItem('identity');
     localStorage.removeItem('token');
     localStorage.clear();
     this.router.navigate(['/home']);

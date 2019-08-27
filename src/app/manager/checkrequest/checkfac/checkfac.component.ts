@@ -36,7 +36,7 @@ export class CheckfacComponent implements OnInit {
   rfcuserpers:boolean;
   updprocess:boolean;
   otherrfctype:any;
-  identiti:any;
+  identity:any;
   fiscaldetails:any[]=[];
   rfccoporates:any[]=[];
   orgUs:any[]=[];
@@ -77,7 +77,7 @@ export class CheckfacComponent implements OnInit {
 
 
   constructor(private modalService:NgbModal,private userservice:UserService, private managerservice:ManagerserviceService) {
-    this.identiti = this.userservice.getIdentiti();
+    this.identity = this.userservice.getidentity();
   }
 
   ngOnInit() {
@@ -182,7 +182,7 @@ export class CheckfacComponent implements OnInit {
     this.messageSuccess = null;
     this.messageError = null;
     this.fiscaldetails = [];
-    this.userservice.getUser(this.identiti.name).subscribe(
+    this.userservice.getUser(this.identity.name).subscribe(
       data=>{
         this.fiscaldetails = data.fiscal;
         this.otherrfc = this.fiscaldetails.length==0;
@@ -287,7 +287,7 @@ export class CheckfacComponent implements OnInit {
     this.messageError = null;
     this.fiscalAddress = new fiscaladdress(street,extnum,intnum,colony,locality,municipality,cp);
     this.fiscalUpdate = new fiscalupdate(this.person.tag, tnumber1,tnumber2,cellnumber,this.fiscalAddress);
-    this.fiscalUserUpd = new fiscaluserupdates(this.identiti.name,this.fiscalUpdate);
+    this.fiscalUserUpd = new fiscaluserupdates(this.identity.name,this.fiscalUpdate);
     this.updrfcuser(this.fiscalUserUpd);
   }
 
@@ -301,13 +301,13 @@ export class CheckfacComponent implements OnInit {
       let tag = newrfc+"--"+this.otherrfctype;
       this.fiscalAddress = new fiscaladdress(street,extnum,intnum,colony,locality,municipality,cp);
       this.fiscalUser = new fiscaluser(newrfc,tag,name,emailuser,this.otherrfctype,'client',tnumber1,tnumber2,cellnumber,this.fiscalAddress);
-      this.fiscalUserNew = new fiscalusernew(this.identiti.name,this.fiscalUser);
+      this.fiscalUserNew = new fiscalusernew(this.identity.name,this.fiscalUser);
       this.updrfcuser(this.fiscalUserNew);
     }else if(this.otherrfctype=='corporativo'){
       let tag = newrfc+"-Plantel-"+this.orgName;
       this.fiscalAddress = new fiscaladdress(street,extnum,intnum,colony,locality,municipality,cp);
       this.fiscalUseerCorp = new fiscalusercorp(newrfc, tag, name, emailuser, this.otherrfctype, 'client', true, this.orgid, tnumber1, tnumber2, cellnumber, this.fiscalAddress);
-      this.fiscalUserNewCorp = new fiscalusernewcorp(this.identiti.name,this.fiscalUseerCorp);
+      this.fiscalUserNewCorp = new fiscalusernewcorp(this.identity.name,this.fiscalUseerCorp);
       this.updrfcuser(this.fiscalUserNewCorp);
     }
   }

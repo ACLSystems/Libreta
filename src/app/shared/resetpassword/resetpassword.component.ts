@@ -9,7 +9,7 @@ import { ServiceisorgService } from './../sharedservices/serviceisorg.service';
 })
 export class ResetpasswordComponent implements OnInit {
 
-  identiti;
+  identity;
   rolOrg;
   messageError: string;
   messageSuccess: string;
@@ -21,7 +21,7 @@ export class ResetpasswordComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.identiti = this.user.getIdentiti();
+    this.identity = this.user.getidentity();
     this.user.getRoles().subscribe(data=>{
       console.log(data);
       //this.rolOrg = data.message.isOrg;

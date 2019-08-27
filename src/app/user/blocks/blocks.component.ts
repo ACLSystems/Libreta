@@ -19,7 +19,7 @@ declare var $:any;
 export class BlocksComponent implements OnInit{
 
   public token;
-  public identiti;
+  public identity;
 
   loading:boolean;
 
@@ -60,7 +60,7 @@ export class BlocksComponent implements OnInit{
 
   ngOnInit() {
     this.token = this._user.getToken();
-    this.identiti = this._user.getIdentiti();
+    this.identity = this._user.getidentity();
     this.getBlock(this.blockid,true);
     this.isBlockTrack();
     this.getResources();
@@ -102,7 +102,7 @@ export class BlocksComponent implements OnInit{
   getBlock(id:string, prev:boolean){
     this.loading = true;
     this.token = this._user.getToken();
-    this.identiti = this._user.getIdentiti();
+    this.identity = this._user.getidentity();
     this._course.getBlock(this.groupid, this.courseid, id, prev).subscribe(data=>{
       if(data.messageUser!=null){
         this.message_error = data.messageUser;

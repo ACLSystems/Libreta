@@ -19,6 +19,7 @@ import { SigninComponent } from './signin/signin.component';
 import { ConstanciasComponent } from './constancias/constancias.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { RECAPTCHA_LANGUAGE, RecaptchaModule } from 'ng-recaptcha';
+import { OfflineComponent } from './offline/offline.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { RECAPTCHA_LANGUAGE, RecaptchaModule } from 'ng-recaptcha';
     QuotationComponent,
     CourseshopComponent,
     ConstanciasComponent,
-		TimeAgoPipe
+		TimeAgoPipe,
+		OfflineComponent
   ],
   providers: [
     HomeService,

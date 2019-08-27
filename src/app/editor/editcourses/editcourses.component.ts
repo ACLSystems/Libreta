@@ -11,11 +11,11 @@ import { UserService } from './../../shared/sharedservices/user.service';
 })
 export class EditcoursesComponent implements OnInit {
   loading: boolean;
-  identiti: any;
+  identity: any;
   public cursoslist: any[] = [];
 
   constructor(public serviceorg:ServiceisorgService, private _router:Router, private _activeRouter:ActivatedRoute, private user:UserService) {
-    this.identiti = this.user.getIdentiti();
+    this.identity = this.user.getidentity();
   }
 
   ngOnInit() {

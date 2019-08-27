@@ -13,7 +13,7 @@ export class CursoComponent implements OnInit {
 
   @ViewChild(CourseshopComponent) shop: CourseshopComponent;
 
-  public identiti: any;
+  public identity: any;
   public token: any;
   loading: boolean;
   costo: number;
@@ -32,7 +32,7 @@ export class CursoComponent implements OnInit {
               private activeRouter: ActivatedRoute,
               private router: Router,
               private homeService: HomeService) {
-    this.identiti = this.homeService.getIdentiti();
+    this.identity = this.homeService.getidentity();
     this.token = this.homeService.getToken();
     this.costo = 30;
     this.activeRouter.params.subscribe( params =>{

@@ -14,7 +14,7 @@ export class MonitorComponent implements OnInit {
 	usersTemp: any[]
 	users: any[]
 	loading: boolean
-	identiti: any;
+	identity: any;
 
 
   constructor(private user:UserService, public adminService: AdminService) {
@@ -22,7 +22,7 @@ export class MonitorComponent implements OnInit {
 		this.numUsers = 0;
 		this.ous = [];
 		this.users = [];
-		this.identiti = this.user.getIdentiti();
+		this.identity = this.user.getidentity();
 	}
 
   ngOnInit() {
@@ -31,7 +31,7 @@ export class MonitorComponent implements OnInit {
 
 	getSessions() {
 		this.adminService.getSessions().subscribe(data => {
-			console.log(data)
+			//console.log(data)
 			if(data.numUsers && data.numUsers > 0){
 				this.numUsers = data.numUsers;
 			}

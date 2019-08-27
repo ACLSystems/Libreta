@@ -12,7 +12,7 @@ export class CourselessonsComponent implements OnInit {
 
 loading:boolean;
 courseid;
-identiti;
+identity;
 listblock:any []=[];
 
 constructor(private router:Router, private activatedRoute:ActivatedRoute, private user:UserService, private serviceorg:ServiceisorgService) {
@@ -22,7 +22,7 @@ constructor(private router:Router, private activatedRoute:ActivatedRoute, privat
 }
 
 ngOnInit() {
-  this.identiti = this.user.getIdentiti();
+  this.identity = this.user.getidentity();
   this.getListBlock();
 }
 

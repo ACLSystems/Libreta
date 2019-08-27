@@ -4,7 +4,6 @@ import { ServiceisorgService } from '../../shared/sharedservices/serviceisorg.se
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css'],
 	providers: [ServiceisorgService]
 })
 export class UserComponent implements OnInit {
@@ -15,8 +14,7 @@ export class UserComponent implements OnInit {
 	messageError: string;
 	isFindOk:boolean;
 
-
-	constructor(private serviceorg:ServiceisorgService) { }
+	constructor(private serviceorg:ServiceisorgService) {}
 
 	ngOnInit() {
 		this.loading = false;
@@ -25,17 +23,18 @@ export class UserComponent implements OnInit {
 
 	searchUser(wordcode:string){
     this.loadingData = true;
-    this.userAccount = {};
+    // this.userAccount = {};
 		this.messageError = 'Buscando...';
 		this.isFindOk = false;
     this.serviceorg.getUserBySupervisor(wordcode).subscribe(data=>{
 			let messageNotFound = 'Error: User -'+ wordcode +'- does not exist'
       if(data.message!=messageNotFound){
 				this.messageError = 'Usuario ' + wordcode;
-        this.userAccount=data;
+				let temp = data.person;
+				temp.email = wordcode;
+        this.userAccount=temp;
         this.loadingData = false;
         this.isFindOk = true;
-				console.log(data)
       } else {
         this.messageError = "El usuario ingresado no existe en plataforma"
         this.loadingData = false;
@@ -48,9 +47,30 @@ export class UserComponent implements OnInit {
     });
   }
 
-	setUser() {
+	setUser(username:string, name:string,fatherName:string,motherName:string) {
 		this.loading = true;
-
+		let user = {
+			name: username,
+			person: {
+				name: name,
+				fatherName: fatherName,
+				motherName: motherName
+			}
+		};
+		this.userAccount = user.person;
+		this.serviceorg.updateuserBySupervisor(user).subscribe(data =>{
+			if(data && data.message) {
+				window.alert('Usuario ' + username + ' fue modificado');
+				this.loading = false;
+			} else {
+				window.alert('Hubo un error');
+				console.log(data);
+				this.loading = false;
+			}
+		}, error => {
+			console.log(error);
+      this.loading = false;
+		});
 	}
 
 }

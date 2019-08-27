@@ -28,13 +28,13 @@ export class SearchconsoleComponent implements OnInit {
   closemodal:NgbModalRef;
   public emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-  identiti;
+  identity;
   username;
 
   constructor(private serviceorg:ServiceisorgService, private userservice:UserService,private modalService:NgbModal) { }
 
   ngOnInit() {
-    this.identiti = this.userservice.getIdentiti();
+    this.identity = this.userservice.getidentity();
     this.getgroups();
   }
 
@@ -74,7 +74,7 @@ export class SearchconsoleComponent implements OnInit {
   public getgroups(){
     this.groupsmanager = [];
     this.loading = true;
-    this.serviceorg.getGroupsManager(this.identiti.ouid).subscribe(data=>{
+    this.serviceorg.getGroupsManager(this.identity.ouid).subscribe(data=>{
       if(data.message!='No groups found'){
         this.groupsmanager = data.message
       }
