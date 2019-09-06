@@ -33,10 +33,11 @@ export class UserService{
   /*
   metodo para obtener la informacion del usuario
   */
-  getUser(username): Observable<any> {
+	getUser(username): Observable<any> {
+		const token = localStorage.getItem('token');
     const headers = new HttpHeaders(
       {
-        'Authorization': 'Bearer ' + this.token
+        'Authorization': 'Bearer ' + token
       })
     return this.http.get(this.url + 'api/v1/user/getdetails?name=' + username);
   }

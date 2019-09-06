@@ -4,5 +4,5 @@ export const environment = {
   urlconalep: 'https://conalepvirtual.superatemexico.com/',
   idTutor: '5afade18be6da5001b81e59f',
 	versionCheckURL: 'version.json',
-	captchaSiteKey: '6LdAzbMUAAAAACI4-83Cak-Q3B_RYQnrVFPLsFcA'
+	captchaSiteKey: '6Lez87YUAAAAANDE-5nE5G29sE74pm4wezy-nO4j'
 };
