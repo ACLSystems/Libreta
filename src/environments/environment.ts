@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: 'http://localhost:3050/',
+	url: 'http://localhost:3050/',
   urlconalep: 'http://localhost:4200/',
   idTutor: '5ab47313007ce400a8ef4248',
 	versionCheckURL: 'version.json',

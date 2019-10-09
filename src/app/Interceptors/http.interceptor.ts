@@ -53,7 +53,10 @@ export class HttpConfigInterceptor implements HttpInterceptor{
 			    //localStorage.clear();
 					console.log(error);
 					if(error.error && error.error.message) {
-						window.alert(error.error.message);
+						console.log(request.url);
+						if(!request.url.match(/login/) && !request.url.match(/recover/)) {
+							window.alert(error.error.message);
+						}
 					}
 					this.router.navigate(['/login']);
 				} else if(error.status === 0) { // Está offline

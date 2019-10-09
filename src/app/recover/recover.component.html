@@ -19,13 +19,13 @@
   </div>
 
   <div *ngIf="messageError" class="alert alert-danger alert-dismissible fade show" role="alert">
-    <i class="fas fa-exclamation-triangle"></i> Se generó el siguiente error en el sistema: <strong>{{messageError}}</strong> ,favor de reportarlo en la mesa de ayuda
+    <i class="fas fa-exclamation-triangle"></i> <strong>{{messageError}}</strong>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
 
-  <div class="card">
+  <div class="card" *ngIf="!redirectRecover">
     <div class="card-body">
       <h3>
         Recuperar contraseña
@@ -55,4 +55,11 @@
       </form>
     </div>
   </div>
+	<button *ngIf="redirectRecover"
+		type="button"
+		class="btn btn-success"
+		(click)="goRecover();"
+		>
+		Recuperar contraseña
+	</button>
 </div>

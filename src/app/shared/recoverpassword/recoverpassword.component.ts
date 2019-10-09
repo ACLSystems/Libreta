@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { SharedService } from './../sharedservices/shared.service';
 import { UserService } from './../sharedservices/user.service';
 
@@ -13,7 +15,11 @@ export class RecoverpasswordComponent implements OnInit {
   dataIsOk = false;
 	pushed = false;
   emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-  constructor(private sharedservices: SharedService, private userService: UserService) {
+  constructor(
+		private sharedservices: SharedService,
+		private userService: UserService,
+		private router: Router
+	) {
 
   }
 
@@ -49,4 +55,8 @@ export class RecoverpasswordComponent implements OnInit {
       }
     });
   }
+
+	goLogin(){
+		this.router.navigate(['/login']);
+	}
 }

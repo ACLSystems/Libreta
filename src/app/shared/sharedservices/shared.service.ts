@@ -19,7 +19,7 @@ export class SharedService {
   funcion para usar el api de recuperacion de contraseña (envio de email al usuario)
   */
   recoverPassword(email: string){
-		let params = { mail: email };
+		let params = { email: email };
 		let headers = new HttpHeaders({'Content-Type':'application/json'});
     return this.http.post(this.url + 'api/user/validateemail', params, {headers:headers});
   }

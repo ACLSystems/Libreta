@@ -1,6 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
+
 import { Login } from '../shared/login/login';
+
 import { RecoverPass } from './../models/temp/recoverpass';
 import { UserService } from './../shared/sharedservices/user.service';
 
@@ -20,6 +23,7 @@ export class RecoverComponent implements OnInit {
   isPassOk = false;
   type = 'password';
   show = false;
+	redirectRecover=false;
 
   public messageSuccess: string;
   public messageError: string;
@@ -57,19 +61,33 @@ export class RecoverComponent implements OnInit {
     if (this.isPassOk) {
       this.passwordRecover = new RecoverPass(this.emailuser, this.tokentemp, this.password);
       this.user.recoverPass(this.passwordRecover).subscribe( () => {
-        this.messageSuccess = 'Se actualizo la contraseña correctamente';
-        this.login = new Login(this.emailuser, this.password);
-        this.user.signIn(this.login).subscribe( data => {
-          this.token = data.token;
-          localStorage.setItem('token', this.token);
-          this.user.getUser(this.login.username).subscribe( resdata => {
-            const identity = resdata;
-            localStorage.setItem('identity', JSON.stringify(identity));
-            this.router.navigate(['/consoleuser']);
-          });
-        });
+				//console.log(dataRec);
+        //this.messageSuccess = 'Se actualizo la contraseña correctamente';
+				Swal.fire({
+					text: "Se actualizó la contraseña correctamente",
+					confirmButtonText: "Ok"
+				}).then((result) => {
+					if(result.value) {
+						this.router.navigate(['/login']);
+					}
+				});
+        // this.login = new Login(this.emailuser, this.password);
+        // this.user.signIn(this.login).subscribe( data => {
+        //   this.token = data.token;
+        //   localStorage.setItem('token', this.token);
+        //   this.user.getUser(this.login.username).subscribe( resdata => {
+        //     const identity = resdata;
+        //     localStorage.setItem('identity', JSON.stringify(identity));
+				//
+        //   });
+        // });
       }, error => {
-        this.messageError = error;
+				if(error.error && error.error.message && error.error.message == 'Token ID is not valid and we cannot proceed with password recovery. Please try again.') {
+					this.messageError = 'Debes comenzar nuevamente el proceso de recuperación de contraseña, ya que esta liga ha expirado.'
+					this.redirectRecover = true;
+				} else {
+					this.messageError = error.error.message;
+				}
       });
     }
   }
@@ -85,4 +103,8 @@ export class RecoverComponent implements OnInit {
       this.type = 'password';
     }
   }
+
+	goRecover() {
+		this.router.navigate(['/recoverpassword']);
+	}
 }
