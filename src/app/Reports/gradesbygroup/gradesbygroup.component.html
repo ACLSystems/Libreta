@@ -67,7 +67,9 @@
 				class="btn btn-outline-success btn-sm"
 				placement="bottom"
 				ngbTooltip="Impresión masiva de constancias"
-				(click)="printCertificatedMass()">
+				(click)="printCertificatedMass()"
+				disabled
+				>
 				<i class="fas fa-window-restore"></i> Impresión masiva
 			</button>
     </div>
@@ -105,7 +107,9 @@
 							</button>
 		          <button *ngIf="!item.pass && !item.passDate"
 								type="button" class="btn btn-danger btn-sm"
-								placement="bottom" ngbTooltip="Alumno no cumple con requisitos para obtener constancia">
+								placement="bottom" ngbTooltip="Alumno no cumple con requisitos para obtener constancia"
+								disabled
+								>
 								<i class="fas fa-certificate"></i>
 							</button>
 		        </td>
