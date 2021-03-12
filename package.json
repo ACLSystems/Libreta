@@ -30,7 +30,7 @@
     "core-js": "^2.5.4",
     "file-saver": "^2.0.2",
     "fullcalendar": "3.6.1",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "jwt-decode": "^2.2.0",
     "ng-connection-service": "^1.0.4",
     "ng-fullcalendar": "^1.7.1",
